@@ -1,0 +1,61 @@
+# Catalan translations for Redmine Smile
+# by Jérôme BATAILLE (jerome.bataille@smile.fr)
+
+ca:
+  #271407 Time Entries : filter by BU
+  label_bu: BU Project
+
+  #100718 Liste demandes : total F / G / D au niveau de chaque groupe
+  label_group_additional_infos: Informacions additionnelles du groupe
+
+  #77476 Demandes : colonne Tâche racine
+  field_issue_root_id: Arrel tasca
+
+  #147568: Filter on parent task
+  field_issue_parent_id: Pare tasca
+  field_children_count: Nombre de nens
+  field_level_in_tree: Nivell en l'arbre
+
+  #412709 Demandes : Filtre + Colonne "Projet de la demande parente"
+  field_parent_project: Project of the parent issue
+
+  #539595 Requête personnalisée : Filtres avancés (Demande, Parent, Racine)
+  label_advanced_filters: Advanced filters
+  message_advanced_filters_will_appear: The new filters will appear after you have applied the activation of this option
+
+  #######################
+  #340206 Filtre additifs
+  label_or: Or
+  label_or_filters: Filtrar O
+
+  # Evolution #134828
+  field_watchers: Observadors
+
+  field_spent_hours_for_issue_and_user: Hours for issue and user
+  field_spent_hours_for_issue: Hours for issue
+  field_spent_hours_for_user: Hours for user
+
+  field_billable_hours_for_issue_and_user: Billable for issue and user
+  field_billable_hours_for_issue: Billable for issue
+  field_billable_hours_for_user: Billable for user
+
+  field_deviation_hours_for_issue_and_user: Deviation for issue and user
+  field_deviation_hours_for_issue: Deviation for issue
+  field_deviation_hours_for_user: Deviation for user
+
+  field_is_last_time_entry_for_issue_and_user: Is last Time Entry for issue and user
+  field_is_last_time_entry_for_issue: Is last Time Entry for issue
+  field_is_last_time_entry_for_user: Is last Time Entry for user
+
+  #245281 Demandes, Rapport, case à cocher sommer les temps
+  label_include_children_time: Incloure el temps de subtasques
+
+  field_position: Position
+
+  label_without_children: Sense subtasques
+  label_with_children: Amb subtasques
+  label_with_children_symbol: (⊨)
+  label_with_children_symbol_explanation: This symbol means that the field is calculated with its sub-tasks
+
+  field_issue_id: Issue Id.
+
