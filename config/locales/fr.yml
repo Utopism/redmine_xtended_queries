@@ -34,14 +34,32 @@ fr:
   field_spent_hours_for_issue_and_user: Heures pour la demande et l'utilisateur
   field_spent_hours_for_issue: Heures pour la demande
   field_spent_hours_for_user: Heures pour l'utilisateur
+  field_spent_hours_for_issue_and_user_this_month: Heures pour la demande et l'utilisateur ce mois
+  field_spent_hours_for_issue_this_month: Heures pour la demande ce mois
+  field_spent_hours_for_user_this_month: Heures pour l'utilisateur ce mois
+  field_spent_hours_for_issue_and_user_previous_month: Heures pour la demande et l'utilisateur mois préc.
+  field_spent_hours_for_issue_previous_month: Heures pour la demande mois préc.
+  field_spent_hours_for_user_previous_month: Heures pour l'utilisateur mois préc.
 
   field_billable_hours_for_issue_and_user: Facturable pour la demande et l'utilisateur
   field_billable_hours_for_issue: Facturable pour la demande
   field_billable_hours_for_user: Facturable pour l'utilisateur
+  field_billable_hours_for_issue_and_user_this_month: Facturable pour la demande et l'utilisateur ce mois
+  field_billable_hours_for_issue_this_month: Facturable pour la demande ce mois
+  field_billable_hours_for_user_this_month: Facturable pour l'utilisateur ce mois
+  field_billable_hours_for_issue_and_user_previous_month: Facturable pour la demande et l'utilisateur mois préc.
+  field_billable_hours_for_issue_previous_month: Facturable pour la demande mois préc.
+  field_billable_hours_for_user_previous_month: Facturable pour l'utilisateur mois préc.
 
   field_deviation_hours_for_issue_and_user: Dépassement pour la demande et l'utilisateur
   field_deviation_hours_for_issue: Dépassement pour la demande
   field_deviation_hours_for_user: Dépassement pour l'utilisateur
+  field_deviation_hours_for_issue_and_user_this_month: Dépassement pour la demande et l'utilisateur ce mois
+  field_deviation_hours_for_issue_this_month: Dépassement pour la demande ce mois
+  field_deviation_hours_for_user_this_month: Dépassement pour l'utilisateur ce mois
+  field_deviation_hours_for_issue_and_user_previous_month: Dépassement pour la demande et l'utilisateur mois préc.
+  field_deviation_hours_for_issue_previous_month: Dépassement pour la demande mois préc.
+  field_deviation_hours_for_user_previous_month: Dépassement pour l'utilisateur mois préc.
 
   field_is_last_time_entry_for_issue_and_user: Dernière Entrée de Temps pour la demande et l'utilisateur
   field_is_last_time_entry_for_issue: Dernière Entrée de Temps pour la demande

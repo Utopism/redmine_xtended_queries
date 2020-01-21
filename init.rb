@@ -18,7 +18,7 @@ Redmine::Plugin.register plugin_name do
   author_url "mailto:Jerome BATAILLE <redmine-support@smile.fr>?subject=#{plugin_name}"
   description 'Extends the Redmine Queries and adds small Improvments'
   url "https://github.com/Smile-SA/#{plugin_name}"
-  version '1.0.5'
+  version '1.0.6'
   requires_redmine :version_or_higher => '2.6.0'
 
   requires_redmine_plugin :redmine_smile_base, :version_or_higher => '1.0.0'
@@ -89,8 +89,12 @@ rails_dispatcher.to_prepare do
     '/lib/models/smile_models_time_entry',
     '/lib/models/smile_models_time_entry_query',
     '/lib/models/smile_models_query_custom_field_column',
-    '/lib/models/smile_models_time_report_query',
   ]
+
+  redmine_queries_for_time_report_plugin_available = Redmine::Plugin.installed?('redmine_queries_for_time_report')
+  if redmine_queries_for_time_report_plugin_available
+    required << '/lib/models/smile_models_time_report_query'
+  end
 
 
   ###############
@@ -173,7 +177,7 @@ rails_dispatcher.to_prepare do
 
   prepend_in(QueryCustomFieldColumn, Smile::Models::QueryCustomFieldColumnOverride::ExtendedQueries)
 
-  if Redmine::Plugin.installed?('redmine_queries_for_time_report')
+  if redmine_queries_for_time_report_plugin_available
     prepend_in(TimeReportQuery, Smile::Models::TimeReportQueryOverride::ExtendedQueries)
   end
 

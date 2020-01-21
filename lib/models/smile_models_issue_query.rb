@@ -156,8 +156,11 @@ module Smile
           #######################
 
           # Smile comment : 4/ WATCHERS
-          index = base.available_columns.find_index {|column| column.name == :bu_project}
-          base.available_columns.insert (index + 1), QueryColumn.new(:watchers)
+          index = base.available_columns.find_index {|column| column.name == :watchers}
+          unless index
+            index = base.available_columns.find_index {|column| column.name == :bu_project}
+            base.available_columns.insert (index + 1), QueryColumn.new(:watchers)
+          end
 
           ################
           # Smile specific #469832 Demandes : nouvelles colonnes Sujet Tâche Parente / Racine
