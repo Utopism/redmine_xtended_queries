@@ -88,6 +88,7 @@ rails_dispatcher.to_prepare do
     '/lib/models/smile_models_time_entry',
     '/lib/models/smile_models_time_entry_query',
     '/lib/models/smile_models_query_custom_field_column',
+    '/lib/models/smile_models_query',
   ]
 
   redmine_queries_for_time_report_plugin_available = Redmine::Plugin.installed?('redmine_queries_for_time_report')
