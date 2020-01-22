@@ -10,6 +10,9 @@
 # * #763000 Totalable colums : hide checkbox if not enable on project nor sub-projects
 #   DISABLED
 
+# 2/ module ForbidPublicGlobalQueries
+# * #346641 Forbid setting query public to others than me for non-admins
+
 #require 'active_support/concern' #Rails 3
 
 module Smile
@@ -1214,6 +1217,117 @@ module Smile
           end
         end # module ClassMethods
       end # module ExtendedQueries
+
+      #*****************************
+      # 2/ ForbidPublicGlobalQueries
+      module ForbidPublicGlobalQueries
+        # extend ActiveSupport::Concern
+
+        def self.prepended(base)
+          #####################
+          # 1/ Instance methods
+          enhancements_instance_methods = [
+            # Following Protected
+
+            #                                      50/ new method
+            :validate_setting_public_query_for_all_projects_forbidden,
+          ]
+
+          trace_prefix = "#{' ' * (base.name.length + 27)}  --->  "
+          last_postfix = '< (SM::MO::QueryOverride::ForbidPublicGlobalQueries)'
+
+
+          smile_instance_methods = base.public_instance_methods.select{|m|
+              base.instance_method(m).owner == self
+            }
+          smile_instance_methods += base.protected_instance_methods.select{|m|
+              base.instance_method(m).owner == self
+            }
+
+          smile_instance_methods += base.private_instance_methods.select{|m|
+              base.instance_method(m).owner == self
+            }
+
+          missing_instance_methods = enhancements_instance_methods.select{|m|
+            !smile_instance_methods.include?(m)
+          }
+
+          if missing_instance_methods.any?
+            trace_first_prefix = "#{base.name} MISS            instance_methods  "
+          else
+            trace_first_prefix = "#{base.name}                 instance_methods  "
+          end
+
+          SmileTools::trace_by_line(
+            (
+              missing_instance_methods.any? ?
+              missing_instance_methods :
+              smile_instance_methods
+            ),
+            trace_first_prefix,
+            trace_prefix,
+            last_postfix
+          )
+
+          if missing_instance_methods.any?
+            raise trace_first_prefix + missing_instance_methods.join(', ') + '  ' + last_postfix
+          end
+
+          ####################
+          # 2/ New validations
+          base.instance_eval do
+            # Smile specific #346641 Forbid setting query public to others than me for non-admins
+            validate :validate_setting_public_query_for_all_projects_forbidden, :if => Proc.new { |q| q.new_record? || q.changed? }
+          end
+
+          new_validate_callback_names = [
+            :validate_setting_public_query_for_all_projects_forbidden,
+          ]
+
+          validate_callback_names = base._validate_callbacks.collect{|cb| cb.send(:filter)}
+
+          missing_validate_callback = new_validate_callback_names.select{|cb|
+              ! validate_callback_names.include?(cb)
+            }
+
+          if missing_validate_callback.any?
+            trace_first_prefix = "#{base.name} MISS                    validate  "
+
+          else
+            trace_first_prefix = "#{base.name}                         validate  "
+          end
+
+          SmileTools::trace_by_line(
+            (
+              missing_validate_callback.any? ?
+              missing_validate_callback :
+              new_validate_callback_names
+            ),
+            trace_first_prefix,
+            trace_prefix,
+            last_postfix
+          )
+
+          if missing_validate_callback.any?
+            raise trace_first_prefix + missing_validate_callback.join(', ') + '  ' + last_postfix
+          end
+        end # def self.prepended
+
+
+      protected
+
+        # 50/ new method
+        # Smile specific #346641 Forbid setting query public to others than me for non-admins
+        def validate_setting_public_query_for_all_projects_forbidden
+          if (
+            !User.current.admin? &&
+            visibility != Query::VISIBILITY_PRIVATE && # public query
+            project_id == nil # for all
+          )
+            errors.add(:base, l(:field_is_for_all) + ' ' + l('activerecord.errors.messages.exclusion'))
+          end
+        end
+      end # module ForbidPublicGlobalQueries
     end # module QueryOverride
   end # module Models
 end # module Smile
