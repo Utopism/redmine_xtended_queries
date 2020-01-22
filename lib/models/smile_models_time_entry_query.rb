@@ -16,15 +16,6 @@
 #
 # * #355842 Rapport temps passé : filtre projet mis-à-jour
 #   2015/09
-#
-#
-# 2/ module ExtendedQueriesBis
-# * #222040 Liste des entrées de temps : dé-sérialisation colonne Demande et filtres
-#
-# * #271407 Time Entries : filter by BU
-#   2014
-#
-# * #245965 Rapport : critères, indication type champ personnalisé
 
 #require 'active_support/concern' #Rails 3
 
@@ -417,7 +408,6 @@ module Smile
         # Smile specific #423277 Rapport : Filtre sur tâche parente et racine
         # Smile specific #271407 Time Entries : filter by BU
         # Smile specific #355842 Rapport temps passé : filtre projet mis-à-jour
-        # TODO jebat merge modules ExtendedQueries and ExtendedQueriesBis
         def results_scope(options={})
           ################
           # Smile specific : scope stored for later modification

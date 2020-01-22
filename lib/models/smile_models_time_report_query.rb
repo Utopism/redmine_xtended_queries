@@ -1,10 +1,5 @@
 # Smile - add methods to the Time Entry Query model
 #
-# TODO jebat : these two modules are intricated for the following issues :
-# * #271407 Time Entries : filter by BU
-# * #355842 Rapport temps passé : filtre projet mis-à-jour
-#
-#
 # 1/ module ExtendedQueries
 # * #248383 Rapport: filtre sur version et catégorie
 #   2014
@@ -19,18 +14,6 @@
 #
 # * #355842 Rapport temps passé : filtre projet mis-à-jour
 #   2015/09
-#
-#
-# 2/ module ExtendedQueriesBis
-# * #222040 Liste des entrées de temps : dé-sérialisation colonne Demande et filtres
-#
-# * #271407 Time Entries : filter by BU
-#   2014
-#
-# * #355842 Rapport temps passé : filtre projet mis-à-jour
-#   2015/09
-#
-# * #245965 Rapport : critères, indication type champ personnalisé
 
 #require 'active_support/concern' #Rails 3
 
@@ -46,20 +29,21 @@ module Smile
           #####################
           # 1) Instance methods
           extended_queries_instance_methods = [
-            :results_scope,                   #  1/ EXTENDED    TO TEST  RM V4.0.0 OK
-            :build_from_params,               #  2/ EXTENDED    TO TEST  RM V4.0.0 OK
-            :sql_for_issue_created_on_field,  #  3/ new method  TO TEST
-            :sql_for_tracker_field,           #  4/ new method  TO TEST
-            :sql_for_subject_field,           #  5/ new method  TO TEST
-            :sql_for_fixed_version_id_field,  #  6/ new method  TO TEST
-            :sql_for_issue_category_id_field, #  7/ new method  TO TEST
-            :sql_for_root_id_field,           #  9/ new method  TO TEST
-            :sql_for_parent_id_field,         # 10/ new method  TO TEST
-            :sql_for_member_of_group_field,   # 13/ new method  TO TEST  COPIED from IssueQuery
-            :sql_for_user_id_me_field,        # 14/ new method  TO TEST  RM V4.0.0 OK
-            :sql_for_author_id_me_field,      # 15/ new method  TO TEST  RM V4.0.0 OK
+            :results_scope,                                               #  1/ EXTENDED    TO TEST  RM V4.0.0 OK
+            :build_from_params,                                           #  2/ EXTENDED    TO TEST  RM V4.0.0 OK
 
-            :initialize_available_filters,    # 20/ REWRITTEN   TO TEST  RM V4.0.0 OK
+            :sql_for_issue_created_on_field,                              #  3/ new method  TO TEST  RM V4.0.0 OK
+            :sql_for_tracker_field,                                       #  4/ new method  TO TEST  RM V4.0.0 OK
+            :sql_for_subject_field,                                       #  5/ new method  TO TEST  RM V4.0.0 OK
+            :sql_for_fixed_version_id_field,                              #  6/ new method  TO TEST  RM V4.0.0 OK
+            :sql_for_issue_category_id_field,                             #  7/ new method  TO TEST  RM V4.0.0 OK
+            :sql_for_root_id_field,                                       #  9/ new method  TO TEST  RM V4.0.0 OK
+            :sql_for_parent_id_field,                                     # 10/ new method  TO TEST  RM V4.0.0 OK
+            :sql_for_member_of_group_field,                               # 11/ new method  TO TEST  RM V4.0.0 OK COPIED from IssueQuery
+            :sql_for_user_id_me_field,                                    # 12/ new method  TO TEST  RM V4.0.0 OK
+            :sql_for_author_id_me_field,                                  # 13/ new method  TO TEST  RM V4.0.0 OK
+
+            :initialize_available_filters,                                # 31/ REWRITTEN   TO TEST  RM V4.0.0 OK
           ]
 
           trace_prefix = "#{' ' * (base.name.length + 17)}  --->  "
@@ -124,83 +108,13 @@ module Smile
             :redmine_xtended_queries
           )
 
-
-          ##################
-          # 3) Query Columns
-          # TODO columns used in Time Report Queries ?
-          new_query_columns_names = [
-            :id,
-            :spent_hours_for_issue_and_user,
-            # :root,   # QueryAssociationColumn
-            # :parent, # QueryAssociationColumn
-            :tracker,
-            :subject,
-          ]
-
-          # Smile specific : + ID column + sortable + groupable
-          base.available_columns.unshift(
-            QueryColumn.new(:id, :sortable => "#{TimeEntry.table_name}.id", :default_order => 'desc', :caption => '#', :frozen => true, :groupable => "#{Issue.table_name}.id")
-          )
-
-          base.available_columns << QueryColumn.new(:spent_hours_for_issue_and_user, :sortable => "hours")
-
-          ################
-          # Smile specific #222040 Liste des entrées de temps : dé-sérialisation colonne Demande et filtres
-          # Smile specific #751023 V4.0.0 : Time entries list : Root Parent Task columns
-          # + ROOT groupable
-          base.available_columns << QueryAssociationColumn.new(:issue, :root, :sortable => "#{Issue.table_name}.root_id", :caption => :field_issue_root_id, :groupable => "#{Issue.table_name}.root_id")
-
-          # Smile specific #751023 V4.0.0 : Time entries list : Root and Parent Task columns
-          # + PARENT groupable
-          base.available_columns << QueryAssociationColumn.new(:issue, :parent, :sortable => "#{Issue.table_name}.parent_id", :caption => :field_issue_parent_id, :groupable => "#{Issue.table_name}.parent_id")
-
-          # Add columns tracker and subject, that were included in issue column before
-          # + TRACKER
-          # :groupable => true
-          base.available_columns << QueryColumn.new(:tracker, :sortable => "#{Issue.table_name}.tracker_id", :groupable => "#{Issue.table_name}.tracker_id")
-
-          # + SUBJECT
-          base.available_columns << QueryColumn.new(:subject, :sortable => "#{Issue.table_name}.subject")
-          # END -- Smile specific #222040 Liste des entrées de temps : dé-sérialisation colonne Demande et filtres
-          #######################
-
-
-          current_query_columns_names = base.available_columns.select{|ac| new_query_columns_names.include?(ac.name)}.collect(&:name)
-
-          missing_query_columns_names = new_query_columns_names.select{|ac|
-              ! current_query_columns_names.include?(ac)
-            }
-
-          if missing_query_columns_names.any?
-            trace_first_prefix = "#{base.name} MISS available_columns  "
-          else
-            trace_first_prefix = "#{base.name}      available_columns  "
-          end
-
-          SmileTools::trace_by_line(
-            (
-              missing_query_columns_names.any? ?
-              missing_query_columns_names :
-              new_query_columns_names
-            ),
-            trace_first_prefix,
-            trace_prefix,
-            last_postfix,
-            :redmine_xtended_queries
-          )
-
-          if missing_query_columns_names.any?
-            raise trace_first_prefix + missing_query_columns_names.join(', ') + '  ' + last_postfix
-          end
-
-
           ##################
           # 4) Class methods
-          b_a_r_class_methods = [
-            :joins_for_bu_project_id, # 1/ new method
+          extended_queries_class_methods = [
+            :joins_for_bu_project_id,                        # 10/ new method  TO TEST RM V4.0.0 OK
           ]
 
-          last_postfix = '< (SM::MO::TimeReportQueryOverride::ExtendedQueriesBis::CMeths)'
+          last_postfix = '< (SM::MO::TimeReportQueryOverride::ExtendedQueries::CMeths)'
 
           base.singleton_class.prepend ClassMethods
 
@@ -209,7 +123,7 @@ module Smile
               base.method(m).owner == ClassMethods
             }
 
-          missing_class_methods = b_a_r_class_methods.select{|m|
+          missing_class_methods = extended_queries_class_methods.select{|m|
             !smile_class_methods.include?(m)
           }
 
@@ -243,7 +157,6 @@ module Smile
         # Smile specific #423277 Rapport : Filtre sur tâche parente et racine
         # Smile specific #271407 Time Entries : filter by BU
         # Smile specific #355842 Rapport temps passé : filtre projet mis-à-jour
-        # TODO jebat merge modules ExtendedQueries and ExtendedQueriesBis
         def results_scope(options={})
           ################
           # Smile specific : scope stored for later modification
@@ -260,7 +173,8 @@ module Smile
               filters.include?('parent_id') ||
               filters.include?('root_id')
           )
-            scope_for_results = scope_for_results.includes(:issue)
+            # Do not includes issue, generate a conflicting second join on issues
+            #scope_for_results = scope_for_results.includes(:issue)
           end
           # END -- Smile specific #248383 Rapport: filtre sur version et catégorie
           #######################
@@ -375,7 +289,7 @@ module Smile
           sql_for_field(field, operator, value, Issue.table_name, 'parent_id')
         end
 
-        # 13/ new method, RM 2.6 OK
+        # 11/ new method, RM 2.6 OK
         # Smile specific #473776 Spent Time Report : Filter on Assignee's group
         # COPIED from IssueQuery
         def sql_for_member_of_group_field(field, operator, value)
@@ -397,20 +311,21 @@ module Smile
           '(' + sql_for_field("assigned_to_id", operator, members_of_groups, Issue.table_name, "assigned_to_id", false) + ')'
         end
 
-        # 14/ new method, RM 4.0.0 OK
+        # 12/ new method, RM 4.0.0 OK
         # Smile specific #831010: Time Report Query : new time entry user filter, me
         def sql_for_user_id_me_field(field, operator, value)
           sql_for_field(field, operator, value, nil, "(CASE WHEN (#{TimeEntry.table_name}.user_id = #{User.current.id}) THEN 'me' ELSE 'not_me' END)")
         end
 
-        # 15/ new method, RM 4.0.0 OK
+        # 13/ new method, RM 4.0.0 OK
         # Smile specific #831010: Time Report Query : new time entry user filter, me
         def sql_for_author_id_me_field(field, operator, value)
           sql_for_field(field, operator, value, nil, "(CASE WHEN (#{TimeEntry.table_name}.author_id = #{User.current.id}) THEN 'me' ELSE 'not_me' END)")
         end
 
 
-        # 20/ REWRITTEN, RM 4.0.0 OK
+        # 31/ REWRITTEN, RM 4.0.0 OK
+        # TODO add hook
         # Smile specific #768560: V4.0.0 : Time entries list : access to hidden BAR values
         # Smile specific : new filters
         # + BU
@@ -554,15 +469,20 @@ module Smile
             )
           end
 
-          add_available_filter("author_id",
-            :type => :list_optional, :values => lambda { author_values }
-          )
+          # Starting from Redmine ~ 4
+          if TimeEntry.instance_methods.include?(:author)
+            add_available_filter("author_id",
+              :type => :list_optional, :values => lambda { author_values }
+            )
+          end
 
           # Smile specific #831010: Time Report Query : new time entry user filter, me
-          if User.current.logged?
-            add_available_filter("author_id",
-              :type => :list_optional, :values => lambda { [["<< #{l(:label_me)} >>", 'me']] }, :name =>"#{l(:field_author)} (#{l(:label_me)})"
-            )
+          if Redmine::VERSION::MAJOR >= 4
+            if User.current.logged?
+              add_available_filter("author_id_me",
+                :type => :list_optional, :values => lambda { [["<< #{l(:label_me)} >>", 'me']] }, :name =>"#{l(:field_author)} (#{l(:label_me)})"
+              )
+            end
           end
 
           ################
@@ -604,6 +524,8 @@ module Smile
           # Smile specific #994 Budget and Remaining enhancement
           # + REMAINING HOURS
           add_available_filter "remaining_hours", :type => :float if budget_and_remaining_enabled
+          # END -- Smile specific #994 Budget and Remaining enhancement
+          #######################
 
           add_custom_fields_filters(TimeEntryCustomField)
           add_associations_custom_fields_filters :project
@@ -613,7 +535,7 @@ module Smile
 
 
         module ClassMethods
-          # 1/ New method RM 4.0.0  Plugin OK
+          # 10/ new method RM 4.0.3
           # Smile specific #271407 Time Entries : filter by BU
           # Smile specific #269602 Rapport de temps : critère BU
           def joins_for_bu_project_id

@@ -30,7 +30,8 @@ module Smile
             smile_instance_methods,
             trace_first_prefix,
             trace_prefix,
-            last_postfix
+            last_postfix,
+            :redmine_xtended_queries
           )
         end
 

@@ -54,7 +54,8 @@ module Smile
             ),
             trace_first_prefix,
             trace_prefix,
-            last_postfix
+            last_postfix,
+            :redmine_xtended_queries
           )
 
           if missing_instance_methods.any?
@@ -93,7 +94,8 @@ module Smile
             ),
             trace_first_prefix,
             trace_prefix,
-            last_postfix
+            last_postfix,
+            :redmine_xtended_queries
           )
 
           if missing_class_methods.any?

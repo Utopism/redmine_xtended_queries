@@ -120,5 +120,4 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
     * **Billable Hours by Issue / User**
     * **Deviation Hours by Issue / User**
 
-* Forbid setting **global query** public to other than me for non-admins
-  * new validation callback method **validate_setting_public_query_for_all_projects_forbidden**
+* Forbid setting **global query** public to other than me for non-admins : Fixed upstream with Redmine V3.0.4
