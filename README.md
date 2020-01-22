@@ -24,10 +24,6 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
     * **Target version**
     * **Category**
     * **Subject**
-    * Date :
-      * **Year**
-      * **Month**
-      * **Week**
     * **Watchers**
     * **Position**
     * Issues Tree :
@@ -63,25 +59,61 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
     * **Parent task -- (Subject)**
     * **Parent task -- (Position)**
     * **Project Updated**
+    * Date :
+      * **Year**
+      * **Month**
+      * **Week**
     * **Updated on**
     * Cumulative Hours :
       * **Spent hours for issue and user**
       * **Spent hours for issue**
       * **Spent hours for user**
+      * **Spent hours for issue and user this month**
+      * **Spent hours for issue this month**
+      * **Spent hours for user this month**
+      * **Spent hours for issue and user previous month**
+      * **Spent hours for issue previous month**
+      * **Spent hours for user previous month**
     * New Cumulative Billable and Deviation :
 
-      Only if Billable and Deviation Custom Field exist on Time Entries
+      Only if **Billable** and **Deviation** called **Custom Fields** exist on Time Entries
 
       * **Billable hours for issue and user**
       * **Billable hours for issue**
       * **Billable hours for user**
+      * **Billable hours for issue and user this month**
+      * **Billable hours for issue this month**
+      * **Billable hours for user this month**
+      * **Billable hours for issue and user previous month**
+      * **Billable hours for issue previous month**
+      * **Billable hours for user previous month**
+
       * **Deviation hours for issue and user**
       * **Deviation hours for issue**
       * **Deviation hours for user**
+      * **Deviation hours for issue and user this month**
+      * **Deviation hours for issue this month**
+      * **Deviation hours for user this month**
+      * **Deviation hours for issue and user previous month**
+      * **Deviation hours for issue previous month**
+      * **Deviation hours for user previous month**
     * New Totalable columns :
       * **Spent Hours by Issue / User**
       * **Billable Hours by Issue / User**
       * **Deviation Hours by Issue / User**
+
+  * New Filters :
+    * **Spent hours for issue and user**
+    * **Spent hours for issue**
+    * **Spent hours for user**
+
+    * **Spent hours for issue and user this month**
+    * **Spent hours for issue this_month**
+    * **Spent hours for user this month**
+
+    * **Spent hours for issue and user previous month**
+    * **Spent hours for issue previous_month**
+    * **Spent hours for user previous month**
 
   * New Group totals fixed for
     * **Spent Hours by Issue / User**

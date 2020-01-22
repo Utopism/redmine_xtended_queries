@@ -40,40 +40,67 @@ module Smile
           #####################
           # 1) Instance methods
           extended_queries_instance_methods = [
-            :results_scope,                    #  1/ EXTENDED    TESTED  RM V4.0.0 OK
-            :build_from_params,                #  2/ EXTENDED    TESTED  RM V4.0.0 OK
-            :sql_for_issue_created_on_field,   #  3/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_tracker_field,            #  4/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_subject_field,            #  5/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_fixed_version_id_field,   #  6/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_issue_category_id_field,  #  7/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_root_id_field,            #  9/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_parent_id_field,          # 10/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_member_of_group_field,    # 11/ new method  TESTED  RM V4.0.0 OK COPIED from IssueQuery
-            :sql_for_user_id_me_field,         # 12/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_author_id_me_field,       # 13/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_is_last_time_entry_for_issue_and_user_field,  # 14/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_is_last_time_entry_for_issue_field,           # 15/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_is_last_time_entry_for_user_field,            # 16/ new method  TESTED  RM V4.0.0 OK
+            :results_scope,                                               #  1/ EXTENDED    TESTED  RM V4.0.0 OK
+            :build_from_params,                                           #  2/ EXTENDED    TESTED  RM V4.0.0 OK
 
-            :available_columns,                                    # 30/ EXTENDED    TESTED  RM V4.0.0 OK
-            :initialize_available_filters,                         # 31/ REWRITTEN   TO TEST RM V4.0.0 OK
+            :sql_for_issue_created_on_field,                              #  3/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_tracker_field,                                       #  4/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_subject_field,                                       #  5/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_fixed_version_id_field,                              #  6/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_issue_category_id_field,                             #  7/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_root_id_field,                                       #  9/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_parent_id_field,                                     # 10/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_member_of_group_field,                               # 11/ new method  TESTED  RM V4.0.0 OK COPIED from IssueQuery
+            :sql_for_user_id_me_field,                                    # 12/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_author_id_me_field,                                  # 13/ new method  TESTED  RM V4.0.0 OK
 
-            # New filter on last time entry for issue / user
-            :join_max_time_entry_id_by_issue_and_user_needed_for_filters?, # 40/ new TO TEST RM V4.0.0 OK
-            :join_max_time_entry_id_by_issue_needed_for_filters?,  # 41/ new method  TO TEST RM V4.0.0 OK
-            :join_max_time_entry_id_by_user_needed_for_filters?,   # 42/ new method  TO TEST RM V4.0.0 OK
-            :joins_additionnal,                                    # 43/ new method  TO TEST RM V4.0.0 OK
-            :joins_for_order_statement,                            # 44/ EXTENDED    TO TEST RM V4.0.0 OK
-            :total_for_spent_hours_for_issue,                      # 45/ new method  TO TEST RM V4.0.0 OK
-            :total_for_spent_hours_for_issue_and_user,             # 46/ new method  TO TEST RM V4.0.0 OK
-            :total_for_spent_hours_for_user,                       # 47/ new method  TO TEST RM V4.0.0 OK
-            :total_for_billable_hours_for_issue,                   # 48/ new method  TO TEST RM V4.0.0 OK
-            :total_for_billable_hours_for_issue_and_user,          # 49/ new method  TO TEST RM V4.0.0 OK
-            :total_for_billable_hours_for_user,                    # 50/ new method  TO TEST RM V4.0.0 OK
-            :total_for_deviation_hours_for_issue,                  # 51/ new method  TO TEST RM V4.0.0 OK
-            :total_for_deviation_hours_for_issue_and_user,         # 52/ new method  TO TEST RM V4.0.0 OK
-            :total_for_deviation_hours_for_user,                   # 53/ new method  TO TEST RM V4.0.0 OK
+            :sql_for_is_last_time_entry_for_issue_and_user_field,         # 14/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_is_last_time_entry_for_issue_field,                  # 15/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_is_last_time_entry_for_user_field,                   # 16/ new method  TESTED  RM V4.0.0 OK
+
+            :sql_for_spent_hours_for_issue_and_user_field,                # 17/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_spent_hours_for_issue_field,                         # 18/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_spent_hours_for_user_field,                          # 19/ new method  TESTED  RM V4.0.0 OK
+
+            :sql_for_spent_hours_for_issue_and_user_this_month_field,     # 20/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_spent_hours_for_issue_this_month_field,              # 21/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_spent_hours_for_user_this_month_field,               # 22/ new method  TESTED  RM V4.0.0 OK
+
+            :sql_for_spent_hours_for_issue_and_user_previous_month_field, # 23/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_spent_hours_for_issue_previous_month_field,          # 24/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_spent_hours_for_user_previous_month_field,           # 25/ new method  TESTED  RM V4.0.0 OK
+
+            :available_columns,                                           # 30/ EXTENDED    TESTED  RM V4.0.0 OK
+            :initialize_available_filters,                                # 31/ REWRITTEN   TO TEST RM V4.0.0 OK
+
+            #################################################
+            # New filters on last time entry for issue / user
+            :join_max_time_entry_id_by_issue_and_user_needed_for_filters?,                # 40/ new TO TEST RM V4.0.0 OK
+            :join_max_time_entry_id_by_issue_needed_for_filters?,                         # 41/ new method  TO TEST RM V4.0.0 OK
+            :join_max_time_entry_id_by_user_needed_for_filters?,                          # 42/ new method  TO TEST RM V4.0.0 OK
+
+            ############################
+            # New filters on Spent hours
+            :join_max_time_entry_id_by_issue_and_user_this_month_needed_for_filters?,     # 43/ new TO TEST RM V4.0.0 OK
+            :join_max_time_entry_id_by_issue_this_month_needed_for_filters?,              # 44/ new method  TO TEST RM V4.0.0 OK
+            :join_max_time_entry_id_by_user_this_month_needed_for_filters?,               # 45/ new method  TO TEST RM V4.0.0 OK
+
+            :join_max_time_entry_id_by_issue_and_user_previous_month_needed_for_filters?, # 46/ new TO TEST RM V4.0.0 OK
+            :join_max_time_entry_id_by_issue_previous_month_needed_for_filters?,          # 47/ new method  TO TEST RM V4.0.0 OK
+            :join_max_time_entry_id_by_user_previous_month_needed_for_filters?,           # 48/ new method  TO TEST RM V4.0.0 OK
+
+            :joins_additionnal,                                    # 50/ new method  TO TEST RM V4.0.0 OK
+            :joins_for_order_statement,                            # 51/ EXTENDED    TO TEST RM V4.0.0 OK
+
+            :total_for_spent_hours_for_issue,                      # 60/ new method  TO TEST RM V4.0.0 OK
+            :total_for_spent_hours_for_issue_and_user,             # 61/ new method  TO TEST RM V4.0.0 OK
+            :total_for_spent_hours_for_user,                       # 62/ new method  TO TEST RM V4.0.0 OK
+            :total_for_billable_hours_for_issue,                   # 63/ new method  TO TEST RM V4.0.0 OK
+            :total_for_billable_hours_for_issue_and_user,          # 64/ new method  TO TEST RM V4.0.0 OK
+            :total_for_billable_hours_for_user,                    # 65/ new method  TO TEST RM V4.0.0 OK
+            :total_for_deviation_hours_for_issue,                  # 66/ new method  TO TEST RM V4.0.0 OK
+            :total_for_deviation_hours_for_issue_and_user,         # 67/ new method  TO TEST RM V4.0.0 OK
+            :total_for_deviation_hours_for_user,                   # 68/ new method  TO TEST RM V4.0.0 OK
           ]
 
           trace_prefix = "#{' ' * (base.name.length + 18)}  --->  "
@@ -148,6 +175,12 @@ module Smile
             :spent_hours_for_issue_and_user,
             :spent_hours_for_issue,
             :spent_hours_for_user,
+            :spent_hours_for_issue_and_user_this_month,
+            :spent_hours_for_issue_this_month,
+            :spent_hours_for_user_this_month,
+            :spent_hours_for_issue_and_user_previous_month,
+            :spent_hours_for_issue_previous_month,
+            :spent_hours_for_user_previous_month,
             :root,
             :parent,
             :tracker,
@@ -161,6 +194,12 @@ module Smile
               :billable_hours_for_issue_and_user,
               :billable_hours_for_issue,
               :billable_hours_for_user,
+              :billable_hours_for_issue_and_user_this_month,
+              :billable_hours_for_issue_this_month,
+              :billable_hours_for_user_this_month,
+              :billable_hours_for_issue_and_user_previous_month,
+              :billable_hours_for_issue_previous_month,
+              :billable_hours_for_user_previous_month,
             ]
           end
 
@@ -169,6 +208,12 @@ module Smile
               :deviation_hours_for_issue_and_user,
               :deviation_hours_for_issue,
               :deviation_hours_for_user,
+              :deviation_hours_for_issue_and_user_this_month,
+              :deviation_hours_for_issue_this_month,
+              :deviation_hours_for_user_this_month,
+              :deviation_hours_for_issue_and_user_previous_month,
+              :deviation_hours_for_issue_previous_month,
+              :deviation_hours_for_user_previous_month,
             ]
           end
 
@@ -196,11 +241,27 @@ module Smile
           base.available_columns << QueryColumn.new(:spent_hours_for_issue, :sortable => "hours", :totalable => true)
           base.available_columns << QueryColumn.new(:spent_hours_for_user, :sortable => "hours", :totalable => true)
 
+          base.available_columns << QueryColumn.new(:spent_hours_for_issue_and_user_this_month, :sortable => "hours", :totalable => false)
+          base.available_columns << QueryColumn.new(:spent_hours_for_issue_this_month, :sortable => "hours", :totalable => false)
+          base.available_columns << QueryColumn.new(:spent_hours_for_user_this_month, :sortable => "hours", :totalable => false)
+
+          base.available_columns << QueryColumn.new(:spent_hours_for_issue_and_user_previous_month, :sortable => "hours", :totalable => false)
+          base.available_columns << QueryColumn.new(:spent_hours_for_issue_previous_month, :sortable => "hours", :totalable => false)
+          base.available_columns << QueryColumn.new(:spent_hours_for_user_previous_month, :sortable => "hours", :totalable => false)
+
           # Billable Hours for Issue / User
           if TimeEntry.billable_custom_field_id
             base.available_columns << QueryColumn.new(:billable_hours_for_issue_and_user, :sortable => "hours", :totalable => true)
             base.available_columns << QueryColumn.new(:billable_hours_for_issue, :sortable => "hours", :totalable => true)
             base.available_columns << QueryColumn.new(:billable_hours_for_user, :sortable => "hours", :totalable => true)
+
+            base.available_columns << QueryColumn.new(:billable_hours_for_issue_and_user_this_month, :sortable => "hours", :totalable => false)
+            base.available_columns << QueryColumn.new(:billable_hours_for_issue_this_month, :sortable => "hours", :totalable => false)
+            base.available_columns << QueryColumn.new(:billable_hours_for_user_this_month, :sortable => "hours", :totalable => false)
+
+            base.available_columns << QueryColumn.new(:billable_hours_for_issue_and_user_previous_month, :sortable => "hours", :totalable => false)
+            base.available_columns << QueryColumn.new(:billable_hours_for_issue_previous_month, :sortable => "hours", :totalable => false)
+            base.available_columns << QueryColumn.new(:billable_hours_for_user_previous_month, :sortable => "hours", :totalable => false)
           end
 
           # Deviation Hours for Issue / User
@@ -208,6 +269,14 @@ module Smile
             base.available_columns << QueryColumn.new(:deviation_hours_for_issue_and_user, :sortable => "hours", :totalable => true)
             base.available_columns << QueryColumn.new(:deviation_hours_for_issue, :sortable => "hours", :totalable => true)
             base.available_columns << QueryColumn.new(:deviation_hours_for_user, :sortable => "hours", :totalable => true)
+
+            base.available_columns << QueryColumn.new(:deviation_hours_for_issue_and_user_this_month, :sortable => "hours", :totalable => false)
+            base.available_columns << QueryColumn.new(:deviation_hours_for_issue_this_month, :sortable => "hours", :totalable => false)
+            base.available_columns << QueryColumn.new(:deviation_hours_for_user_this_month, :sortable => "hours", :totalable => false)
+
+            base.available_columns << QueryColumn.new(:deviation_hours_for_issue_and_user_previous_month, :sortable => "hours", :totalable => false)
+            base.available_columns << QueryColumn.new(:deviation_hours_for_issue_previous_month, :sortable => "hours", :totalable => false)
+            base.available_columns << QueryColumn.new(:deviation_hours_for_user_previous_month, :sortable => "hours", :totalable => false)
           end
 
           ################
@@ -297,9 +366,10 @@ module Smile
             :sql_max_time_entry_id_by_issue_and_user,        #  1/ REWRITTEN,  TO TEST RM V4.0.0 OK
             :sql_max_time_entry_id_by_issue,                 #  2/ REWRITTEN,  TO TEST RM V4.0.0 OK
             :sql_max_time_entry_id_by_user,                  #  3/ REWRITTEN,  TO TEST RM V4.0.0 OK
-            :left_join_max_time_entry_id_by_issue_and_user,  #  3/ new method  TO TEST RM V4.0.0 OK
-            :left_join_max_time_entry_id_by_issue,           #  4/ new method  TO TEST RM V4.0.0 OK
-            :left_join_max_time_entry_id_by_user,            #  5/ new method  TO TEST RM V4.0.0 OK
+
+            :left_join_max_time_entry_id_by_issue_and_user,  #  4/ new method  TO TEST RM V4.0.0 OK
+            :left_join_max_time_entry_id_by_issue,           #  5/ new method  TO TEST RM V4.0.0 OK
+            :left_join_max_time_entry_id_by_user,            #  6/ new method  TO TEST RM V4.0.0 OK
 
             :joins_for_bu_project_id,                        # 10/ new method  TO TEST RM V4.0.0 OK
           ]
@@ -546,6 +616,50 @@ module Smile
           sql_for_field(field, operator, value, nil, "(#{TimeEntry.table_name}.id = max_time_entry_id_by_user.max_id)")
         end
 
+        # 17/ new method, RM 4.0.0 OK
+        def sql_for_spent_hours_for_issue_and_user_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_issue_and_user.sum_hours_by_issue_and_user")
+        end
+
+        # 18/ new method, RM 4.0.0 OK
+        def sql_for_spent_hours_for_issue_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_issue.sum_hours_by_issue")
+        end
+
+        # 19/ new method, RM 4.0.0 OK
+        def sql_for_spent_hours_for_user_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_user.sum_hours_by_user")
+        end
+
+        # 20/ new method, RM 4.0.0 OK
+        def sql_for_spent_hours_for_issue_and_user_this_month_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_issue_and_user_this_month.sum_hours_by_issue_and_user")
+        end
+
+        # 21/ new method, RM 4.0.0 OK
+        def sql_for_spent_hours_for_issue_this_month_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_issue_this_month.sum_hours_by_issue")
+        end
+
+        # 22/ new method, RM 4.0.0 OK
+        def sql_for_spent_hours_for_user_this_month_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_user_this_month.sum_hours_by_user")
+        end
+
+        # 23/ new method, RM 4.0.0 OK
+        def sql_for_spent_hours_for_issue_and_user_previous_month_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_issue_and_user_previous_month.sum_hours_by_issue_and_user")
+        end
+
+        # 24/ new method, RM 4.0.0 OK
+        def sql_for_spent_hours_for_issue_previous_month_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_issue_previous_month.sum_hours_by_issue")
+        end
+
+        # 25/ new method, RM 4.0.0 OK
+        def sql_for_spent_hours_for_user_previous_month_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_user_previous_month.sum_hours_by_user")
+        end
 
         # 30/ EXTENDED, RM 4.0.0 OK
         # Add new optional columns
@@ -721,9 +835,12 @@ module Smile
             )
           end
 
-          add_available_filter("author_id",
-            :type => :list_optional, :values => lambda { author_values }
-          )
+          # Starting from Redmine ~ 4
+          if TimeEntry.instance_methods.include?(:author)
+            add_available_filter("author_id",
+              :type => :list_optional, :values => lambda { author_values }
+            )
+          end
 
           # Smile specific #831010: Time Report Query : new time entry user filter, me
           if Redmine::VERSION::MAJOR >= 4
@@ -769,6 +886,18 @@ module Smile
 
           add_available_filter "hours", :type => :float
 
+          add_available_filter "spent_hours_for_issue_and_user",                :type => :float
+          add_available_filter "spent_hours_for_issue",                         :type => :float
+          add_available_filter "spent_hours_for_user",                          :type => :float
+
+          add_available_filter "spent_hours_for_issue_and_user_this_month",     :type => :float
+          add_available_filter "spent_hours_for_issue_this_month",              :type => :float
+          add_available_filter "spent_hours_for_user_this_month",               :type => :float
+
+          add_available_filter "spent_hours_for_issue_and_user_previous_month", :type => :float
+          add_available_filter "spent_hours_for_issue_previous_month",          :type => :float
+          add_available_filter "spent_hours_for_user_previous_month",           :type => :float
+
           ################
           # Smile specific #994 Budget and Remaining enhancement
           # + REMAINING HOURS
@@ -794,25 +923,73 @@ module Smile
           add_associations_custom_fields_filters :user
         end
 
+
+        ###############################
+        # Filters on Is last time entry
         # 40/ new method, RM 4.0.0 OK
         def join_max_time_entry_id_by_issue_and_user_needed_for_filters?
           filters.include?('is_last_time_entry_for_issue_and_user') ||
-            or_filters.include?('is_last_time_entry_for_issue_and_user')
+            or_filters.include?('is_last_time_entry_for_issue_and_user') ||
+          filters.include?('spent_hours_for_issue_and_user') ||
+            or_filters.include?('spent_hours_for_issue_and_user')
         end
 
         # 41/ new method, RM 4.0.0 OK
         def join_max_time_entry_id_by_issue_needed_for_filters?
           filters.include?('is_last_time_entry_for_issue') ||
-            or_filters.include?('is_last_time_entry_for_issue')
+            or_filters.include?('is_last_time_entry_for_issue') ||
+          filters.include?('spent_hours_for_issue') ||
+            or_filters.include?('spent_hours_for_issue')
         end
 
         # 42/ new method, RM 4.0.0 OK
         def join_max_time_entry_id_by_user_needed_for_filters?
           filters.include?('is_last_time_entry_for_user') ||
-            or_filters.include?('is_last_time_entry_for_user')
+            or_filters.include?('is_last_time_entry_for_user') ||
+          filters.include?('spent_hours_for_user') ||
+            or_filters.include?('spent_hours_for_user')
         end
 
+        ########################
+        # Filters on Spent Hours
         # 43/ new method, RM 4.0.0 OK
+        def join_max_time_entry_id_by_issue_and_user_this_month_needed_for_filters?
+          filters.include?('spent_hours_for_issue_and_user_this_month') ||
+            or_filters.include?('spent_hours_for_issue_and_user_this_month')
+        end
+
+        # 44/ new method, RM 4.0.0 OK
+        def join_max_time_entry_id_by_issue_this_month_needed_for_filters?
+          filters.include?('spent_hours_for_issue_this_month') ||
+            or_filters.include?('spent_hours_for_issue_this_month')
+        end
+
+        # 45/ new method, RM 4.0.0 OK
+        def join_max_time_entry_id_by_user_this_month_needed_for_filters?
+          filters.include?('spent_hours_for_user_this_month') ||
+            or_filters.include?('spent_hours_for_user_this_month')
+        end
+
+        # 46/ new method, RM 4.0.0 OK
+        def join_max_time_entry_id_by_issue_and_user_previous_month_needed_for_filters?
+          filters.include?('spent_hours_for_issue_and_user_previous_month') ||
+            or_filters.include?('spent_hours_for_issue_and_user_previous_month')
+        end
+
+        # 47/ new method, RM 4.0.0 OK
+        def join_max_time_entry_id_by_issue_previous_month_needed_for_filters?
+          filters.include?('spent_hours_for_issue_previous_month') ||
+            or_filters.include?('spent_hours_for_issue_previous_month')
+        end
+
+        # 48/ new method, RM 4.0.0 OK
+        def join_max_time_entry_id_by_user_previous_month_needed_for_filters?
+          filters.include?('spent_hours_for_user_previous_month') ||
+            or_filters.include?('spent_hours_for_user_previous_month')
+        end
+
+
+        # 50/ new method, RM 4.0.0 OK
         # Smile specific : debug from query
         def joins_additionnal(order_options)
           joins = []
@@ -826,17 +1003,63 @@ module Smile
           logger.debug " =>prof           group_by_column=#{group_by_column.name}" if group_by_column && debug
           logger.debug " =>prof           filters=#{self.filters}" if debug == '2'
 
-          #---------------------
-          # 1) By Issue and User, Filter on visible time entries
-          if (
-            join_max_time_entry_id_by_issue_and_user_needed_for_filters?
-          )
-            logger.debug " =>prof           +left_join_max_time_entry_id_by_issue_and_user(...)" if debug
 
-            # 1.1) Filter on VISIBLE sub-issues used in left_join_max_time_entry_id_by_issue_and_user for :
+          ######
+          # 1.0) join max t.e. by issue / user
+          join_max_t_e_by_issue_and_user                = join_max_time_entry_id_by_issue_and_user_needed_for_filters?
+          join_max_t_e_by_issue                         = join_max_time_entry_id_by_issue_needed_for_filters?
+          join_max_t_e_by_user                          = join_max_time_entry_id_by_user_needed_for_filters?
+
+          ######
+          # 2.0) join max t.e. by issue / user THIS MONTH
+          join_max_t_e_by_issue_and_user_this_month     = join_max_time_entry_id_by_issue_and_user_this_month_needed_for_filters?
+          join_max_t_e_by_issue_this_month              = join_max_time_entry_id_by_issue_this_month_needed_for_filters?
+          join_max_t_e_by_user_this_month               = join_max_time_entry_id_by_user_this_month_needed_for_filters?
+
+          ######
+          # 3.0) join max t.e. by issue / user PREVIOUS MONTH
+          join_max_t_e_by_issue_and_user_previous_month = join_max_time_entry_id_by_issue_and_user_previous_month_needed_for_filters?
+          join_max_t_e_by_issue_previous_month          = join_max_time_entry_id_by_issue_previous_month_needed_for_filters?
+          join_max_t_e_by_user_previous_month           = join_max_time_entry_id_by_user_previous_month_needed_for_filters?
+
+
+          # 0) Filter on VISIBLE sub-issues used in left_join_max_time_entry_id_by_issue / user
+          #    ALL / THIS MONTH / PREVIOUS MONTH
+          if (
+            join_max_t_e_by_issue_and_user ||
+            join_max_t_e_by_issue ||
+            join_max_t_e_by_user ||
+
+            join_max_t_e_by_issue_and_user_this_month ||
+            join_max_t_e_by_issue_this_month ||
+            join_max_t_e_by_user_this_month ||
+
+            join_max_t_e_by_issue_and_user_previous_month ||
+            join_max_t_e_by_issue_previous_month ||
+            join_max_t_e_by_user_previous_month
+          )
             sql_visible_issues_filter = ' ' + self.class.sql_in_values_or_false_if_empty(
               sql_visible_time_entries_issues_ids(
-                # 1.2) Optimization
+                filter_column_on_projects('project_id'),
+                debug
+              ),
+              'issue_id'
+            )
+
+            logger.debug " =>prof           sql_visible_issues_filter=#{sql_visible_issues_filter}" if debug == '3'
+          end
+
+
+          ####
+          # 1) join max t.e. by issue / user
+          if (
+            join_max_t_e_by_issue_and_user ||
+            join_max_t_e_by_issue ||
+            join_max_t_e_by_user
+          )
+            # 1.0) Filter on VISIBLE sub-issues used in left_join_max_time_entry_id_by{_issue}{_and_user} for :
+            sql_visible_issues_filter = ' ' + self.class.sql_in_values_or_false_if_empty(
+              sql_visible_time_entries_issues_ids(
                 filter_column_on_projects('project_id'),
                 debug
               ),
@@ -845,100 +1068,254 @@ module Smile
 
             logger.debug " =>prof           sql_visible_issues_filter=#{sql_visible_issues_filter}" if debug == '3'
 
-            sql_where_filter = self.class.sql_where_w_optional_conditions(
-                false, # where_prefix
-                # 1.1) Access to time entries check
-                sql_visible_issues_filter
-              ) +
-              ' '
-            if debug == '2'
-              logger.debug " =>prof           sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
-            elsif debug == '3'
-              logger.debug " =>prof           sql_where_filter='#{sql_where_filter}'"
+            #-----------------------
+            # 1.1) By Issue and User, Filter on visible time entries
+            if join_max_t_e_by_issue_and_user
+              logger.debug " =>prof           +left_join_max_time_entry_id_by_issue_and_user(...)" if debug
+
+              sql_where_filter = self.class.sql_where_w_optional_conditions(
+                  false, # where_prefix
+                  # Access to time entries check
+                  sql_visible_issues_filter
+                ) +
+                ' '
+              if debug == '2'
+                logger.debug " =>prof           sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
+              elsif debug == '3'
+                logger.debug " =>prof           sql_where_filter='#{sql_where_filter}'"
+              end
+
+              # No postfix, default select name
+              joins << self.class.left_join_max_time_entry_id_by_issue_and_user(sql_where_filter)
+            else
+              logger.debug " =>prof           join_max_time_entry_by_issue_and_user NOT needed" if debug == '2'
             end
 
-            # No postfix, default select name
-            joins << self.class.left_join_max_time_entry_id_by_issue_and_user(sql_where_filter)
-          else
-            logger.debug " =>prof           join_max_time_entry_by_issue_and_user NOT needed" if debug == '2'
+            #--------------
+            # 1.2) By Issue, Filter on visible time entries
+            if join_max_t_e_by_issue
+              logger.debug " =>prof           +left_join_max_time_entry_id_by_issue(...)" if debug
+
+              sql_where_filter = self.class.sql_where_w_optional_conditions(
+                  false, # where_prefix
+                  # 1.1) Access to time entries check
+                  sql_visible_issues_filter
+                ) +
+                ' '
+              if debug == '2'
+                logger.debug " =>prof           sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
+              elsif debug == '3'
+                logger.debug " =>prof           sql_where_filter='#{sql_where_filter}'"
+              end
+
+              # No postfix, default select name
+              joins << self.class.left_join_max_time_entry_id_by_issue(sql_where_filter)
+            else
+              logger.debug " =>prof           join_max_time_entry_by_issue          NOT needed" if debug == '2'
+            end
+
+            #-------------
+            # 1.3) By User, Filter on visible time entries
+            if join_max_t_e_by_user
+              logger.debug " =>prof           +left_join_max_time_entry_id_by_user(...)" if debug
+
+              sql_where_filter = self.class.sql_where_w_optional_conditions(
+                  false, # where_prefix
+                  # Access to time entries check
+                  sql_visible_issues_filter
+                ) +
+                ' '
+              if debug == '2'
+                logger.debug " =>prof           sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
+              elsif debug == '3'
+                logger.debug " =>prof           sql_where_filter='#{sql_where_filter}'"
+              end
+
+              # No postfix, default select name
+              joins << self.class.left_join_max_time_entry_id_by_user(sql_where_filter)
+            else
+              logger.debug " =>prof           join_max_time_entry_by_user           NOT needed" if debug == '2'
+            end
           end
 
-          #------------
-          # 2) By Issue, Filter on visible time entries
+
+          ####
+          # 2) join max t.e. by issue / user THIS MONTH
           if (
-            join_max_time_entry_id_by_issue_needed_for_filters?
+            join_max_t_e_by_issue_and_user_this_month ||
+            join_max_t_e_by_issue_this_month ||
+            join_max_t_e_by_user_this_month
           )
-            logger.debug " =>prof           +left_join_max_time_entry_id_by_issue(...)" if debug
+            #------------------------------------------
+            # 2.0) Filter time entries on current month
+            date_filter = Date.today
+            #date_filter = Date.today.prev_month
+            sql_current_month_t_e_filter = "tyear = #{date_filter.year} AND tmonth = #{date_filter.month}"
 
-            # 1.1) Filter on VISIBLE sub-issues used in left_join_max_time_entry_id_by_issue for :
-            sql_visible_issues_filter = ' ' + self.class.sql_in_values_or_false_if_empty(
-                sql_visible_time_entries_issues_ids(
-                  # 1.2) Optimization
-                  filter_column_on_projects('project_id'),
-                  debug
-                ),
-                'issue_id'
-              )
-            logger.debug " =>prof           sql_visible_issues_filter=#{sql_visible_issues_filter}" if debug == '3'
+            #-----------------------
+            # 2.1) By Issue and User, Filter on visible time entries
+            if join_max_t_e_by_issue_and_user_this_month
+              logger.debug " =>prof           +left_join_max_time_entry_id_by_issue_and_user(...)" if debug
 
-            sql_where_filter = self.class.sql_where_w_optional_conditions(
-                false, # where_prefix
-                # 1.1) Access to time entries check
-                sql_visible_issues_filter
-              ) +
-              ' '
-            if debug == '2'
-              logger.debug " =>prof           sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
-            elsif debug == '3'
-              logger.debug " =>prof           sql_where_filter='#{sql_where_filter}'"
+              sql_where_filter = self.class.sql_where_w_optional_conditions(
+                  false, # where_prefix
+                  # Access to time entries check
+                  sql_visible_issues_filter,
+                  sql_current_month_t_e_filter
+                ) +
+                ' '
+              if debug == '2'
+                logger.debug " =>prof           sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
+              elsif debug == '3'
+                logger.debug " =>prof           sql_where_filter='#{sql_where_filter}'"
+              end
+
+              # No postfix, default select name
+              joins << self.class.left_join_max_time_entry_id_by_issue_and_user(sql_where_filter, '_this_month')
+            else
+              logger.debug " =>prof           join_max_time_entry_by_issue_and_user NOT needed" if debug == '2'
             end
 
-            # No postfix, default select name
-            joins << self.class.left_join_max_time_entry_id_by_issue(sql_where_filter)
-          else
-            logger.debug " =>prof           join_max_time_entry_by_issue          NOT needed" if debug == '2'
+            #--------------
+            # 2.2) By Issue, Filter on visible time entries
+            if join_max_t_e_by_issue_this_month
+              logger.debug " =>prof           +left_join_max_time_entry_id_by_issue(...)" if debug
+
+              sql_where_filter = self.class.sql_where_w_optional_conditions(
+                  false, # where_prefix
+                  # Access to time entries check
+                  sql_visible_issues_filter,
+                  sql_current_month_t_e_filter
+                ) +
+                ' '
+              if debug == '2'
+                logger.debug " =>prof           sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
+              elsif debug == '3'
+                logger.debug " =>prof           sql_where_filter='#{sql_where_filter}'"
+              end
+
+              # No postfix, default select name
+              joins << self.class.left_join_max_time_entry_id_by_issue(sql_where_filter, '_this_month')
+            else
+              logger.debug " =>prof           join_max_time_entry_by_issue          NOT needed" if debug == '2'
+            end
+
+            #-------------
+            # 2.3) By User, Filter on visible time entries
+            if join_max_t_e_by_user_this_month
+              logger.debug " =>prof           +left_join_max_time_entry_id_by_user(...)" if debug
+
+              sql_where_filter = self.class.sql_where_w_optional_conditions(
+                  false, # where_prefix
+                  # Access to time entries check
+                  sql_visible_issues_filter,
+                  sql_current_month_t_e_filter
+                ) +
+                ' '
+              if debug == '2'
+                logger.debug " =>prof           sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
+              elsif debug == '3'
+                logger.debug " =>prof           sql_where_filter='#{sql_where_filter}'"
+              end
+
+              # No postfix, default select name
+              joins << self.class.left_join_max_time_entry_id_by_user(sql_where_filter, '_this_month')
+            else
+              logger.debug " =>prof           join_max_time_entry_by_user           NOT needed" if debug == '2'
+            end
           end
 
-          #-----------
-          # 3) By User, Filter on visible time entries
+
+          ####
+          # 3) join max t.e. by issue / user PREVIOUS MONTH
           if (
-            join_max_time_entry_id_by_user_needed_for_filters?
+            join_max_t_e_by_issue_and_user_previous_month ||
+            join_max_t_e_by_issue_previous_month ||
+            join_max_t_e_by_user_previous_month
           )
-            logger.debug " =>prof           +left_join_max_time_entry_id_by_user(...)" if debug
+            #-------------------------------------------
+            # 3.0) Filter time entries on previous month
+            date_filter = Date.today.prev_month
+            sql_current_month_t_e_filter = "tyear = #{date_filter.year} AND tmonth = #{date_filter.month}"
 
-            # 1.1) Filter on VISIBLE sub-issues used in left_join_max_time_entry_id_by_user for :
-            sql_visible_issues_filter = ' ' + self.class.sql_in_values_or_false_if_empty(
-                sql_visible_time_entries_issues_ids(
-                  # 1.2) Optimization
-                  filter_column_on_projects('project_id'),
-                  debug
-                ),
-                'issue_id'
-              )
-            logger.debug " =>prof           sql_visible_issues_filter=#{sql_visible_issues_filter}" if debug == '3'
+            #-----------------------
+            # 3.1) By Issue and User, Filter on visible time entries
+            if join_max_t_e_by_issue_and_user_previous_month
+              logger.debug " =>prof           +left_join_max_time_entry_id_by_issue_and_user(...)" if debug
 
-            sql_where_filter = self.class.sql_where_w_optional_conditions(
-                false, # where_prefix
-                # 1.1) Access to time entries check
-                sql_visible_issues_filter
-              ) +
-              ' '
-            if debug == '2'
-              logger.debug " =>prof           sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
-            elsif debug == '3'
-              logger.debug " =>prof           sql_where_filter='#{sql_where_filter}'"
+              sql_where_filter = self.class.sql_where_w_optional_conditions(
+                  false, # where_prefix
+                  # Access to time entries check
+                  sql_visible_issues_filter,
+                  sql_current_month_t_e_filter
+                ) +
+                ' '
+              if debug == '2'
+                logger.debug " =>prof           sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
+              elsif debug == '3'
+                logger.debug " =>prof           sql_where_filter='#{sql_where_filter}'"
+              end
+
+              # No postfix, default select name
+              joins << self.class.left_join_max_time_entry_id_by_issue_and_user(sql_where_filter, '_previous_month')
+            else
+              logger.debug " =>prof           join_max_time_entry_by_issue_and_user NOT needed" if debug == '2'
             end
 
-            # No postfix, default select name
-            joins << self.class.left_join_max_time_entry_id_by_user(sql_where_filter)
-          else
-            logger.debug " =>prof           join_max_time_entry_by_user           NOT needed" if debug == '2'
+
+            #--------------
+            # 3.2) By Issue, Filter on visible time entries
+            if join_max_t_e_by_issue_previous_month
+              logger.debug " =>prof           +left_join_max_time_entry_id_by_issue(...)" if debug
+
+              sql_where_filter = self.class.sql_where_w_optional_conditions(
+                  false, # where_prefix
+                  # Access to time entries check
+                  sql_visible_issues_filter,
+                  sql_current_month_t_e_filter
+                ) +
+                ' '
+              if debug == '2'
+                logger.debug " =>prof           sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
+              elsif debug == '3'
+                logger.debug " =>prof           sql_where_filter='#{sql_where_filter}'"
+              end
+
+              # No postfix, default select name
+              joins << self.class.left_join_max_time_entry_id_by_issue(sql_where_filter, '_previous_month')
+            else
+              logger.debug " =>prof           join_max_time_entry_by_issue          NOT needed" if debug == '2'
+            end
+
+            #-------------
+            # 3.3) By User, Filter on visible time entries
+            if join_max_t_e_by_user_previous_month
+              logger.debug " =>prof           +left_join_max_time_entry_id_by_user(...)" if debug
+
+              sql_where_filter = self.class.sql_where_w_optional_conditions(
+                  false, # where_prefix
+                  # Access to time entries check
+                  sql_visible_issues_filter,
+                  sql_current_month_t_e_filter
+                ) +
+                ' '
+              if debug == '2'
+                logger.debug " =>prof           sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
+              elsif debug == '3'
+                logger.debug " =>prof           sql_where_filter='#{sql_where_filter}'"
+              end
+
+              # No postfix, default select name
+              joins << self.class.left_join_max_time_entry_id_by_user(sql_where_filter, '_previous_month')
+            else
+              logger.debug " =>prof           join_max_time_entry_by_user           NOT needed" if debug == '2'
+            end
           end
 
           joins
         end
 
-        # 44/ EXTENDED, RM 4.0.0 OK
+        # 51/ EXTENDED, RM 4.0.0 OK
         # Extends IssueQuery.joins_for_order_statement to add joins
         # Smile specific : + param debug
         def joins_for_order_statement(order_options)
@@ -970,7 +1347,7 @@ module Smile
           order_joins
         end
 
-        # 45/ new method, RM 4.0.0 OK
+        # 60/ new method, RM 4.0.0 OK
         # Returns sum of all the spent hours for issue
         def total_for_spent_hours_for_issue(scope)
           debug = nil
@@ -995,7 +1372,7 @@ module Smile
           map_total(sums) {|t| t.to_f.round(2)}
         end
 
-        # 46/ new method, RM 4.0.0 OK
+        # 61/ new method, RM 4.0.0 OK
         # Returns sum of all the spent hours for issue and user
         def total_for_spent_hours_for_issue_and_user(scope)
           unless join_max_time_entry_id_by_issue_and_user_needed_for_filters?
@@ -1010,7 +1387,7 @@ module Smile
           map_total(scope.sum('max_time_entry_id_by_issue_and_user.sum_hours_by_issue_and_user')) {|t| t.to_f.round(2)}
         end
 
-        # 47/ new method, RM 4.0.0 OK
+        # 62/ new method, RM 4.0.0 OK
         # Returns sum of all the spent hours for user
         def total_for_spent_hours_for_user(scope)
           unless join_max_time_entry_id_by_user_needed_for_filters?
@@ -1025,7 +1402,7 @@ module Smile
           map_total(scope.sum('max_time_entry_id_by_user.sum_hours_by_user')) {|t| t.to_f.round(2)}
         end
 
-        # 48/ new method, RM 4.0.0 OK
+        # 63/ new method, RM 4.0.0 OK
         # Returns sum of all the billable hours for issue
         def total_for_billable_hours_for_issue(scope)
           cf = TimeEntry.billable_custom_field
@@ -1041,7 +1418,7 @@ module Smile
           total = map_total(total) {|t| cf.format.cast_total_value(cf, t)}
         end
 
-        # 49/ new method, RM 4.0.0 OK
+        # 64/ new method, RM 4.0.0 OK
         # Returns sum of all the billable hours for issue and user
         def total_for_billable_hours_for_issue_and_user(scope)
           cf = TimeEntry.billable_custom_field
@@ -1058,7 +1435,7 @@ module Smile
           total = map_total(total) {|t| cf.format.cast_total_value(cf, t)}
         end
 
-        # 50/ new method, RM 4.0.0 OK
+        # 65/ new method, RM 4.0.0 OK
         # Returns sum of all the billable hours for user
         def total_for_billable_hours_for_user(scope)
           cf = TimeEntry.billable_custom_field
@@ -1074,7 +1451,7 @@ module Smile
           total = map_total(total) {|t| cf.format.cast_total_value(cf, t)}
         end
 
-        # 51/ new method, RM 4.0.0 OK
+        # 66/ new method, RM 4.0.0 OK
         # Returns sum of all the deviation hours for issue
         def total_for_deviation_hours_for_issue(scope)
           cf = TimeEntry.deviation_custom_field
@@ -1090,7 +1467,7 @@ module Smile
           total = map_total(total) {|t| cf.format.cast_total_value(cf, t)}
         end
 
-        # 52/ new method, RM 4.0.0 OK
+        # 67/ new method, RM 4.0.0 OK
         # Returns sum of all the deviation hours for issue and user
         def total_for_deviation_hours_for_issue_and_user(scope)
           cf = TimeEntry.deviation_custom_field
@@ -1107,7 +1484,7 @@ module Smile
           total = map_total(total) {|t| cf.format.cast_total_value(cf, t)}
         end
 
-        # 53/ new method, RM 4.0.0 OK
+        # 68/ new method, RM 4.0.0 OK
         # Returns sum of all the deviation hours for user
         def total_for_deviation_hours_for_user(scope)
           cf = TimeEntry.deviation_custom_field

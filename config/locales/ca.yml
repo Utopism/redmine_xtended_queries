@@ -34,14 +34,32 @@ ca:
   field_spent_hours_for_issue_and_user: Hours for issue and user
   field_spent_hours_for_issue: Hours for issue
   field_spent_hours_for_user: Hours for user
+  field_spent_hours_for_issue_and_user_this_month: Hours for issue and user this month
+  field_spent_hours_for_issue_this_month: Hours for issue this month
+  field_spent_hours_for_user_this_month: Hours for user this month
+  field_spent_hours_for_issue_and_user_previous_month: Hours for issue and user previous month
+  field_spent_hours_for_issue_previous_month: Hours for issue previous month
+  field_spent_hours_for_user_previous_month: Hours for user previous month
 
   field_billable_hours_for_issue_and_user: Billable for issue and user
   field_billable_hours_for_issue: Billable for issue
   field_billable_hours_for_user: Billable for user
+  field_billable_hours_for_issue_and_user_this_month: Billable for issue and user this month
+  field_billable_hours_for_issue_this_month: Billable for issue this month
+  field_billable_hours_for_user_this_month: Billable for user this month
+  field_billable_hours_for_issue_and_user_previous_month: Billable for issue and user previous month
+  field_billable_hours_for_issue_previous_month: Billable for issue previous month
+  field_billable_hours_for_user_previous_month: Billable for user previous month
 
   field_deviation_hours_for_issue_and_user: Deviation for issue and user
   field_deviation_hours_for_issue: Deviation for issue
   field_deviation_hours_for_user: Deviation for user
+  field_deviation_hours_for_issue_and_user_this_month: Deviation for issue and user this month
+  field_deviation_hours_for_issue_this_month: Deviation for issue this month
+  field_deviation_hours_for_user_this_month: Deviation for user this month
+  field_deviation_hours_for_issue_and_user_previous_month: Deviation for issue and user previous month
+  field_deviation_hours_for_issue_previous_month: Deviation for issue previous month
+  field_deviation_hours_for_user_previous_month: Deviation for user previous month
 
   field_is_last_time_entry_for_issue_and_user: Is last Time Entry for issue and user
   field_is_last_time_entry_for_issue: Is last Time Entry for issue

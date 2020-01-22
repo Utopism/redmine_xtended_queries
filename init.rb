@@ -88,8 +88,12 @@ rails_dispatcher.to_prepare do
     '/lib/models/smile_models_time_entry',
     '/lib/models/smile_models_time_entry_query',
     '/lib/models/smile_models_query_custom_field_column',
-    '/lib/models/smile_models_time_report_query',
   ]
+
+  redmine_queries_for_time_report_plugin_available = Redmine::Plugin.installed?('redmine_queries_for_time_report')
+  if redmine_queries_for_time_report_plugin_available
+    required << '/lib/models/smile_models_time_report_query'
+  end
 
 
   ###############
@@ -172,7 +176,7 @@ rails_dispatcher.to_prepare do
 
   prepend_in(QueryCustomFieldColumn, Smile::Models::QueryCustomFieldColumnOverride::ExtendedQueries)
 
-  if Redmine::Plugin.installed?('redmine_queries_for_time_report')
+  if redmine_queries_for_time_report_plugin_available
     prepend_in(TimeReportQuery, Smile::Models::TimeReportQueryOverride::ExtendedQueries)
   end
 
