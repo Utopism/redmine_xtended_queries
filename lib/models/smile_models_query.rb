@@ -697,7 +697,6 @@ module Smile
         # Smile specific #147568 Filter on parent task
         # Smile specific #52117 Droit relais, accès aux sous-projets
         # Smile specific #247451 Entrées de temps et Rapport : filtre par demande
-        # Smile specific #994 Budget and Remaining enhancement
         def calc_project_and_children_issues
           return if defined?(@children_root_issues_id_and_label)
 
@@ -833,7 +832,6 @@ module Smile
         end
 
         # 22/ REWRITTEN, RM 4.0.0 OK
-        # TODO remove
         # Overrides Query.total_for to add more joins
         # Smile specific #994 Budget and Remaining enhancement
         # Smile specific #758281 V4.0.0 : Query Totals needs filter additionnal queries
@@ -905,8 +903,8 @@ module Smile
         end
 
         # 23/ REWRITTEN, RM 4.0.0 OK
-        # TODO remove total_by_group_for in this plugin
         # Smile specific #772964 V4.0.0 : Issues Pdf export : bar totals lead to error 500
+        # Smile specific #994 Budget and Remaining enhancement
         # Smile specific : + only_visible param
         # Smile specific : cached by only_visible AND column
         # Smile specific : calls itself on sub-columns for BAR COMPOSITE columns
@@ -941,7 +939,7 @@ module Smile
           #######################
 
 
-          #-----------------------------
+          #---------------
           # Smile specific : debug trace
           debug = nil
           if self.respond_to?('debug')
@@ -976,11 +974,10 @@ module Smile
         end
 
         # 24/ REWRITTEN, RM 4.0.0 OK
-        # TODO remove total_with_scope ?
         # Smile specific : manage only_visible case
         # Smile specific : only pass visible param to total_for_* send call
         def total_with_scope(column, scope, only_visible=true)
-          #-----------------------------
+          #---------------
           # Smile specific : debug trace
           debug = nil
           if self.respond_to?('debug')

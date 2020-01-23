@@ -246,6 +246,10 @@ module Smile
             end
 
             # 3/ REWRITTEN, RM 4.0.3 OK
+            # TODO test with and without redmine_smile_enhancements plugin
+            # Smile specific #994 Budget and remaining enhancement
+            # Smile specific #216009 Liste demandes : Compteur groupe vide, tâche racine / % avanct
+            # Smile specific #100718 Liste demandes : total F / G / D au niveau de chaque groupe
             def grouped_query_results(items, query, &block)
               #---------------
               # Smile specific : profiling trace
@@ -261,25 +265,94 @@ module Smile
               result_count_by_group = query.result_count_by_group
               #---------------
               # Smile specific : debug trace
-              logger.debug " =>prof     result_count_by_group keys=#{result_count_by_group.keys}" if debug
+              logger.debug " =>prof        result_count_by_group keys=#{result_count_by_group ? result_count_by_group.keys.join(',') : 'NONE'}" if debug
 
               previous_group, first = false, true
-              totals_by_group = query.totalable_columns.inject({}) do |h, column|
-                h[column] = query.total_by_group_for(column)
-                h
+
+              ################
+              # Smile specific : to calculate it once
+              issue_ids_by_group_value = nil
+
+              ################
+              # Smile specific #100718 Liste demandes : total F / G / D au niveau de chaque groupe
+              # Smile specific : calculate totals_by_group
+              if Query.respond_to?('group_additional_infos_provided?') && Query.group_additional_infos_provided?
+                if query.group_additional_infos
+                  logger.debug " =>prof       group_additional_infos OK" if debug
+                  logger.debug " =>prof       grouped? #{query.grouped? ? 1 : 0}" if debug
+
+                  totals_by_group = query.totalable_columns.inject({}) do |h, column|
+                    ################
+                    # Smile specific #994 Budget and remaining enhancement
+                    # Smile specific : group totals for BAR columns, Optimized :
+                    # * Use preloaded BAR values
+                    # * Only on parent issues if with Children
+                    logger.debug " =>prof   * #{column.name}" if query.grouped? && debug
+
+                    total_by_group_for_column = query.total_by_group_for_column_for_issues(column, items)
+
+                    if total_by_group_for_column.nil?
+                      h[column] = query.total_by_group_for(column)
+                    else
+                      h[column] = total_by_group_for_column
+                    end
+                    # END -- Smile specific #994 Budget and remaining enhancement
+                    #######################
+
+                    ################
+                    # Smile specific #994 Budget and remaining enhancement
+                    # Smile specific : hours by day conversion
+                    if (
+                      query.hours_by_day && (query.hours_by_day != 0) &&
+                      (
+                        [:spent_hours, :estimated_hours].include?(column.name) ||
+                        Query.bar_additional_time_column_names.include?(column.name)
+                      )
+                    )
+                      if h[column]
+                        h[column].each do |k, total|
+                          h[column][k] = (total / query.hours_by_day) if total
+                        end
+                      end
+                    end
+                    # END -- Smile specific #994 Budget and remaining enhancement
+                    #######################
+
+                    h
+                  end # totals_by_group = query.totalable_columns ...
+                else
+                  totals_by_group = nil
+                end
+              else
+                #--------------
+                # Smile comment : NATIVE Source Code
+                totals_by_group = query.totalable_columns.inject({}) do |h, column|
+                  h[column] = query.total_by_group_for(column)
+                  h
+                end
               end
               items.each do |item|
-                logger.debug " =>prof     #{item.id}" if debug == '2'
+                #---------------
+                # Smile specific : debug trace
+                logger.debug " =>prof       #{item.id}" if debug == '2'
                 group_name = group_count = nil
                 if query.grouped?
                   column = query.group_by_column
                   #---------------
                   # Smile specific : split for debug trace
-                  group = column.value(item)
+                  # Smile comment : Old version :
+                  # group = group.value(item)
+                  ################
+                  # Smile specific : + with_children
+                  with_children = nil
+                  if Query.respond_to?('with_children_provided?') && Query.with_children_provided?
+                    with_children = query.with_children
+                  end
+                  group = column.group_value(item, with_children)
 
                   ################
-                  # Smile specific : Fix issue if group is a model
-                  # More complicated groupable than (= true)
+                  # Smile specific : Fix issue if group is a model, for columns issue, root, parent
+                  # Smile comment : more complicated groupable than (= true)
                   group_key = group
                   if (
                     group &&
@@ -303,21 +376,43 @@ module Smile
                     else
                       #---------------
                       # Smile specific : debug trace
-                      logger.debug " =>prof       grouped column=#{column.name}" if debug
+                      logger.debug " =>prof         grouped column=#{column.name}" if debug == '2'
+
                       group_name = format_object(group)
+
+                      #---------------
+                      # Smile specific : debug trace
+                      logger.debug " =>prof         ** group_name=#{group_name}" if debug == '3'
                     end
                     group_name ||= ""
 
                     #---------------
                     # Smile specific : debug trace
-                    logger.debug " =>prof       group count for class #{group.class}" if debug == '2'
+                    logger.debug " =>prof         group count for class #{group.class}" if debug == '2'
 
-                    ######################
-                    # Smile specific group -> group_key
+                    ################
+                    # Smile specific : group -> group_key
                     group_count = result_count_by_group ? result_count_by_group[group_key] : nil
-                    ######################
-                    # Smile specific group -> group_key
-                    group_totals = totals_by_group.map {|column, t| total_tag(column, t[group_key] || 0)}.join(" ").html_safe
+
+                    ################
+                    # Smile specific #100718 Liste demandes : total F / G / D au niveau de chaque groupe
+                    # Smile specific : only if query.group_additional_infos
+                    if Query.respond_to?('group_additional_infos_provided?') && Query.group_additional_infos_provided?
+                      if query.group_additional_infos
+                        ################
+                        # Smile specific : group -> group_key
+                        group_totals = totals_by_group.map {|column, t| total_tag(column, t[group_key] || 0, query.hours_by_day)}.join(" ").html_safe
+                      else
+                        group_totals = nil
+                      end
+                    else
+                      #--------------
+                      # Smile comment : NATIVE Source Code
+
+                      ################
+                      # Smile specific : group -> group_key
+                      group_totals = totals_by_group.map {|column, t| total_tag(column, t[group_key] || 0)}.join(" ").html_safe
+                    end
                   end
                 end
                 yield item, group_name, group_count, group_totals
