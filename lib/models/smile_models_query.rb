@@ -834,6 +834,7 @@ module Smile
         # 22/ REWRITTEN, RM 4.0.0 OK
         # Overrides Query.total_for to add more joins
         # Smile specific #994 Budget and Remaining enhancement
+        # TODO add hook
         # Smile specific #758281 V4.0.0 : Query Totals needs filter additionnal queries
         # Smile specific : + only_visible param
         # Smile specific : cached by only_visible AND column
@@ -859,6 +860,7 @@ module Smile
             return @total_for_by_column[only_visible][column.name]
           end
 
+          # TODO add hook
           if self.respond_to?('total_for_bar')
             total_for_bar(column, only_visible, @total_for_by_column, :total_for)
           end
@@ -905,6 +907,7 @@ module Smile
         # 23/ REWRITTEN, RM 4.0.0 OK
         # Smile specific #772964 V4.0.0 : Issues Pdf export : bar totals lead to error 500
         # Smile specific #994 Budget and Remaining enhancement
+        # TODO add hook
         # Smile specific : + only_visible param
         # Smile specific : cached by only_visible AND column
         # Smile specific : calls itself on sub-columns for BAR COMPOSITE columns
@@ -928,6 +931,7 @@ module Smile
 
           ################
           # Smile specific : manage composite Issue Columns
+          # TODO add hook
           if self.respond_to?('total_for_bar')
             total_for_bar(column, only_visible, @total_by_group_for_by_column, :total_by_group_for)
           end
