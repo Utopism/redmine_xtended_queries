@@ -33,55 +33,55 @@ module Smile
           extended_queries_instance_methods = [
             :results_scope,                                               #  1/ EXTENDED    TESTED  RM V4.0.0 OK
             :build_from_params,                                           #  2/ EXTENDED    TESTED  RM V4.0.0 OK
+            :available_columns,                                           #  3/ EXTENDED    TESTED  RM V4.0.0 OK
+            :initialize_available_filters,                                #  4/ REWRITTEN   TO TEST RM V4.0.0 OK
+            :joins_additionnal,                                           #  5/ new method  TO TEST RM V4.0.0 OK
+            :joins_for_order_statement,                                   #  6/ EXTENDED    TO TEST RM V4.0.0 OK
 
-            :sql_for_issue_created_on_field,                              #  3/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_tracker_field,                                       #  4/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_subject_field,                                       #  5/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_fixed_version_id_field,                              #  6/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_issue_category_id_field,                             #  7/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_root_id_field,                                       #  9/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_parent_id_field,                                     # 10/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_member_of_group_field,                               # 11/ new method  TESTED  RM V4.0.0 OK COPIED from IssueQuery
-            :sql_for_user_id_me_field,                                    # 12/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_author_id_me_field,                                  # 13/ new method  TESTED  RM V4.0.0 OK
 
-            :sql_for_is_last_time_entry_for_issue_and_user_field,         # 14/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_is_last_time_entry_for_issue_field,                  # 15/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_is_last_time_entry_for_user_field,                   # 16/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_issue_created_on_field,                              # 10/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_tracker_field,                                       # 11/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_subject_field,                                       # 12/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_fixed_version_id_field,                              # 13/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_issue_category_id_field,                             # 14/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_root_id_field,                                       # 15/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_parent_id_field,                                     # 16/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_member_of_group_field,                               # 17/ new method  TESTED  RM V4.0.0 OK COPIED from IssueQuery
+            :sql_for_user_id_me_field,                                    # 18/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_author_id_me_field,                                  # 19/ new method  TESTED  RM V4.0.0 OK
 
-            :sql_for_spent_hours_for_issue_and_user_field,                # 17/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_spent_hours_for_issue_field,                         # 18/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_spent_hours_for_user_field,                          # 19/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_is_last_time_entry_for_issue_and_user_field,         # 30/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_is_last_time_entry_for_issue_field,                  # 31/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_is_last_time_entry_for_user_field,                   # 32/ new method  TESTED  RM V4.0.0 OK
 
-            :sql_for_spent_hours_for_issue_and_user_this_month_field,     # 20/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_spent_hours_for_issue_this_month_field,              # 21/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_spent_hours_for_user_this_month_field,               # 22/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_spent_hours_for_issue_and_user_field,                # 33/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_spent_hours_for_issue_field,                         # 34/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_spent_hours_for_user_field,                          # 35/ new method  TESTED  RM V4.0.0 OK
 
-            :sql_for_spent_hours_for_issue_and_user_previous_month_field, # 23/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_spent_hours_for_issue_previous_month_field,          # 24/ new method  TESTED  RM V4.0.0 OK
-            :sql_for_spent_hours_for_user_previous_month_field,           # 25/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_spent_hours_for_issue_and_user_this_month_field,     # 36/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_spent_hours_for_issue_this_month_field,              # 37/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_spent_hours_for_user_this_month_field,               # 38/ new method  TESTED  RM V4.0.0 OK
 
-            :available_columns,                                           # 30/ EXTENDED    TESTED  RM V4.0.0 OK
-            :initialize_available_filters,                                # 31/ REWRITTEN   TO TEST RM V4.0.0 OK
+            :sql_for_spent_hours_for_issue_and_user_previous_month_field, # 39/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_spent_hours_for_issue_previous_month_field,          # 40/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_spent_hours_for_user_previous_month_field,           # 41/ new method  TESTED  RM V4.0.0 OK
+
 
             #################################################
             # New filters on last time entry for issue / user
-            :join_max_time_entry_id_by_issue_and_user_needed_for_filters?,                # 40/ new TO TEST RM V4.0.0 OK
-            :join_max_time_entry_id_by_issue_needed_for_filters?,                         # 41/ new method  TO TEST RM V4.0.0 OK
-            :join_max_time_entry_id_by_user_needed_for_filters?,                          # 42/ new method  TO TEST RM V4.0.0 OK
+            :join_max_time_entry_id_by_issue_and_user_needed_for_filters?,                # 50/ new TO TEST RM V4.0.0 OK
+            :join_max_time_entry_id_by_issue_needed_for_filters?,                         # 51/ new method  TO TEST RM V4.0.0 OK
+            :join_max_time_entry_id_by_user_needed_for_filters?,                          # 52/ new method  TO TEST RM V4.0.0 OK
 
             ############################
             # New filters on Spent hours
-            :join_max_time_entry_id_by_issue_and_user_this_month_needed_for_filters?,     # 43/ new TO TEST RM V4.0.0 OK
-            :join_max_time_entry_id_by_issue_this_month_needed_for_filters?,              # 44/ new method  TO TEST RM V4.0.0 OK
-            :join_max_time_entry_id_by_user_this_month_needed_for_filters?,               # 45/ new method  TO TEST RM V4.0.0 OK
+            :join_max_time_entry_id_by_issue_and_user_this_month_needed_for_filters?,     # 53/ new TO TEST RM V4.0.0 OK
+            :join_max_time_entry_id_by_issue_this_month_needed_for_filters?,              # 54/ new method  TO TEST RM V4.0.0 OK
+            :join_max_time_entry_id_by_user_this_month_needed_for_filters?,               # 55/ new method  TO TEST RM V4.0.0 OK
 
-            :join_max_time_entry_id_by_issue_and_user_previous_month_needed_for_filters?, # 46/ new TO TEST RM V4.0.0 OK
-            :join_max_time_entry_id_by_issue_previous_month_needed_for_filters?,          # 47/ new method  TO TEST RM V4.0.0 OK
-            :join_max_time_entry_id_by_user_previous_month_needed_for_filters?,           # 48/ new method  TO TEST RM V4.0.0 OK
-
-            :joins_additionnal,                                    # 50/ new method  TO TEST RM V4.0.0 OK
-            :joins_for_order_statement,                            # 51/ EXTENDED    TO TEST RM V4.0.0 OK
+            :join_max_time_entry_id_by_issue_and_user_previous_month_needed_for_filters?, # 56/ new TO TEST RM V4.0.0 OK
+            :join_max_time_entry_id_by_issue_previous_month_needed_for_filters?,          # 57/ new method  TO TEST RM V4.0.0 OK
+            :join_max_time_entry_id_by_user_previous_month_needed_for_filters?,           # 58/ new method  TO TEST RM V4.0.0 OK
 
             :total_for_spent_hours_for_issue,                      # 60/ new method  TO TEST RM V4.0.0 OK
             :total_for_spent_hours_for_issue_and_user,             # 61/ new method  TO TEST RM V4.0.0 OK
@@ -515,143 +515,7 @@ module Smile
           self
         end
 
-        # 3/ new method, RM 4.0.0 Plugin OK
-        # Smile specific #358513: Rapport temps passé : filtre Demande Créée (date)
-        def sql_for_issue_created_on_field(field, operator, value)
-          sql_for_field(field, operator, value, Issue.table_name, 'created_on')
-        end
-
-        # 4/ new method, RM 2.3.2 OK
-        # Smile specific #222040 Liste des entrées de temps : dé-sérialisation colonne Demande et filtres
-        def sql_for_tracker_field(field, operator, value)
-          sql_for_field(field, operator, value, Issue.table_name, 'tracker_id')
-        end
-
-        # 5/ new method, RM 2.3.2 OK
-        # Smile specific #222040 Liste des entrées de temps : dé-sérialisation colonne Demande et filtres
-        def sql_for_subject_field(field, operator, value)
-          sql_for_field(field, operator, value, Issue.table_name, 'subject')
-        end
-
-        # 6/ new method, RM 2.3.2 OK
-        # Smile specific #248383 Rapport: filtre sur version et catégorie
-        def sql_for_fixed_version_id_field(field, operator, value)
-          sql_for_field(field, operator, value, Issue.table_name, 'fixed_version_id')
-        end
-
-        # 7/ new method, RM 2.3.2 OK
-        # Smile specific #248383 Rapport: filtre sur version et catégorie
-        def sql_for_issue_category_id_field(field, operator, value)
-          sql_for_field(field, operator, value, Issue.table_name, 'category_id')
-        end
-
-        # 9/ new method, RM 2.6 OK
-        # Smile specific #423277 Rapport : Filtre sur tâche parente et racine
-        def sql_for_root_id_field(field, operator, value)
-          sql_for_field(field, operator, value, Issue.table_name, 'root_id')
-        end
-
-        # 10/ new method, RM 2.6 OK
-        # Smile specific #423277 Rapport : Filtre sur tâche parente et racine
-        def sql_for_parent_id_field(field, operator, value)
-          sql_for_field(field, operator, value, Issue.table_name, 'parent_id')
-        end
-
-        # 11/ new method, RM 2.6 OK
-        # Smile specific #473776 Spent Time Report : Filter on Assignee's group
-        # COPIED from IssueQuery
-        def sql_for_member_of_group_field(field, operator, value)
-          if operator == '*' # Any group
-            groups = Group.givable
-            operator = '=' # Override the operator since we want to find by assigned_to
-          elsif operator == "!*"
-            groups = Group.givable
-            operator = '!' # Override the operator since we want to find by assigned_to
-          else
-            groups = Group.where(:id => value).to_a
-          end
-          groups ||= []
-
-          members_of_groups = groups.inject([]) {|user_ids, group|
-            user_ids + group.user_ids + [group.id]
-          }.uniq.compact.sort.collect(&:to_s)
-
-          '(' + sql_for_field("assigned_to_id", operator, members_of_groups, Issue.table_name, "assigned_to_id", false) + ')'
-        end
-
-        # 12/ new method, RM 4.0.0 OK
-        # Smile specific #831010: Time Report Query : new time entry user filter, me
-        def sql_for_user_id_me_field(field, operator, value)
-          sql_for_field(field, operator, value, nil, "(CASE WHEN (#{TimeEntry.table_name}.user_id = #{User.current.id}) THEN 'me' ELSE 'not_me' END)")
-        end
-
-        # 13/ new method, RM 4.0.0 OK
-        # Smile specific #831010: Time Report Query : new time entry user filter, me
-        def sql_for_author_id_me_field(field, operator, value)
-          sql_for_field(field, operator, value, nil, "(CASE WHEN (#{TimeEntry.table_name}.author_id = #{User.current.id}) THEN 'me' ELSE 'not_me' END)")
-        end
-
-        # 14/ new method, RM 4.0.0 OK
-        def sql_for_is_last_time_entry_for_issue_and_user_field(field, operator, value)
-          sql_for_field(field, operator, value, nil, "(#{TimeEntry.table_name}.id = max_time_entry_id_by_issue_and_user.max_id)")
-        end
-
-        # 15/ new method, RM 4.0.0 OK
-        def sql_for_is_last_time_entry_for_issue_field(field, operator, value)
-          sql_for_field(field, operator, value, nil, "(#{TimeEntry.table_name}.id = max_time_entry_id_by_issue.max_id)")
-        end
-
-        # 16/ new method, RM 4.0.0 OK
-        def sql_for_is_last_time_entry_for_user_field(field, operator, value)
-          sql_for_field(field, operator, value, nil, "(#{TimeEntry.table_name}.id = max_time_entry_id_by_user.max_id)")
-        end
-
-        # 17/ new method, RM 4.0.0 OK
-        def sql_for_spent_hours_for_issue_and_user_field(field, operator, value)
-          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_issue_and_user.sum_hours_by_issue_and_user")
-        end
-
-        # 18/ new method, RM 4.0.0 OK
-        def sql_for_spent_hours_for_issue_field(field, operator, value)
-          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_issue.sum_hours_by_issue")
-        end
-
-        # 19/ new method, RM 4.0.0 OK
-        def sql_for_spent_hours_for_user_field(field, operator, value)
-          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_user.sum_hours_by_user")
-        end
-
-        # 20/ new method, RM 4.0.0 OK
-        def sql_for_spent_hours_for_issue_and_user_this_month_field(field, operator, value)
-          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_issue_and_user_this_month.sum_hours_by_issue_and_user")
-        end
-
-        # 21/ new method, RM 4.0.0 OK
-        def sql_for_spent_hours_for_issue_this_month_field(field, operator, value)
-          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_issue_this_month.sum_hours_by_issue")
-        end
-
-        # 22/ new method, RM 4.0.0 OK
-        def sql_for_spent_hours_for_user_this_month_field(field, operator, value)
-          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_user_this_month.sum_hours_by_user")
-        end
-
-        # 23/ new method, RM 4.0.0 OK
-        def sql_for_spent_hours_for_issue_and_user_previous_month_field(field, operator, value)
-          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_issue_and_user_previous_month.sum_hours_by_issue_and_user")
-        end
-
-        # 24/ new method, RM 4.0.0 OK
-        def sql_for_spent_hours_for_issue_previous_month_field(field, operator, value)
-          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_issue_previous_month.sum_hours_by_issue")
-        end
-
-        # 25/ new method, RM 4.0.0 OK
-        def sql_for_spent_hours_for_user_previous_month_field(field, operator, value)
-          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_user_previous_month.sum_hours_by_user")
-        end
-
-        # 30/ EXTENDED, RM 4.0.0 OK
+        # 3/ EXTENDED, RM 4.0.0 OK
         # Add new optional columns
         # instance variable : for each project / user
         # + TMONTH
@@ -680,8 +544,7 @@ module Smile
           @available_columns
         end
 
-        # 31/ REWRITTEN, RM 4.0.0 OK
-        # TODO add hook
+        # 4/ REWRITTEN, RM 4.0.0 OK
         # Smile specific #768560: V4.0.0 : Time entries list : access to hidden BAR values
         # Smile specific : new filters
         # + BU
@@ -689,7 +552,7 @@ module Smile
         # + ROOT_ID, PARENT_ID
         # + ISSUE CREATED ON
         # + MEMBER OF GROUP
-        # TODO move in other plugin :
+        # TODO move to hook budget/remaining hours :
         # + BUDGET HOURS
         # + REMAINING HOURS
         def initialize_available_filters
@@ -748,7 +611,7 @@ module Smile
                 :type => :list_optional,
                 :values => lambda {
                   calc_project_and_children_issues
-                  @children_root_issues_id_and_label
+                    @children_root_issues_id_and_label
                 }
 
               add_available_filter 'parent_id',
@@ -756,8 +619,23 @@ module Smile
                 :type => :list_optional,
                 :values => lambda {
                   calc_project_and_children_issues
-                  @children_parent_issues_id_and_label
+                    @children_parent_issues_id_and_label
                 }
+
+              ################
+              # Smile specific #247451 Entrées de temps et Rapport : filtre par demande
+              # * Unable to know if we are on an issue :
+              #   scope modified afterwards by the controller to filter on issue
+              #   => possible to filter on an issue that is not the current one
+              #   => obviously will return no result
+              add_available_filter 'issue_id',
+                :type => :list_optional,
+                :values => lambda {
+                  calc_project_and_children_issues
+                    @children_issues_id_and_label
+                }
+              # END -- Smile specific #247451 Entrées de temps et Rapport : filtre par demande
+              #######################
 
               #---------------
               # Smile specific #147568 Filter on parent task
@@ -770,27 +648,13 @@ module Smile
               add_available_filter 'level_in_tree',
                 :type => :integer
             end
+          else
+            # NATIVE source code
+            add_available_filter("issue_id", :type => :tree, :label => :label_issue)
           end
           # END -- Smile specific : new filters, only if on project
           #######################
 
-          add_available_filter("issue_id", :type => :tree, :label => :label_issue)
-
-          ################
-          # Smile specific #247451 Entrées de temps et Rapport : filtre par demande
-          # * Unable to know if we are on an issue :
-          #   scope modified afterwards by the controller to filter on issue
-          #   => possible to filter on an issue that is not the current one
-          #   => obviously will return no result
-          # Smile TODO Jebat V4.0.0 DISABLED
-          #
-          # unless project_and_subprojects_issues.empty?
-          #   add_available_filter 'issue_id',
-          #     :type => :list_optional,
-          #     :values => project_and_subprojects_issues
-          # end
-          # END -- Smile specific #247451 Entrées de temps et Rapport : filtre par demande
-          #######################
 
           ################
           # Smile specific : issue created on filter
@@ -913,73 +777,7 @@ module Smile
           add_associations_custom_fields_filters :user
         end
 
-
-        ###############################
-        # Filters on Is last time entry
-        # 40/ new method, RM 4.0.0 OK
-        def join_max_time_entry_id_by_issue_and_user_needed_for_filters?
-          filters.include?('is_last_time_entry_for_issue_and_user') ||
-            or_filters.include?('is_last_time_entry_for_issue_and_user') ||
-          filters.include?('spent_hours_for_issue_and_user') ||
-            or_filters.include?('spent_hours_for_issue_and_user')
-        end
-
-        # 41/ new method, RM 4.0.0 OK
-        def join_max_time_entry_id_by_issue_needed_for_filters?
-          filters.include?('is_last_time_entry_for_issue') ||
-            or_filters.include?('is_last_time_entry_for_issue') ||
-          filters.include?('spent_hours_for_issue') ||
-            or_filters.include?('spent_hours_for_issue')
-        end
-
-        # 42/ new method, RM 4.0.0 OK
-        def join_max_time_entry_id_by_user_needed_for_filters?
-          filters.include?('is_last_time_entry_for_user') ||
-            or_filters.include?('is_last_time_entry_for_user') ||
-          filters.include?('spent_hours_for_user') ||
-            or_filters.include?('spent_hours_for_user')
-        end
-
-        ########################
-        # Filters on Spent Hours
-        # 43/ new method, RM 4.0.0 OK
-        def join_max_time_entry_id_by_issue_and_user_this_month_needed_for_filters?
-          filters.include?('spent_hours_for_issue_and_user_this_month') ||
-            or_filters.include?('spent_hours_for_issue_and_user_this_month')
-        end
-
-        # 44/ new method, RM 4.0.0 OK
-        def join_max_time_entry_id_by_issue_this_month_needed_for_filters?
-          filters.include?('spent_hours_for_issue_this_month') ||
-            or_filters.include?('spent_hours_for_issue_this_month')
-        end
-
-        # 45/ new method, RM 4.0.0 OK
-        def join_max_time_entry_id_by_user_this_month_needed_for_filters?
-          filters.include?('spent_hours_for_user_this_month') ||
-            or_filters.include?('spent_hours_for_user_this_month')
-        end
-
-        # 46/ new method, RM 4.0.0 OK
-        def join_max_time_entry_id_by_issue_and_user_previous_month_needed_for_filters?
-          filters.include?('spent_hours_for_issue_and_user_previous_month') ||
-            or_filters.include?('spent_hours_for_issue_and_user_previous_month')
-        end
-
-        # 47/ new method, RM 4.0.0 OK
-        def join_max_time_entry_id_by_issue_previous_month_needed_for_filters?
-          filters.include?('spent_hours_for_issue_previous_month') ||
-            or_filters.include?('spent_hours_for_issue_previous_month')
-        end
-
-        # 48/ new method, RM 4.0.0 OK
-        def join_max_time_entry_id_by_user_previous_month_needed_for_filters?
-          filters.include?('spent_hours_for_user_previous_month') ||
-            or_filters.include?('spent_hours_for_user_previous_month')
-        end
-
-
-        # 50/ new method, RM 4.0.0 OK
+        # 5/ new method, RM 4.0.0 OK
         # Smile specific : debug from query
         def joins_additionnal(order_options)
           joins = []
@@ -1305,7 +1103,7 @@ module Smile
           joins
         end
 
-        # 51/ EXTENDED, RM 4.0.0 OK
+        # 6/ EXTENDED, RM 4.0.0 OK
         # Extends IssueQuery.joins_for_order_statement to add joins
         # Smile specific : + param debug
         def joins_for_order_statement(order_options)
@@ -1335,6 +1133,208 @@ module Smile
           end
 
           order_joins
+        end
+
+
+        # 10/ new method, RM 4.0.0 Plugin OK
+        # Smile specific #358513: Rapport temps passé : filtre Demande Créée (date)
+        def sql_for_issue_created_on_field(field, operator, value)
+          sql_for_field(field, operator, value, Issue.table_name, 'created_on')
+        end
+
+        # 11/ new method, RM 2.3.2 OK
+        # Smile specific #222040 Liste des entrées de temps : dé-sérialisation colonne Demande et filtres
+        def sql_for_tracker_field(field, operator, value)
+          sql_for_field(field, operator, value, Issue.table_name, 'tracker_id')
+        end
+
+        # 12/ new method, RM 2.3.2 OK
+        # Smile specific #222040 Liste des entrées de temps : dé-sérialisation colonne Demande et filtres
+        def sql_for_subject_field(field, operator, value)
+          sql_for_field(field, operator, value, Issue.table_name, 'subject')
+        end
+
+        # 13/ new method, RM 2.3.2 OK
+        # Smile specific #248383 Rapport: filtre sur version et catégorie
+        def sql_for_fixed_version_id_field(field, operator, value)
+          sql_for_field(field, operator, value, Issue.table_name, 'fixed_version_id')
+        end
+
+        # 14/ new method, RM 2.3.2 OK
+        # Smile specific #248383 Rapport: filtre sur version et catégorie
+        def sql_for_issue_category_id_field(field, operator, value)
+          sql_for_field(field, operator, value, Issue.table_name, 'category_id')
+        end
+
+        # 15/ new method, RM 2.6 OK
+        # Smile specific #423277 Rapport : Filtre sur tâche parente et racine
+        def sql_for_root_id_field(field, operator, value)
+          sql_for_field(field, operator, value, Issue.table_name, 'root_id')
+        end
+
+        # 16/ new method, RM 2.6 OK
+        # Smile specific #423277 Rapport : Filtre sur tâche parente et racine
+        def sql_for_parent_id_field(field, operator, value)
+          sql_for_field(field, operator, value, Issue.table_name, 'parent_id')
+        end
+
+        # 17/ new method, RM 2.6 OK
+        # Smile specific #473776 Spent Time Report : Filter on Assignee's group
+        # COPIED from IssueQuery
+        def sql_for_member_of_group_field(field, operator, value)
+          if operator == '*' # Any group
+            groups = Group.givable
+            operator = '=' # Override the operator since we want to find by assigned_to
+          elsif operator == "!*"
+            groups = Group.givable
+            operator = '!' # Override the operator since we want to find by assigned_to
+          else
+            groups = Group.where(:id => value).to_a
+          end
+          groups ||= []
+
+          members_of_groups = groups.inject([]) {|user_ids, group|
+            user_ids + group.user_ids + [group.id]
+          }.uniq.compact.sort.collect(&:to_s)
+
+          '(' + sql_for_field("assigned_to_id", operator, members_of_groups, Issue.table_name, "assigned_to_id", false) + ')'
+        end
+
+        # 18/ new method, RM 4.0.0 OK
+        # Smile specific #831010: Time Report Query : new time entry user filter, me
+        def sql_for_user_id_me_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "(CASE WHEN (#{TimeEntry.table_name}.user_id = #{User.current.id}) THEN 'me' ELSE 'not_me' END)")
+        end
+
+        # 19/ new method, RM 4.0.0 OK
+        # Smile specific #831010: Time Report Query : new time entry user filter, me
+        def sql_for_author_id_me_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "(CASE WHEN (#{TimeEntry.table_name}.author_id = #{User.current.id}) THEN 'me' ELSE 'not_me' END)")
+        end
+
+        # 30/ new method, RM 4.0.0 OK
+        def sql_for_is_last_time_entry_for_issue_and_user_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "(#{TimeEntry.table_name}.id = max_time_entry_id_by_issue_and_user.max_id)")
+        end
+
+        # 31/ new method, RM 4.0.0 OK
+        def sql_for_is_last_time_entry_for_issue_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "(#{TimeEntry.table_name}.id = max_time_entry_id_by_issue.max_id)")
+        end
+
+        # 32/ new method, RM 4.0.0 OK
+        def sql_for_is_last_time_entry_for_user_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "(#{TimeEntry.table_name}.id = max_time_entry_id_by_user.max_id)")
+        end
+
+        # 33/ new method, RM 4.0.0 OK
+        def sql_for_spent_hours_for_issue_and_user_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_issue_and_user.sum_hours_by_issue_and_user")
+        end
+
+        # 34/ new method, RM 4.0.0 OK
+        def sql_for_spent_hours_for_issue_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_issue.sum_hours_by_issue")
+        end
+
+        # 35/ new method, RM 4.0.0 OK
+        def sql_for_spent_hours_for_user_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_user.sum_hours_by_user")
+        end
+
+        # 36/ new method, RM 4.0.0 OK
+        def sql_for_spent_hours_for_issue_and_user_this_month_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_issue_and_user_this_month.sum_hours_by_issue_and_user")
+        end
+
+        # 37/ new method, RM 4.0.0 OK
+        def sql_for_spent_hours_for_issue_this_month_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_issue_this_month.sum_hours_by_issue")
+        end
+
+        # 38/ new method, RM 4.0.0 OK
+        def sql_for_spent_hours_for_user_this_month_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_user_this_month.sum_hours_by_user")
+        end
+
+        # 39/ new method, RM 4.0.0 OK
+        def sql_for_spent_hours_for_issue_and_user_previous_month_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_issue_and_user_previous_month.sum_hours_by_issue_and_user")
+        end
+
+        # 40/ new method, RM 4.0.0 OK
+        def sql_for_spent_hours_for_issue_previous_month_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_issue_previous_month.sum_hours_by_issue")
+        end
+
+        # 41/ new method, RM 4.0.0 OK
+        def sql_for_spent_hours_for_user_previous_month_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "max_time_entry_id_by_user_previous_month.sum_hours_by_user")
+        end
+
+
+        ###############################
+        # Filters on Is last time entry
+        # 40/ new method, RM 4.0.0 OK
+        def join_max_time_entry_id_by_issue_and_user_needed_for_filters?
+          filters.include?('is_last_time_entry_for_issue_and_user') ||
+            or_filters.include?('is_last_time_entry_for_issue_and_user') ||
+          filters.include?('spent_hours_for_issue_and_user') ||
+            or_filters.include?('spent_hours_for_issue_and_user')
+        end
+
+        # 41/ new method, RM 4.0.0 OK
+        def join_max_time_entry_id_by_issue_needed_for_filters?
+          filters.include?('is_last_time_entry_for_issue') ||
+            or_filters.include?('is_last_time_entry_for_issue') ||
+          filters.include?('spent_hours_for_issue') ||
+            or_filters.include?('spent_hours_for_issue')
+        end
+
+        # 42/ new method, RM 4.0.0 OK
+        def join_max_time_entry_id_by_user_needed_for_filters?
+          filters.include?('is_last_time_entry_for_user') ||
+            or_filters.include?('is_last_time_entry_for_user') ||
+          filters.include?('spent_hours_for_user') ||
+            or_filters.include?('spent_hours_for_user')
+        end
+
+        ########################
+        # Filters on Spent Hours
+        # 53/ new method, RM 4.0.0 OK
+        def join_max_time_entry_id_by_issue_and_user_this_month_needed_for_filters?
+          filters.include?('spent_hours_for_issue_and_user_this_month') ||
+            or_filters.include?('spent_hours_for_issue_and_user_this_month')
+        end
+
+        # 54/ new method, RM 4.0.0 OK
+        def join_max_time_entry_id_by_issue_this_month_needed_for_filters?
+          filters.include?('spent_hours_for_issue_this_month') ||
+            or_filters.include?('spent_hours_for_issue_this_month')
+        end
+
+        # 55/ new method, RM 4.0.0 OK
+        def join_max_time_entry_id_by_user_this_month_needed_for_filters?
+          filters.include?('spent_hours_for_user_this_month') ||
+            or_filters.include?('spent_hours_for_user_this_month')
+        end
+
+        # 56/ new method, RM 4.0.0 OK
+        def join_max_time_entry_id_by_issue_and_user_previous_month_needed_for_filters?
+          filters.include?('spent_hours_for_issue_and_user_previous_month') ||
+            or_filters.include?('spent_hours_for_issue_and_user_previous_month')
+        end
+
+        # 57/ new method, RM 4.0.0 OK
+        def join_max_time_entry_id_by_issue_previous_month_needed_for_filters?
+          filters.include?('spent_hours_for_issue_previous_month') ||
+            or_filters.include?('spent_hours_for_issue_previous_month')
+        end
+
+        # 58/ new method, RM 4.0.0 OK
+        def join_max_time_entry_id_by_user_previous_month_needed_for_filters?
+          filters.include?('spent_hours_for_user_previous_month') ||
+            or_filters.include?('spent_hours_for_user_previous_month')
         end
 
         # 60/ new method, RM 4.0.0 OK

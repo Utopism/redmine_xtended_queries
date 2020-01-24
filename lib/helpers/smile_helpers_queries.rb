@@ -246,7 +246,7 @@ module Smile
             end
 
             # 3/ REWRITTEN, RM 4.0.3 OK
-            # TODO test with and without redmine_smile_enhancements plugin
+            # TODO test grouped_query_results with and without redmine_smile_enhancements plugin
             # Smile specific #994 Budget and remaining enhancement
             # Smile specific #216009 Liste demandes : Compteur groupe vide, tâche racine / % avanct
             # Smile specific #100718 Liste demandes : total F / G / D au niveau de chaque groupe

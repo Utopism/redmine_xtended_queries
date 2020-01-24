@@ -29,21 +29,20 @@ module Smile
           #####################
           # 1) Instance methods
           extended_queries_instance_methods = [
-            :results_scope,                                               #  1/ EXTENDED    TO TEST  RM V4.0.0 OK
-            :build_from_params,                                           #  2/ EXTENDED    TO TEST  RM V4.0.0 OK
+            :initialize_available_filters,                                #  1/ REWRITTEN   TO TEST  RM V4.0.0 OK
+            :results_scope,                                               #  2/ EXTENDED    TO TEST  RM V4.0.0 OK
+            :build_from_params,                                           #  3/ EXTENDED    TO TEST  RM V4.0.0 OK
 
-            :sql_for_issue_created_on_field,                              #  3/ new method  TO TEST  RM V4.0.0 OK
-            :sql_for_tracker_field,                                       #  4/ new method  TO TEST  RM V4.0.0 OK
-            :sql_for_subject_field,                                       #  5/ new method  TO TEST  RM V4.0.0 OK
-            :sql_for_fixed_version_id_field,                              #  6/ new method  TO TEST  RM V4.0.0 OK
-            :sql_for_issue_category_id_field,                             #  7/ new method  TO TEST  RM V4.0.0 OK
-            :sql_for_root_id_field,                                       #  9/ new method  TO TEST  RM V4.0.0 OK
-            :sql_for_parent_id_field,                                     # 10/ new method  TO TEST  RM V4.0.0 OK
-            :sql_for_member_of_group_field,                               # 11/ new method  TO TEST  RM V4.0.0 OK COPIED from IssueQuery
-            :sql_for_user_id_me_field,                                    # 12/ new method  TO TEST  RM V4.0.0 OK
-            :sql_for_author_id_me_field,                                  # 13/ new method  TO TEST  RM V4.0.0 OK
-
-            :initialize_available_filters,                                # 31/ REWRITTEN   TO TEST  RM V4.0.0 OK
+            :sql_for_issue_created_on_field,                              # 10/ new method  TO TEST  RM V4.0.0 OK
+            :sql_for_tracker_field,                                       # 11/ new method  TO TEST  RM V4.0.0 OK
+            :sql_for_subject_field,                                       # 12/ new method  TO TEST  RM V4.0.0 OK
+            :sql_for_fixed_version_id_field,                              # 13/ new method  TO TEST  RM V4.0.0 OK
+            :sql_for_issue_category_id_field,                             # 14/ new method  TO TEST  RM V4.0.0 OK
+            :sql_for_root_id_field,                                       # 15/ new method  TO TEST  RM V4.0.0 OK
+            :sql_for_parent_id_field,                                     # 16/ new method  TO TEST  RM V4.0.0 OK
+            :sql_for_member_of_group_field,                               # 17/ new method  TO TEST  RM V4.0.0 OK COPIED from IssueQuery
+            :sql_for_user_id_me_field,                                    # 18/ new method  TO TEST  RM V4.0.0 OK
+            :sql_for_author_id_me_field,                                  # 19/ new method  TO TEST  RM V4.0.0 OK
           ]
 
           trace_prefix = "#{' ' * (base.name.length + 17)}  --->  "
@@ -111,7 +110,7 @@ module Smile
           ##################
           # 4) Class methods
           extended_queries_class_methods = [
-            :joins_for_bu_project_id,                        # 10/ new method  TO TEST RM V4.0.0 OK
+            :joins_for_bu_project_id,  # 1/ new method  TO TEST RM V4.0.0 OK
           ]
 
           last_postfix = '< (SM::MO::TimeReportQueryOverride::ExtendedQueries::CMeths)'
@@ -151,189 +150,16 @@ module Smile
         end # def self.prepended
 
 
-        # 1/ EXTENDED, RM 4.0.0 Plugin OK
-        # Smile specific #248383 Rapport: filtre sur version et catégorie
-        # Smile specific #358513 Filtre Demande Mise-à-jour
-        # Smile specific #423277 Rapport : Filtre sur tâche parente et racine
-        # Smile specific #271407 Time Entries : filter by BU
-        # Smile specific #355842 Rapport temps passé : filtre projet mis-à-jour
-        def results_scope(options={})
-          ################
-          # Smile specific : scope stored for later modification
-          scope_for_results = super
-
-          ################
-          # Smile specific #248383 Rapport: filtre sur version et catégorie
-          # Smile specific #358513 Filtre Demande Mise-à-jour
-          # Smile specific #423277 Rapport : Filtre sur tâche parente et racine
-          if (
-              filters.include?('fixed_version_id') ||
-              filters.include?('category_id') ||
-              filters.include?('issue_created_on') ||
-              filters.include?('parent_id') ||
-              filters.include?('root_id')
-          )
-            # Do not includes issue, generate a conflicting second join on issues
-            #scope_for_results = scope_for_results.includes(:issue)
-          end
-          # END -- Smile specific #248383 Rapport: filtre sur version et catégorie
-          #######################
-
-          ################
-          # Smile specific #271407 Time Entries : filter by BU
-          if filters.include?('bu_project')
-            scope_for_results = scope_for_results.joins(
-                self.class.joins_for_bu_project_id
-              )
-
-          end
-          # END -- Smile specific #271407 Time Entries : filter by BU
-          #######################
-
-          ################
-          # Smile specific #355842 Rapport temps passé : filtre projet mis-à-jour
-          if filters.include?('project_updated_on')
-            sql_projects_filter = filter_column_on_projects('project_id')
-            unless sql_projects_filter.present?
-              sql_projects_filter = '(1=1)'
-            end
-
-            scope_for_results = scope_for_results.joins(
-                self.class.left_join_project_updated_on_from_issues(sql_projects_filter)
-              )
-          end
-          # END -- Smile specific #355842 Rapport temps passé : filtre projet mis-à-jour
-          #######################
-
-          scope_for_results
-        end
-
-        # 2/ EXTENDED, RM 4.0.0 Plugin OK
-        # Smile specific #539595 Requête personnalisée : Filtres avancés (Demande, Parent, Racine)
-        # Smile specific #340206 Filtre additifs
-        #
-        # Accepts :from/:to params as shortcut filters
-        def build_from_params(params, defaults={})
-          ################
-          # Smile specific #539595 Requête personnalisée : Filtres avancés (Demande, Parent, Racine)
-          if self.respond_to?('advanced_filters')
-            self.advanced_filters = params[:advanced_filters] || (params[:query] && params[:query][:advanced_filters])
-          end
-
-          ################
-          # Smile specific #277485 Rapport : Export Csv, option conversion en jours
-          # Smile specific : hours_by_day option
-          if self.respond_to?('hours_by_day')
-            self.hours_by_day = params[:hours_by_day] || (params[:query] && params[:query][:hours_by_day])
-          end
-
-          ################
-          # Smile specific #340206 Filtre additifs
-          if params[:or_fields] || params[:or_f]
-            self.or_filters = {}
-            add_or_filters(params[:or_fields] || params[:or_f], params[:or_operators] || params[:or_op], params[:or_values] || params[:or_v])
-          # else
-            # field short filters already added in super method
-          end
-          # END -- Smile specific
-          #######################
-
-          if Redmine::VERSION::MAJOR < 4
-            super(params)
-          else
-            super(params, defaults)
-          end
-
-          self
-        end
-
-        # 3/ new method, RM 4.0.0 Plugin OK
-        # Smile specific #358513: Rapport temps passé : filtre Demande Créée (date)
-        def sql_for_issue_created_on_field(field, operator, value)
-          sql_for_field(field, operator, value, Issue.table_name, 'created_on')
-        end
-
-        # 4/ new method, RM 2.3.2 OK
-        # Smile specific #222040 Liste des entrées de temps : dé-sérialisation colonne Demande et filtres
-        def sql_for_tracker_field(field, operator, value)
-          sql_for_field(field, operator, value, Issue.table_name, 'tracker_id')
-        end
-
-        # 5/ new method, RM 2.3.2 OK
-        # Smile specific #222040 Liste des entrées de temps : dé-sérialisation colonne Demande et filtres
-        def sql_for_subject_field(field, operator, value)
-          sql_for_field(field, operator, value, Issue.table_name, 'subject')
-        end
-
-        # 6/ new method, RM 2.3.2 OK
-        # Smile specific #248383 Rapport: filtre sur version et catégorie
-        def sql_for_fixed_version_id_field(field, operator, value)
-          sql_for_field(field, operator, value, Issue.table_name, 'fixed_version_id')
-        end
-
-        # 7/ new method, RM 2.3.2 OK
-        # Smile specific #248383 Rapport: filtre sur version et catégorie
-        def sql_for_issue_category_id_field(field, operator, value)
-          sql_for_field(field, operator, value, Issue.table_name, 'category_id')
-        end
-
-        # 9/ new method, RM 2.6 OK
-        # Smile specific #423277 Rapport : Filtre sur tâche parente et racine
-        def sql_for_root_id_field(field, operator, value)
-          sql_for_field(field, operator, value, Issue.table_name, 'root_id')
-        end
-
-        # 10/ new method, RM 2.6 OK
-        # Smile specific #423277 Rapport : Filtre sur tâche parente et racine
-        def sql_for_parent_id_field(field, operator, value)
-          sql_for_field(field, operator, value, Issue.table_name, 'parent_id')
-        end
-
-        # 11/ new method, RM 2.6 OK
-        # Smile specific #473776 Spent Time Report : Filter on Assignee's group
-        # COPIED from IssueQuery
-        def sql_for_member_of_group_field(field, operator, value)
-          if operator == '*' # Any group
-            groups = Group.givable
-            operator = '=' # Override the operator since we want to find by assigned_to
-          elsif operator == "!*"
-            groups = Group.givable
-            operator = '!' # Override the operator since we want to find by assigned_to
-          else
-            groups = Group.where(:id => value).to_a
-          end
-          groups ||= []
-
-          members_of_groups = groups.inject([]) {|user_ids, group|
-            user_ids + group.user_ids + [group.id]
-          }.uniq.compact.sort.collect(&:to_s)
-
-          '(' + sql_for_field("assigned_to_id", operator, members_of_groups, Issue.table_name, "assigned_to_id", false) + ')'
-        end
-
-        # 12/ new method, RM 4.0.0 OK
-        # Smile specific #831010: Time Report Query : new time entry user filter, me
-        def sql_for_user_id_me_field(field, operator, value)
-          sql_for_field(field, operator, value, nil, "(CASE WHEN (#{TimeEntry.table_name}.user_id = #{User.current.id}) THEN 'me' ELSE 'not_me' END)")
-        end
-
-        # 13/ new method, RM 4.0.0 OK
-        # Smile specific #831010: Time Report Query : new time entry user filter, me
-        def sql_for_author_id_me_field(field, operator, value)
-          sql_for_field(field, operator, value, nil, "(CASE WHEN (#{TimeEntry.table_name}.author_id = #{User.current.id}) THEN 'me' ELSE 'not_me' END)")
-        end
-
-
-        # 31/ REWRITTEN, RM 4.0.0 OK
-        # TODO add hook
+        # 1/ REWRITTEN, RM 4.0.0 OK
         # Smile specific #768560: V4.0.0 : Time entries list : access to hidden BAR values
+        # Smile specific #994 Budget and Remaining enhancement
         # Smile specific : new filters
         # + BU
         # + PROJECT UPDATED ON
         # + ROOT_ID, PARENT_ID
         # + ISSUE CREATED ON
         # + MEMBER OF GROUP
-        # TODO move in other plugin :
+        # TODO move to hook budget/remaining hours :
         # + BUDGET HOURS
         # + REMAINING HOURS
         def initialize_available_filters
@@ -403,6 +229,22 @@ module Smile
                   @children_parent_issues_id_and_label
                 }
 
+              ################
+              # Smile specific #247451 Entrées de temps et Rapport : filtre par demande
+              # * Unable to know if we are on an issue :
+              #   scope modified afterwards by the controller to filter on issue
+              #   => possible to filter on an issue that is not the current one
+              #   => obviously will return no result
+              # + ISSUE_ID
+              add_available_filter 'issue_id',
+                :type => :list_optional,
+                :values => lambda {
+                  calc_project_and_children_issues
+                    @children_issues_id_and_label
+                }
+              # END -- Smile specific #247451 Entrées de temps et Rapport : filtre par demande
+              #######################
+
               #---------------
               # Smile specific #147568 Filter on parent task
               # children_count
@@ -414,27 +256,13 @@ module Smile
               add_available_filter 'level_in_tree',
                 :type => :integer
             end
+          else
+            # NATIVE source code
+            add_available_filter("issue_id", :type => :tree, :label => :label_issue)
           end
           # END -- Smile specific : new filters, only if on project
           #######################
 
-          add_available_filter("issue_id", :type => :tree, :label => :label_issue)
-
-          ################
-          # Smile specific #247451 Entrées de temps et Rapport : filtre par demande
-          # * Unable to know if we are on an issue :
-          #   scope modified afterwards by the controller to filter on issue
-          #   => possible to filter on an issue that is not the current one
-          #   => obviously will return no result
-          # Smile TODO Jebat V4.0.0 DISABLED
-          #
-          # unless project_and_subprojects_issues.empty?
-          #   add_available_filter 'issue_id',
-          #     :type => :list_optional,
-          #     :values => project_and_subprojects_issues
-          # end
-          # END -- Smile specific #247451 Entrées de temps et Rapport : filtre par demande
-          #######################
 
           ################
           # Smile specific : issue created on filter
@@ -462,6 +290,7 @@ module Smile
             :type => :list_optional, :values => lambda { author_values }
           )
 
+          ################
           # Smile specific #831010: Time Report Query : new time entry user filter, me
           if User.current.logged?
             add_available_filter("user_id_me",
@@ -469,14 +298,17 @@ module Smile
             )
           end
 
-          # Starting from Redmine ~ 4
+          ################
+          # Smile specific : starting from Redmine ~ 4
           if TimeEntry.instance_methods.include?(:author)
             add_available_filter("author_id",
               :type => :list_optional, :values => lambda { author_values }
             )
           end
 
+          ################
           # Smile specific #831010: Time Report Query : new time entry user filter, me
+          # + AUTHOR_ID_ME
           if Redmine::VERSION::MAJOR >= 4
             if User.current.logged?
               add_available_filter("author_id_me",
@@ -533,9 +365,181 @@ module Smile
           add_associations_custom_fields_filters :user
         end
 
+        # 2/ EXTENDED, RM 4.0.0 Plugin OK
+        # Smile specific #248383 Rapport: filtre sur version et catégorie
+        # Smile specific #358513 Filtre Demande Mise-à-jour
+        # Smile specific #423277 Rapport : Filtre sur tâche parente et racine
+        # Smile specific #271407 Time Entries : filter by BU
+        # Smile specific #355842 Rapport temps passé : filtre projet mis-à-jour
+        def results_scope(options={})
+          ################
+          # Smile specific : scope stored for later modification
+          scope_for_results = super
+
+          ################
+          # Smile specific #248383 Rapport: filtre sur version et catégorie
+          # Smile specific #358513 Filtre Demande Mise-à-jour
+          # Smile specific #423277 Rapport : Filtre sur tâche parente et racine
+          if (
+              filters.include?('fixed_version_id') ||
+              filters.include?('category_id') ||
+              filters.include?('issue_created_on') ||
+              filters.include?('parent_id') ||
+              filters.include?('root_id')
+          )
+            # Do not includes issue, generate a conflicting second join on issues
+            #scope_for_results = scope_for_results.includes(:issue)
+          end
+          # END -- Smile specific #248383 Rapport: filtre sur version et catégorie
+          #######################
+
+          ################
+          # Smile specific #271407 Time Entries : filter by BU
+          if filters.include?('bu_project')
+            scope_for_results = scope_for_results.joins(
+                self.class.joins_for_bu_project_id
+              )
+
+          end
+          # END -- Smile specific #271407 Time Entries : filter by BU
+          #######################
+
+          ################
+          # Smile specific #355842 Rapport temps passé : filtre projet mis-à-jour
+          if filters.include?('project_updated_on')
+            sql_projects_filter = filter_column_on_projects('project_id')
+            unless sql_projects_filter.present?
+              sql_projects_filter = '(1=1)'
+            end
+
+            scope_for_results = scope_for_results.joins(
+                self.class.left_join_project_updated_on_from_issues(sql_projects_filter)
+              )
+          end
+          # END -- Smile specific #355842 Rapport temps passé : filtre projet mis-à-jour
+          #######################
+
+          scope_for_results
+        end
+
+        # 3/ EXTENDED, RM 4.0.0 Plugin OK
+        # Smile specific #539595 Requête personnalisée : Filtres avancés (Demande, Parent, Racine)
+        # Smile specific #340206 Filtre additifs
+        #
+        # Accepts :from/:to params as shortcut filters
+        def build_from_params(params, defaults={})
+          ################
+          # Smile specific #539595 Requête personnalisée : Filtres avancés (Demande, Parent, Racine)
+          if self.respond_to?('advanced_filters')
+            self.advanced_filters = params[:advanced_filters] || (params[:query] && params[:query][:advanced_filters])
+          end
+
+          ################
+          # Smile specific #277485 Rapport : Export Csv, option conversion en jours
+          # Smile specific : hours_by_day option
+          if self.respond_to?('hours_by_day')
+            self.hours_by_day = params[:hours_by_day] || (params[:query] && params[:query][:hours_by_day])
+          end
+
+          ################
+          # Smile specific #340206 Filtre additifs
+          if params[:or_fields] || params[:or_f]
+            self.or_filters = {}
+            add_or_filters(params[:or_fields] || params[:or_f], params[:or_operators] || params[:or_op], params[:or_values] || params[:or_v])
+          # else
+            # field short filters already added in super method
+          end
+          # END -- Smile specific
+          #######################
+
+          if Redmine::VERSION::MAJOR < 4
+            super(params)
+          else
+            super(params, defaults)
+          end
+
+          self
+        end
+
+        # 10/ new method, RM 4.0.0 Plugin OK
+        # Smile specific #358513: Rapport temps passé : filtre Demande Créée (date)
+        def sql_for_issue_created_on_field(field, operator, value)
+          sql_for_field(field, operator, value, Issue.table_name, 'created_on')
+        end
+
+        # 11/ new method, RM 2.3.2 OK
+        # Smile specific #222040 Liste des entrées de temps : dé-sérialisation colonne Demande et filtres
+        def sql_for_tracker_field(field, operator, value)
+          sql_for_field(field, operator, value, Issue.table_name, 'tracker_id')
+        end
+
+        # 12/ new method, RM 2.3.2 OK
+        # Smile specific #222040 Liste des entrées de temps : dé-sérialisation colonne Demande et filtres
+        def sql_for_subject_field(field, operator, value)
+          sql_for_field(field, operator, value, Issue.table_name, 'subject')
+        end
+
+        # 13/ new method, RM 2.3.2 OK
+        # Smile specific #248383 Rapport: filtre sur version et catégorie
+        def sql_for_fixed_version_id_field(field, operator, value)
+          sql_for_field(field, operator, value, Issue.table_name, 'fixed_version_id')
+        end
+
+        # 14/ new method, RM 2.3.2 OK
+        # Smile specific #248383 Rapport: filtre sur version et catégorie
+        def sql_for_issue_category_id_field(field, operator, value)
+          sql_for_field(field, operator, value, Issue.table_name, 'category_id')
+        end
+
+        # 15/ new method, RM 2.6 OK
+        # Smile specific #423277 Rapport : Filtre sur tâche parente et racine
+        def sql_for_root_id_field(field, operator, value)
+          sql_for_field(field, operator, value, Issue.table_name, 'root_id')
+        end
+
+        # 16/ new method, RM 2.6 OK
+        # Smile specific #423277 Rapport : Filtre sur tâche parente et racine
+        def sql_for_parent_id_field(field, operator, value)
+          sql_for_field(field, operator, value, Issue.table_name, 'parent_id')
+        end
+
+        # 17/ new method, RM 2.6 OK
+        # Smile specific #473776 Spent Time Report : Filter on Assignee's group
+        # COPIED from IssueQuery
+        def sql_for_member_of_group_field(field, operator, value)
+          if operator == '*' # Any group
+            groups = Group.givable
+            operator = '=' # Override the operator since we want to find by assigned_to
+          elsif operator == "!*"
+            groups = Group.givable
+            operator = '!' # Override the operator since we want to find by assigned_to
+          else
+            groups = Group.where(:id => value).to_a
+          end
+          groups ||= []
+
+          members_of_groups = groups.inject([]) {|user_ids, group|
+            user_ids + group.user_ids + [group.id]
+          }.uniq.compact.sort.collect(&:to_s)
+
+          '(' + sql_for_field("assigned_to_id", operator, members_of_groups, Issue.table_name, "assigned_to_id", false) + ')'
+        end
+
+        # 19/ new method, RM 4.0.0 OK
+        # Smile specific #831010: Time Report Query : new time entry user filter, me
+        def sql_for_user_id_me_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "(CASE WHEN (#{TimeEntry.table_name}.user_id = #{User.current.id}) THEN 'me' ELSE 'not_me' END)")
+        end
+
+        # 19/ new method, RM 4.0.0 OK
+        # Smile specific #831010: Time Report Query : new time entry user filter, me
+        def sql_for_author_id_me_field(field, operator, value)
+          sql_for_field(field, operator, value, nil, "(CASE WHEN (#{TimeEntry.table_name}.author_id = #{User.current.id}) THEN 'me' ELSE 'not_me' END)")
+        end
+
 
         module ClassMethods
-          # 10/ new method RM 4.0.3
+          # 1/ new method RM 4.0.3
           # Smile specific #271407 Time Entries : filter by BU
           # Smile specific #269602 Rapport de temps : critère BU
           def joins_for_bu_project_id
