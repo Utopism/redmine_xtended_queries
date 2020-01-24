@@ -33,8 +33,8 @@ module Smile
           extended_queries_instance_methods = [
             :results_scope,                                               #  1/ EXTENDED    TESTED  RM V4.0.0 OK
             :build_from_params,                                           #  2/ EXTENDED    TESTED  RM V4.0.0 OK
-            :available_columns,                                           #  3/ EXTENDED    TESTED  RM V4.0.0 OK
-            :initialize_available_filters,                                #  4/ REWRITTEN   TO TEST RM V4.0.0 OK
+            :initialize_available_filters,                                #  3/ REWRITTEN   TO TEST RM V4.0.0 OK
+            :available_columns,                                           #  4/ EXTENDED    TESTED  RM V4.0.0 OK
             :joins_additionnal,                                           #  5/ new method  TO TEST RM V4.0.0 OK
             :joins_for_order_statement,                                   #  6/ EXTENDED    TO TEST RM V4.0.0 OK
 
@@ -515,37 +515,9 @@ module Smile
           self
         end
 
-        # 3/ EXTENDED, RM 4.0.0 OK
-        # Add new optional columns
-        # instance variable : for each project / user
-        # + TMONTH
-        # + TYEAR
-        def available_columns
-          return @available_columns if @available_columns
-
-          super
-
-          ################
-          # Smile Specific #379708 Liste entrées de temps : colonne semaine
-          # + TMONTH
-          @available_columns << QueryColumn.new(:tmonth,
-            :sortable => ["#{TimeEntry.table_name}.spent_on", "#{TimeEntry.table_name}.created_on"],
-            :caption => l(:label_month)
-          )
-
-          # + TYEAR
-          @available_columns << QueryColumn.new(:tyear,
-            :sortable => ["#{TimeEntry.table_name}.spent_on", "#{TimeEntry.table_name}.created_on"],
-            :caption => l(:label_year)
-          )
-          # END -- Smile Specific #379708 Liste entrées de temps : colonne semaine
-          #######################
-
-          @available_columns
-        end
-
-        # 4/ REWRITTEN, RM 4.0.0 OK
+        # 3/ REWRITTEN, RM 4.0.0 OK
         # Smile specific #768560: V4.0.0 : Time entries list : access to hidden BAR values
+        # Smile specific #994 Budget and Remaining enhancement
         # Smile specific : new filters
         # + BU
         # + PROJECT UPDATED ON
@@ -628,6 +600,7 @@ module Smile
               #   scope modified afterwards by the controller to filter on issue
               #   => possible to filter on an issue that is not the current one
               #   => obviously will return no result
+              # + ISSUE_ID
               add_available_filter 'issue_id',
                 :type => :list_optional,
                 :values => lambda {
@@ -682,6 +655,7 @@ module Smile
             :type => :list_optional, :values => lambda { author_values }
           )
 
+          ################
           # Smile specific #831010: Time Report Query : new time entry user filter, me
           if User.current.logged?
             add_available_filter("user_id_me",
@@ -689,14 +663,17 @@ module Smile
             )
           end
 
-          # Starting from Redmine ~ 4
+          ################
+          # Smile specific : starting from Redmine ~ 4
           if TimeEntry.instance_methods.include?(:author)
             add_available_filter("author_id",
               :type => :list_optional, :values => lambda { author_values }
             )
           end
 
+          ################
           # Smile specific #831010: Time Report Query : new time entry user filter, me
+          # + AUTHOR_ID_ME
           if Redmine::VERSION::MAJOR >= 4
             if User.current.logged?
               add_available_filter("author_id_me",
@@ -775,6 +752,35 @@ module Smile
           add_associations_custom_fields_filters :project
           add_custom_fields_filters(issue_custom_fields, :issue)
           add_associations_custom_fields_filters :user
+        end
+
+        # 4/ EXTENDED, RM 4.0.0 OK
+        # Add new optional columns
+        # instance variable : for each project / user
+        # + TMONTH
+        # + TYEAR
+        def available_columns
+          return @available_columns if @available_columns
+
+          super
+
+          ################
+          # Smile Specific #379708 Liste entrées de temps : colonne semaine
+          # + TMONTH
+          @available_columns << QueryColumn.new(:tmonth,
+            :sortable => ["#{TimeEntry.table_name}.spent_on", "#{TimeEntry.table_name}.created_on"],
+            :caption => l(:label_month)
+          )
+
+          # + TYEAR
+          @available_columns << QueryColumn.new(:tyear,
+            :sortable => ["#{TimeEntry.table_name}.spent_on", "#{TimeEntry.table_name}.created_on"],
+            :caption => l(:label_year)
+          )
+          # END -- Smile Specific #379708 Liste entrées de temps : colonne semaine
+          #######################
+
+          @available_columns
         end
 
         # 5/ new method, RM 4.0.0 OK
@@ -1577,7 +1583,7 @@ module Smile
               ')'
           end
 
-          # 10/ new method, RM 4.0.0 OK
+          # 10/ new method RM 4.0.3 OK
           # Smile specific #271407 Time Entries : filter by BU
           # Smile specific #269602 Rapport de temps : critère BU
           def joins_for_bu_project_id
