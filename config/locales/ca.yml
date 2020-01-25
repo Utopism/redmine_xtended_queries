@@ -72,7 +72,7 @@ ca:
 
   label_without_children: Sense subtasques
   label_with_children: Amb subtasques
-  label_with_children_symbol: (⊨)
+  label_with_children_symbol: ⊨
   label_with_children_symbol_explanation: This symbol means that the field is calculated with its sub-tasks
 
   field_issue_id: Issue Id.

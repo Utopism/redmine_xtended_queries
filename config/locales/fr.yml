@@ -72,7 +72,7 @@ fr:
 
   label_without_children: Sans sous-tâches
   label_with_children: Avec sous-tâches
-  label_with_children_symbol: (⊨)
+  label_with_children_symbol: ⊨
   label_with_children_symbol_explanation: Ce symbole indique que le champ est calculé avec ses sous-tâches
 
   field_issue_id: Id. Demande
