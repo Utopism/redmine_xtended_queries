@@ -1301,13 +1301,15 @@ module Smile
             # 5/ H? space for spent hours columns in hook
             elsif (
               column.name == :hours ||
-              column.name == :spent_hours ||
-              column_name.start_with?('spent_hours_for_')
+              column.name == :spent_hours
             )
               criteria_order = 'H5'
               column_label = "#{l("label_time_icon")} #{column.caption}"
             elsif column.name == :total_spent_hours
               criteria_order = 'H6'
+              column_label = "#{l("label_time_icon")} #{column.caption}"
+            elsif column_name.start_with?('spent_hours_for_')
+              criteria_order = 'H7'
               column_label = "#{l("label_time_icon")} #{column.caption}"
 
             # 6/ I? space for POST spent hours columns in hook
