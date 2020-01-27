@@ -1333,7 +1333,7 @@ module Smile
               column_label = "#{l('label_tool_icon')} #{l("label_attribute_of_issue", :name => column.caption)}"
             elsif column.class == QueryCustomFieldColumn
               column_label = "#{l("label_tool_icon")} #{column.caption}"
-            elsif [:created_on, :start_date, :updated_on, :due_date, :closed_on, :date, :spent_on, :year, :month, :week, :tweek, :day, :tday].include?(column.name)
+            elsif [:created_on, :start_date, :updated_on, :due_date, :closed_on, :date, :spent_on, :year, :tyear, :month, :tmonth, :week, :tweek, :day, :tday].include?(column.name)
               column_label = "#{l("label_calendar_icon")} #{column.caption}"
             elsif [:issue, :issue_id, :parent, :parent_position, :parent_subject, :root, :root_position, :root_subject, :position, :'issue.position'].include?(column.name)
               column_label = "#{l("label_with_children_symbol")} #{column.caption}"
