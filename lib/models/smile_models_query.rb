@@ -111,8 +111,6 @@ module Smile
           ##################
           # 3/ Class methods
           enhancements_class_methods = [
-            :with_children_provided?,                         #  1/  new method       TESTED            OK
-            :group_additional_infos_provided?,                #  2/  new method       TESTED            OK
             :sql_projects_updated_on_from_issues_by_project,  #  3/  new method       TESTED   RM 4.0.0 OK
             :left_join_project_updated_on_from_issues,        #  4/  new method       TESTED   RM 4.0.0 OK
             :advanced_filters_provided?,                      #  5/  new method       TESTED   RM 4.0.0 OK
@@ -1134,16 +1132,6 @@ module Smile
 
 
         module ClassMethods
-          # 1/ new method, RM 4.0.0 OK
-          def with_children_provided?
-            false
-          end
-
-          # 2/ new method, RM 4.0.0 OK
-          def group_additional_infos_provided?
-            false
-          end
-
           # 3/ new method, RM 4.0.0 OK
           # Smile Specific #354800 Requête perso Demandes / Rapport / Historiques : filtre projet mis-à-jour
           def sql_projects_updated_on_from_issues_by_project
