@@ -413,6 +413,7 @@ module Smile
 
                       ################
                       # Smile specific : group -> group_key
+                      # Smile comment totals_by_group : variable
                       group_totals = totals_by_group.map {|column, t| total_tag(column, t[group_key] || 0)}.join(" ").html_safe
                     end
                   end
