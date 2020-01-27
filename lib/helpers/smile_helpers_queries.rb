@@ -20,10 +20,10 @@ module Smile
         def self.prepended(base)
           extended_queries_instance_methods = [
             # module_eval
-            :retrieve_query,                          # 1/ REWRITTEN       TESTED  RM 4.0.0 OK
-            :query_as_hidden_field_tags,              # 2/ REWRITTEN       TESTED  RM 4.0.0 OK
-            :grouped_query_results,                   # 3/ New method      TESTED  RM 4.0.0 OK
-            :column_value_hook_with_extended_queries, # 4/ EXTENDED PLUGIN TO TEST RM 4.0.0 OK
+            :retrieve_query,                              # 1/ REWRITTEN   TESTED  RM 4.0.0 OK
+            :query_as_hidden_field_tags,                  # 2/ REWRITTEN   TESTED  RM 4.0.0 OK
+            :grouped_query_results,                       # 3/ New method  TESTED  RM 4.0.0 OK
+            :column_value_hook,                           # 4/ EXTENDED    TO TEST RM 4.0.0 OK
           ]
 
 
@@ -452,6 +452,26 @@ module Smile
                 result_column_value
               end
             end # def column_value_hook_with_extended_queries
+
+            # 5/ EXTENDED, RM 4.0.0 OK  BAR + INDIC
+            # Smile specific #245550 Requêtes personnalisées : filtres : indicateur du type du groupe
+            def filters_options_for_select_hook_with_extended_queries(query, field, field_options)
+              group = nil
+
+              ################
+              # Smile specific : hours_for_*
+              if field.start_with?('spent_hours_for_')
+                group = :label_budget_and_progress
+              # END -- Smile specific
+              #######################
+              end
+
+              if group
+                group
+              else
+                filters_options_for_select_hook_without_extended_queries(query, field, field_options)
+              end
+            end
           end # base.module_eval do
 
           trace_prefix       = "#{' ' * (base.name.length + 19)}  --->  "
@@ -461,9 +481,16 @@ module Smile
             true,
             :redmine_xtended_queries
 
+          SmileTools.trace_override "#{base.name}             alias_method  filters_options_for_select_hook, :extended_queries " + last_postfix,
+            true,
+            :redmine_xtended_queries
+
           base.instance_eval do
             alias_method :column_value_hook_without_extended_queries, :column_value_hook
             alias_method :column_value_hook, :column_value_hook_with_extended_queries
+
+            alias_method :filters_options_for_select_hook_without_extended_queries, :filters_options_for_select_hook
+            alias_method :filters_options_for_select_hook, :filters_options_for_select_hook_with_extended_queries
           end
 
           smile_instance_methods = (base.instance_methods + base.protected_instance_methods).select{|m|

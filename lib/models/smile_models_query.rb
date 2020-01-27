@@ -111,14 +111,16 @@ module Smile
           ##################
           # 3/ Class methods
           enhancements_class_methods = [
-            :with_children_provided?,                         # 1/  new method  TESTED           OK
-            :group_additional_infos_provided?,                # 2/  new method  TESTED           OK
-            :sql_projects_updated_on_from_issues_by_project,  # 3/  new method  TESTED  RM 4.0.0 OK
-            :left_join_project_updated_on_from_issues,        # 4/  new method  TESTED  RM 4.0.0 OK
-            :advanced_filters_provided?,                      # 5/  new method  TESTED  RM 4.0.0 OK
-            :or_filters_provided?,                            # 6/  new method  TESTED  RM 4.0.0 OK
-            :sql_in_values_or_false_if_empty,                 # 7/  new method  TO TEST RM 4.0.0 OK
-            :sql_where_w_optional_conditions,                 # 8/  new method  TO TEST RM 4.0.0 OK
+            :with_children_provided?,                         #  1/  new method       TESTED            OK
+            :group_additional_infos_provided?,                #  2/  new method       TESTED            OK
+            :sql_projects_updated_on_from_issues_by_project,  #  3/  new method       TESTED   RM 4.0.0 OK
+            :left_join_project_updated_on_from_issues,        #  4/  new method       TESTED   RM 4.0.0 OK
+            :advanced_filters_provided?,                      #  5/  new method       TESTED   RM 4.0.0 OK
+            :or_filters_provided?,                            #  6/  new method       TESTED   RM 4.0.0 OK
+            :sql_in_values_or_false_if_empty,                 #  7/  new method       TO TEST  RM 4.0.0 OK
+            :sql_where_w_optional_conditions,                 #  8/  new method       TO TEST  RM 4.0.0 OK
+            :query_available_inline_columns_options_hook,     #  9/  EXTENDED PLUGIN  TO TEST  RM 4.0.0 OK
+            :query_selected_inline_columns_options_hook,      # 10/  EXTENDED PLUGIN  TO TEST  RM 4.0.0 OK
           ]
 
           base.singleton_class.prepend ClassMethods
@@ -1212,6 +1214,158 @@ module Smile
             end
 
             sql_where
+          end
+
+          # 9/ EXTENDED, RM 4.0.3 OK
+          # Smile specific #245965 Rapport : critères, indication type champ personnalisé
+          def query_available_inline_columns_options_hook(query, column)
+            ################
+            # Smile specific #245965 Rapport : critères, indication type champ personnalisé
+            column_label, criteria_order = nil
+            column_name = column.name.to_s
+
+            # 1/ Keep tree fields order
+            if column.name == :issue
+              criteria_order = 'B0'
+              column_label = "#{l("label_with_children_symbol")} #{column.caption}"
+            # Keep tree fields order
+            elsif column.name == :issue_id
+              criteria_order = 'B1'
+              column_label = "#{l("label_with_children_symbol")} #{column.caption}"
+            # Keep tree fields order
+            elsif column.name == :parent
+              criteria_order = 'B2'
+              column_label = "#{l("label_with_children_symbol")} #{column.caption}"
+            elsif column.name == :parent_position
+              criteria_order = 'B3'
+              column_label = "#{l("label_with_children_symbol")} #{column.caption}"
+            elsif column.name == :parent_subject
+              criteria_order = 'B4'
+              column_label = "#{l("label_with_children_symbol")} #{column.caption}"
+            elsif column.name == :root
+              criteria_order = 'B5'
+              column_label = "#{l("label_with_children_symbol")} #{column.caption}"
+            elsif column.name == :root_position
+              criteria_order = 'B6'
+              column_label = "#{l("label_with_children_symbol")} #{column.caption}"
+            elsif column.name == :root_subject
+              criteria_order = 'B7'
+              column_label = "#{l("label_with_children_symbol")} #{column.caption}"
+            elsif column.name == :position ||  column.name == :'issue.position'
+              criteria_order = 'B8'
+              column_label = "#{l("label_with_children_symbol")} #{column.caption}"
+
+            # 2/ C? Keep date fields order
+            elsif column.name == :created_on
+              criteria_order = 'C5'
+              column_label = "#{l("label_calendar_icon")} #{column.caption}"
+            elsif column.name == :start_date
+              criteria_order = 'C6'
+              column_label = "#{l("label_calendar_icon")} #{column.caption}"
+            elsif column.name == :updated_on
+              criteria_order = 'C7'
+              column_label = "#{l("label_calendar_icon")} #{column.caption}"
+            elsif column.name == :due_date
+              criteria_order = 'C8'
+              column_label = "#{l("label_calendar_icon")} #{column.caption}"
+            elsif column.name == :closed_on
+              criteria_order = 'C9'
+              column_label = "#{l("label_calendar_icon")} #{column.caption}"
+            elsif column.name == :date || column.name == :spent_on
+              criteria_order = 'CA'
+              column_label = "#{l("label_calendar_icon")} #{column.caption}"
+            elsif column.name == :year || column.name == :tyear
+              criteria_order = 'CB'
+              column_label = "#{l("label_calendar_icon")} #{column.caption}"
+            elsif column.name == :month || column.name == :tmonth
+              criteria_order = 'CC'
+              column_label = "#{l("label_calendar_icon")} #{column.caption}"
+            elsif column.name == :week || column.name == :tweek
+              criteria_order = 'CF'
+              column_label = "#{l("label_calendar_icon")} #{column.caption}"
+            elsif column.name == :day || column.name == :tday
+              criteria_order = 'CG'
+              column_label = "#{l("label_calendar_icon")} #{column.caption}"
+
+            # 3/ F? Keep Spent Time fields order
+            # F1-4 space for estimated hours columns in hook
+            elsif column.name == :estimated_hours
+              criteria_order = 'F5'
+              column_label = "#{l("label_time_icon")} #{column.caption}"
+            elsif column.name == :total_estimated_hours
+              criteria_order = 'F6'
+              column_label = "#{l("label_time_icon")} #{column.caption}"
+
+            # 4/ G? space for PRE spent hours columns in hook
+
+            # 5/ H? space for spent hours columns in hook
+            elsif column.name == :spent_hours || column_name.start_with?('spent_hours_for_')
+              criteria_order = 'H5'
+              column_label = "#{l("label_time_icon")} #{column.caption}"
+            elsif column.name == :total_spent_hours
+              criteria_order = 'H6'
+              column_label = "#{l("label_time_icon")} #{column.caption}"
+
+            # 6/ I? space for POST spent hours columns in hook
+
+            # 7/ J? space for POST spent hours columns in hook
+            elsif column.name == :done_ratio
+              criteria_order = 'J5'
+              column_label = "#{l("label_time_icon")} #{column.caption}"
+
+            # 8/ Y? Z? Keep Custom Fields order
+            elsif column.class == QueryCustomFieldColumn
+              criteria_order = 'Y'
+              column_label = "#{l("label_tool_icon")} #{column.caption}"
+            elsif column.class == QueryAssociationCustomFieldColumn
+              criteria_order = 'Z'
+              column_label = "#{l('label_tool_icon')} #{l("label_attribute_of_issue", :name => column.caption)}"
+            end
+
+            if criteria_order
+              [criteria_order, column_label]
+            else
+              super(query, column)
+            end
+          end
+
+          # 10/ EXTENDED, RM 4.0.0 OK
+          # Smile specific #245965 Rapport : critères, indication type champ personnalisé
+          def query_selected_inline_columns_options_hook(query, column)
+            column_label = nil
+            column_name = column.name.to_s
+
+            if column.class == QueryAssociationCustomFieldColumn
+              column_label = "#{l('label_tool_icon')} #{l("label_attribute_of_issue", :name => column.caption)}"
+            elsif column.class == QueryCustomFieldColumn
+              column_label = "#{l("label_tool_icon")} #{column.caption}"
+            elsif [:created_on, :start_date, :updated_on, :due_date, :closed_on, :date, :spent_on, :year, :month, :week, :tweek, :day, :tday].include?(column.name)
+              column_label = "#{l("label_calendar_icon")} #{column.caption}"
+            elsif [:issue, :issue_id, :parent, :parent_position, :parent_subject, :root, :root_position, :root_subject, :position, :'issue.position'].include?(column.name)
+              column_label = "#{l("label_with_children_symbol")} #{column.caption}"
+            elsif [
+              :estimated_hours,
+              :total_estimated_hours,
+              :hours,
+              :spent_hours,
+              :total_spent_hours,
+              :done_ratio,
+            ].include?(column.name)
+              column_label = "#{l("label_time_icon")} #{column.caption}"
+            elsif (
+              column_name.start_with?('spent_hours_for_') ||
+                column_name.start_with?('billable_hours_for_') ||
+                column_name.start_with?('gain_hours_for_') ||
+                column_name.start_with?('deviation_hours_for_')
+            )
+              column_label = "#{l("label_time_icon")} #{column.caption}"
+            end
+
+            if column_label
+              column_label
+            else
+              super(query, column)
+            end
           end
         end # module ClassMethods
       end # module ExtendedQueries

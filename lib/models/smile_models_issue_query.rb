@@ -40,7 +40,6 @@ module Smile
           # 1) Instance methods
           extended_queries_instance_methods = [
             :initialize_available_filters,          # 1/  REWRITTEN  TESTED  RM V4.0.0 OK
-            :available_filters_hook,                # 2/  new        TESTED  RM V4.0.0 OK
 
             :build_from_params,                     # 15/ OVERRIDEN  TESTED  RM V4.0.0 OK
             :build_from_advanced_params,            # 16/ new        TESTED  RM V4.0.0 OK
@@ -494,13 +493,6 @@ module Smile
           Tracker.disabled_core_fields(trackers).each {|field|
             delete_available_filter field
           }
-        end
-
-        ###############
-        # 2/ New method, RM 4.0.0 OK
-        # Smile specific : new hook
-        def available_filters_hook
-          # Does nothing here
         end
 
         # 15/ EXTENDED, RM 4.0.0 OK
