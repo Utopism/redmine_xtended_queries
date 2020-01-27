@@ -347,8 +347,10 @@ module Smile
                   with_children = nil
                   if Query.respond_to?('with_children_provided?') && Query.with_children_provided?
                     with_children = query.with_children
+                    group = column.group_value(item, with_children)
+                  else
+                    group = column.group_value(item)
                   end
-                  group = column.group_value(item, with_children)
 
                   ################
                   # Smile specific : Fix issue if group is a model, for columns issue, root, parent
