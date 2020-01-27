@@ -1299,7 +1299,11 @@ module Smile
             # 4/ G? space for PRE spent hours columns in hook
 
             # 5/ H? space for spent hours columns in hook
-            elsif column.name == :spent_hours || column_name.start_with?('spent_hours_for_')
+            elsif (
+              column.name == :hours ||
+              column.name == :spent_hours ||
+              column_name.start_with?('spent_hours_for_')
+            )
               criteria_order = 'H5'
               column_label = "#{l("label_time_icon")} #{column.caption}"
             elsif column.name == :total_spent_hours
