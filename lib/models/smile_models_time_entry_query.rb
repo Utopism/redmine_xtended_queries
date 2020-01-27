@@ -766,17 +766,30 @@ module Smile
 
           ################
           # Smile Specific #379708 Liste entrées de temps : colonne semaine
-          # + TMONTH
-          @available_columns << QueryColumn.new(:tmonth,
-            :sortable => ["#{TimeEntry.table_name}.spent_on", "#{TimeEntry.table_name}.created_on"],
-            :caption => l(:label_month)
-          )
+
+          index = @available_columns.find_index {|column| column.name == :tweek}
 
           # + TYEAR
-          @available_columns << QueryColumn.new(:tyear,
-            :sortable => ["#{TimeEntry.table_name}.spent_on", "#{TimeEntry.table_name}.created_on"],
-            :caption => l(:label_year)
-          )
+          # spent_on_column = base.available_columns.detect{|c| c.name == :spent_on}
+          @available_columns.insert (index + 1), QueryColumn.new(:tyear,
+              :sortable => ["#{TimeEntry.table_name}.spent_on", "#{TimeEntry.table_name}.created_on"],
+              :groupable => true,
+              :caption => l(:label_year)
+            )
+
+          # + TMONTH
+          @available_columns.insert (index + 1), QueryColumn.new(:tmonth,
+              :sortable => ["#{TimeEntry.table_name}.spent_on", "#{TimeEntry.table_name}.created_on"],
+              :groupable => true,
+              :caption => l(:label_month)
+            )
+
+          # TWEEK : groupable
+          tweek_column = @available_columns.detect{|c| c.name == :tweek}
+
+          if tweek_column
+           tweek_column.groupable = "#{TimeEntry.table_name}.tweek"
+          end
           # END -- Smile Specific #379708 Liste entrées de temps : colonne semaine
           #######################
 
