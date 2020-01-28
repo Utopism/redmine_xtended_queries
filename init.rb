@@ -18,7 +18,7 @@ Redmine::Plugin.register plugin_name do
   author_url "mailto:Jerome BATAILLE <redmine-support@smile.fr>?subject=#{plugin_name}"
   description 'Extends the Redmine Queries and adds small Improvments'
   url "https://github.com/Smile-SA/#{plugin_name}"
-  version '1.0.7'
+  version '1.0.8'
   requires_redmine :version_or_higher => '2.6.0'
 
   requires_redmine_plugin :redmine_smile_base, :version_or_higher => '1.0.0'

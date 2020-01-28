@@ -118,10 +118,28 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
     * **Billable Hours by Issue / User**
     * **Deviation Hours by Issue / User**
 
-* Queries columns **selection box** : new prefix glyphs (utf8) for :
+* Queries columns **selection boxes** : new prefix glyphs (utf8) for :
   * Time columns : 🕝
   * Date type columns : 🗓
   * Custom Fields : 🔧
   * Issue tree and position columns : ⊨
 
 * Forbid setting **global query** public to other than me for non-admins : Fixed upstream with Redmine V3.0.4
+
+# Changelog
+
+* **V1.0.8** Small enhancements and fixes :
+
+  * {TimeStamp}QueryColumn.group_value added for old Redmine versions
+  Use or_filters_provided?
+
+  * Queries columns **selection boxes** **sorted** and glyphs prefixes (utf8) added
+
+  * **Hooks available** for other plugins :
+
+    * lib/models/smile_models_time_{entry/report}_query.rb cleaned
+    * Advanced queries : issue dropdown list filter like parent, root
+
+* **V1.0.7** Forbid setting global query public to other than me for non-admins : Fixed upstream
+
+* **V1.0.6** +Spent/Billable/Deviation hours for issue/user THIS/PREVIOUS MONTH
