@@ -271,6 +271,7 @@ module Smile
 
               ################
               # Smile specific : to calculate it once
+              # TODO issue_ids_by_group_value to remove : not used
               issue_ids_by_group_value = nil
 
               ################
@@ -342,9 +343,12 @@ module Smile
                   # Smile specific : split for debug trace
                   # Smile comment : Old version :
                   # group = group.value(item)
+                  # Smile comment : value does the same thing as group_value
+
                   ################
                   # Smile specific : + with_children
                   with_children = nil
+                  # TODO create group_value if not present
                   if Query.respond_to?('with_children_provided?') && Query.with_children_provided?
                     with_children = query.with_children
                     group = column.group_value(item, with_children)
