@@ -130,7 +130,7 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
 
 * **V1.0.8** Small enhancements and fixes :
 
-  * **{TimeStamp}QueryColumn.group_value** added for old Redmine versions
+  * **QueryColumn.group_value** added for old Redmine versions
 
   * Use respond_to?(or_filters_provided?) instead of respond_to?(or_filters)
 
