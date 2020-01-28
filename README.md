@@ -130,16 +130,16 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
 
 * **V1.0.8** Small enhancements and fixes :
 
-  * {TimeStamp}QueryColumn.group_value added for old Redmine versions
+  * **{TimeStamp}QueryColumn.group_value** added for old Redmine versions
 
-  * Use or_filters_provided?
+  * Use respond_to?(or_filters_provided?) instead of respond_to?(or_filters)
 
   * Queries columns **selection boxes** **sorted** and glyphs prefixes (utf8) added
 
     **Hooks available** for other plugins
 
-  * lib/models/smile_models_time_{entry/report}_query.rb cleaned
-  * Advanced queries : issue dropdown list filter like parent, root
+  * lib/models/smile_models_time_{entry/report}_query.rb **cleaned**
+  * Time Report Advanced queries : **filter issue** dropdown list like parent, root
 
 * **V1.0.7** REMOVED : Forbid setting global query public to other than me for non-admins : **Fixed upstream**
 
