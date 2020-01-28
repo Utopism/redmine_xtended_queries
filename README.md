@@ -15,23 +15,16 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
     With or filters you can for example select issues assigned to you, OR that you have created.
 
   * New columns :
-    * **Issue Id.**
-    * **Estimated hours**
+    * **Project of the parent isssue**
+    * **Estimated time**
     * Issues Tree :
-      * **Root task**
-      * **Parent task**
-    * **Tracker**
-    * **Target version**
-    * **Category**
-    * **Subject**
-    * **Watchers**
-    * **Position**
-    * Issues Tree :
-      * **Project of the parent isssue**
-      * **Root task -- (Subject)**
-      * **Root task -- (Position)**
-      * **Parent task -- (Subject)**
-      * **Parent task -- (Position)**
+      * **⊨ Parent task**
+      * **⊨ Parent task -- (Position)**
+      * **⊨ Parent task -- (Subject)**
+      * **⊨ Root task**
+      * **⊨ Root task -- (Position)**
+      * **⊨ Root task -- (Subject)**
+      * **⊨ Position**
     * **Project Updated**
     * **Updated on**
 
@@ -51,29 +44,34 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
 
 * Time Entry Queries :
   * New columns :
-    * **Position**
-    * **Root task**
-    * **Project of the parent isssue**
-    * **Root task -- (Subject)**
-    * **Root task -- (Position)**
-    * **Parent task -- (Subject)**
-    * **Parent task -- (Position)**
-    * **Project Updated**
+    * **Tracker**
+    * **Target version**
+    * **Category**
+    * **Subject**
+    * **Watchers**
+    * Issues Tree :
+      * **⊨ Issue Id.**
+      * **⊨ Root task**
+      * **⊨ Parent task -- (Subject)**
+      * **⊨ Parent task -- (Position)**
+      * **⊨ Root task -- (Subject)**
+      * **⊨ Root task -- (Position)**
+      * **⊨ Position**
     * Date :
-      * **Year**
-      * **Month**
-      * **Week**
+      * **🗓 Year**
+      * **🗓 Month**
+      * **🗓 Week**
     * **Updated on**
     * Cumulative Hours :
-      * **Spent hours for issue and user**
-      * **Spent hours for issue**
-      * **Spent hours for user**
-      * **Spent hours for issue and user this month**
-      * **Spent hours for issue this month**
-      * **Spent hours for user this month**
-      * **Spent hours for issue and user previous month**
-      * **Spent hours for issue previous month**
-      * **Spent hours for user previous month**
+      * **🕝 Hours for issue and user**
+      * **🕝 Hours for issue**
+      * **🕝 Hours for user**
+      * **🕝 Hours for issue and user this month**
+      * **🕝 Hours for issue this month**
+      * **🕝 Hours for user this month**
+      * **🕝 Hours for issue and user previous month**
+      * **🕝 Hours for issue previous month**
+      * **🕝 Hours for user previous month**
     * New Cumulative Billable and Deviation :
 
       Only if **Billable** and **Deviation** called **Custom Fields** exist on Time Entries
@@ -103,21 +101,27 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
       * **Deviation Hours by Issue / User**
 
   * New Filters :
-    * **Spent hours for issue and user**
-    * **Spent hours for issue**
-    * **Spent hours for user**
+    * **Hours for issue and user**
+    * **Hours for issue**
+    * **Hours for user**
 
-    * **Spent hours for issue and user this month**
-    * **Spent hours for issue this_month**
-    * **Spent hours for user this month**
+    * **Hours for issue and user this month**
+    * **Hours for issue this_month**
+    * **Hours for user this month**
 
-    * **Spent hours for issue and user previous month**
-    * **Spent hours for issue previous_month**
-    * **Spent hours for user previous month**
+    * **Hours for issue and user previous month**
+    * **Hours for issue previous_month**
+    * **Hours for user previous month**
 
   * New Group totals fixed for
     * **Spent Hours by Issue / User**
     * **Billable Hours by Issue / User**
     * **Deviation Hours by Issue / User**
+
+* Queries columns **selection box** : new prefix glyphs (utf8) for :
+  * Time columns : 🕝
+  * Date type columns : 🗓
+  * Custom Fields : 🔧
+  * Issue tree and position columns : ⊨
 
 * Forbid setting **global query** public to other than me for non-admins : Fixed upstream with Redmine V3.0.4

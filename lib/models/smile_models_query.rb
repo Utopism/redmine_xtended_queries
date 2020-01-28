@@ -111,8 +111,6 @@ module Smile
           ##################
           # 3/ Class methods
           enhancements_class_methods = [
-            :with_children_provided?,                         #  1/  new method       TESTED            OK
-            :group_additional_infos_provided?,                #  2/  new method       TESTED            OK
             :sql_projects_updated_on_from_issues_by_project,  #  3/  new method       TESTED   RM 4.0.0 OK
             :left_join_project_updated_on_from_issues,        #  4/  new method       TESTED   RM 4.0.0 OK
             :advanced_filters_provided?,                      #  5/  new method       TESTED   RM 4.0.0 OK
@@ -1134,16 +1132,6 @@ module Smile
 
 
         module ClassMethods
-          # 1/ new method, RM 4.0.0 OK
-          def with_children_provided?
-            false
-          end
-
-          # 2/ new method, RM 4.0.0 OK
-          def group_additional_infos_provided?
-            false
-          end
-
           # 3/ new method, RM 4.0.0 OK
           # Smile Specific #354800 Requête perso Demandes / Rapport / Historiques : filtre projet mis-à-jour
           def sql_projects_updated_on_from_issues_by_project
@@ -1299,11 +1287,17 @@ module Smile
             # 4/ G? space for PRE spent hours columns in hook
 
             # 5/ H? space for spent hours columns in hook
-            elsif column.name == :spent_hours || column_name.start_with?('spent_hours_for_')
+            elsif (
+              column.name == :hours ||
+              column.name == :spent_hours
+            )
               criteria_order = 'H5'
               column_label = "#{l("label_time_icon")} #{column.caption}"
             elsif column.name == :total_spent_hours
               criteria_order = 'H6'
+              column_label = "#{l("label_time_icon")} #{column.caption}"
+            elsif column_name.start_with?('spent_hours_for_')
+              criteria_order = 'H7'
               column_label = "#{l("label_time_icon")} #{column.caption}"
 
             # 6/ I? space for POST spent hours columns in hook
@@ -1339,7 +1333,7 @@ module Smile
               column_label = "#{l('label_tool_icon')} #{l("label_attribute_of_issue", :name => column.caption)}"
             elsif column.class == QueryCustomFieldColumn
               column_label = "#{l("label_tool_icon")} #{column.caption}"
-            elsif [:created_on, :start_date, :updated_on, :due_date, :closed_on, :date, :spent_on, :year, :month, :week, :tweek, :day, :tday].include?(column.name)
+            elsif [:created_on, :start_date, :updated_on, :due_date, :closed_on, :date, :spent_on, :year, :tyear, :month, :tmonth, :week, :tweek, :day, :tday].include?(column.name)
               column_label = "#{l("label_calendar_icon")} #{column.caption}"
             elsif [:issue, :issue_id, :parent, :parent_position, :parent_subject, :root, :root_position, :root_subject, :position, :'issue.position'].include?(column.name)
               column_label = "#{l("label_with_children_symbol")} #{column.caption}"
