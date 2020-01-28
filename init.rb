@@ -89,6 +89,8 @@ rails_dispatcher.to_prepare do
     '/lib/models/smile_models_time_entry_query',
     '/lib/models/smile_models_query_custom_field_column',
     '/lib/models/smile_models_query',
+    '/lib/models/smile_models_query_column',
+    '/lib/models/smile_models_timestamp_query_column',
   ]
 
   redmine_queries_for_time_report_plugin_available = Redmine::Plugin.installed?('redmine_queries_for_time_report')
@@ -179,6 +181,13 @@ rails_dispatcher.to_prepare do
 
   if redmine_queries_for_time_report_plugin_available
     prepend_in(TimeReportQuery, Smile::Models::TimeReportQueryOverride::ExtendedQueries)
+  end
+
+  require_dependency 'query'
+  unless QueryColumn.instance_method(:group_value)
+    prepend_in(QueryColumn, Smile::Models::QueryColumnOverride::GroupValue)
+    prepend_in(TimestampQueryColumn, Smile::Models::TimestampQueryColumnOverride::
+      GroupValue)
   end
 
 
