@@ -184,7 +184,7 @@ rails_dispatcher.to_prepare do
   end
 
   require_dependency 'query'
-  unless QueryColumn.instance_method(:group_value)
+  unless QueryColumn.instance_methods.include?(:group_value)
     prepend_in(QueryColumn, Smile::Models::QueryColumnOverride::GroupValue)
     prepend_in(TimestampQueryColumn, Smile::Models::TimestampQueryColumnOverride::
       GroupValue)
