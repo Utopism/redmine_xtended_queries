@@ -757,18 +757,15 @@ module Smile
         # 4/ EXTENDED, RM 4.0.0 OK
         # Add new optional columns
         # instance variable : for each project / user
-        # + User Custom Fields
         # + TMONTH
         # + TYEAR
         def available_columns
-          return @available_columns if @available_columns
-
           super
 
-          ################
-          # Smile Specific : + User Custom Fields
-          @available_columns += UserCustomField.visible.
-                                  map {|cf| QueryAssociationCustomFieldColumn.new(:user, cf) }
+          index_tyear = @available_columns.find_index {|column| column.name == :tyear}
+
+          # Already overriden
+          return @available_columns if index_tyear
 
           ################
           # Smile Specific #379708 Liste entrées de temps : colonne semaine
