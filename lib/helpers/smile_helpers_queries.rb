@@ -467,7 +467,10 @@ module Smile
 
               ################
               # Smile specific : hours_for_*
-              if field.start_with?('spent_hours_for_')
+              if (
+                field.start_with?('spent_hours_for_') ||
+                field.start_with?('is_last_time_entry')
+              )
                 group = :label_budget_and_progress
               # END -- Smile specific
               #######################
