@@ -1259,21 +1259,25 @@ module Smile
             elsif column.name == :closed_on
               criteria_order = 'C9'
               column_label = "#{l("label_calendar_icon")} #{column.caption}"
-            elsif column.name == :date || column.name == :spent_on
+            elsif column.name == :project_updated_on
               criteria_order = 'CA'
               column_label = "#{l("label_calendar_icon")} #{column.caption}"
-            elsif column.name == :year || column.name == :tyear
+            elsif column.name == :date || column.name == :spent_on
               criteria_order = 'CB'
               column_label = "#{l("label_calendar_icon")} #{column.caption}"
-            elsif column.name == :month || column.name == :tmonth
+            elsif column.name == :year || column.name == :tyear
               criteria_order = 'CC'
               column_label = "#{l("label_calendar_icon")} #{column.caption}"
+            elsif column.name == :month || column.name == :tmonth
+              criteria_order = 'CD'
+              column_label = "#{l("label_calendar_icon")} #{column.caption}"
             elsif column.name == :week || column.name == :tweek
-              criteria_order = 'CF'
+              criteria_order = 'CE'
               column_label = "#{l("label_calendar_icon")} #{column.caption}"
             elsif column.name == :day || column.name == :tday
-              criteria_order = 'CG'
+              criteria_order = 'CF'
               column_label = "#{l("label_calendar_icon")} #{column.caption}"
+
 
             # 3/ F? Keep Spent Time fields order
             # F1-4 space for estimated hours columns in hook
@@ -1299,6 +1303,12 @@ module Smile
             elsif column_name.start_with?('spent_hours_for_')
               criteria_order = 'H7'
               column_label = "#{l("label_time_icon")} #{column.caption}"
+            elsif column_name.start_with?('billable_hours_for_')
+              criteria_order = 'H8'
+              column_label = "#{l("label_time_icon")} #{column.caption}"
+            elsif column_name.start_with?('deviation_hours_for_')
+              criteria_order = 'H8'
+              column_label = "#{l("label_time_icon")} #{column.caption}"
 
             # 6/ I? space for POST spent hours columns in hook
 
@@ -1309,11 +1319,29 @@ module Smile
 
             # 8/ Y? Z? Keep Custom Fields order
             elsif column.class == QueryCustomFieldColumn
-              criteria_order = 'Y'
+              criteria_order = 'Y1'
               column_label = "#{l("label_tool_icon")} #{column.caption}"
-            elsif column.class == QueryAssociationCustomFieldColumn
-              criteria_order = 'Z'
+            elsif (
+              column.class == QueryAssociationCustomFieldColumn &&
+              column.custom_field.class == IssueCustomField
+            )
+              criteria_order = 'Z1'
               column_label = "#{l('label_tool_icon')} #{l("label_attribute_of_issue", :name => column.caption)}"
+            elsif (
+              column.class == QueryAssociationCustomFieldColumn &&
+              column.custom_field.class == ProjectCustomField
+            )
+              criteria_order = 'Z2'
+              column_label = "#{l('label_tool_icon')} #{l("label_attribute_of_project", :name => column.caption)}"
+            elsif (
+              column.class == QueryAssociationCustomFieldColumn &&
+              column.custom_field.class == UserCustomField
+            )
+              criteria_order = 'Z3'
+              column_label = "#{l('label_tool_icon')} #{l("label_attribute_of_user", :name => column.caption)}"
+            elsif column.class == QueryAssociationCustomFieldColumn
+              criteria_order = 'Z4'
+              column_label = "#{l('label_tool_icon')} #{column.caption}"
             end
 
             if criteria_order
@@ -1329,11 +1357,26 @@ module Smile
             column_label = nil
             column_name = column.name.to_s
 
-            if column.class == QueryAssociationCustomFieldColumn
+            if (
+              column.class == QueryAssociationCustomFieldColumn &&
+              column.custom_field.class == IssueCustomField
+            )
               column_label = "#{l('label_tool_icon')} #{l("label_attribute_of_issue", :name => column.caption)}"
+            elsif (
+              column.class == QueryAssociationCustomFieldColumn &&
+              column.custom_field.class == ProjectCustomField
+            )
+              column_label = "#{l('label_tool_icon')} #{l("label_attribute_of_project", :name => column.caption)}"
+            elsif (
+              column.class == QueryAssociationCustomFieldColumn &&
+              column.custom_field.class == UserCustomField
+            )
+              column_label = "#{l('label_tool_icon')} #{l("label_attribute_of_user", :name => column.caption)}"
+            elsif column.class == QueryAssociationCustomFieldColumn
+              column_label = "#{l('label_tool_icon')} #{column.caption}"
             elsif column.class == QueryCustomFieldColumn
               column_label = "#{l("label_tool_icon")} #{column.caption}"
-            elsif [:created_on, :start_date, :updated_on, :due_date, :closed_on, :date, :spent_on, :year, :tyear, :month, :tmonth, :week, :tweek, :day, :tday].include?(column.name)
+            elsif [:created_on, :start_date, :updated_on, :due_date, :closed_on, :project_updated_on, :date, :spent_on, :year, :tyear, :month, :tmonth, :week, :tweek, :day, :tday].include?(column.name)
               column_label = "#{l("label_calendar_icon")} #{column.caption}"
             elsif [:issue, :issue_id, :parent, :parent_position, :parent_subject, :root, :root_position, :root_subject, :position, :'issue.position'].include?(column.name)
               column_label = "#{l("label_with_children_symbol")} #{column.caption}"
