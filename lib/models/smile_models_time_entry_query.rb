@@ -291,8 +291,7 @@ module Smile
           )
 
           # Add columns tracker and subject, that were included in issue column before
-          # + TRACKER
-          # :groupable => true
+          # TRACKER : + groupable
           tracker_column = base.available_columns.detect{|c| c.name == :'issue.tracker'}
           # QueryAssociationColumn -> QueryColumn to enable groupable
           if tracker_column
@@ -307,9 +306,14 @@ module Smile
           base.available_columns << QueryColumn.new(:fixed_version, :sortable => "#{Issue.table_name}.fixed_version_id", :groupable => "#{Issue.table_name}.fixed_version_id")
 
           # Add columns tracker and subject, that were included in issue column before
-          # + CATEGORY
-          # :groupable => true
-          base.available_columns << QueryColumn.new(:category, :sortable => "#{Issue.table_name}.category_id", :groupable => "#{Issue.table_name}.category_id")
+          # CATEGORY : + groupable
+          category_column = base.available_columns.detect{|c| c.name == :'issue.category'}
+          # QueryAssociationColumn -> QueryColumn to enable groupable
+          if category_column
+            base.available_columns.delete(category_column)
+          end
+
+          base.available_columns << QueryColumn.new(:category, :sortable => "#{IssueCategory.table_name}.name", :groupable => "#{IssueCategory.table_name}.name")
 
           # + SUBJECT
           base.available_columns << QueryColumn.new(:subject, :sortable => "#{Issue.table_name}.subject")
@@ -757,8 +761,9 @@ module Smile
         # 4/ EXTENDED, RM 4.0.0 OK
         # Add new optional columns
         # instance variable : for each project / user
-        # + TMONTH
         # + TYEAR
+        # + TMONTH
+        #   TWEEK + groupable
         def available_columns
           super
 
@@ -801,6 +806,9 @@ module Smile
 
         # 5/ new method, RM 4.0.0 OK
         # Smile specific : debug from query
+        # Smile specific : + join_max_t_e_by_issue / user
+        # Smile specific : + join_max_t_e_by_issue / user -- this month
+        # Smile specific : + join_max_t_e_by_issue / user -- previous month
         def joins_additionnal(order_options)
           joins = []
 
