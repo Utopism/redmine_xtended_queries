@@ -10,14 +10,13 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
 
 * **Issue Queries** :
 
-  * New **Or Filters**, like Filters but cumulative not exclusive.
+  * New **Or Filters**, like Filters but cumulative (not exclusive).
 
-    With or filters you can for example select issues assigned to you, OR that you have created.
+    With or filters you can for example select issues assigned to you OR that you have created.
 
   * New columns :
-    * **Project of the parent isssue**
-    * **Estimated time**
     * Issues Tree :
+      * **Project of the parent isssue**
       * **⊨ Parent task**
       * **⊨ Parent task -- (Position)**
       * **⊨ Parent task -- (Subject)**
@@ -26,42 +25,48 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
       * **⊨ Root task -- (Subject)**
       * **⊨ Position**
     * **Project Updated**
-    * **Updated on**
+
+      The Updated on value
+
+    * Issue **Updated on**
 
   * New filters :
-    * **Project updated on**
+    * **Project updated**
+
+      The Updated on value
+
     * Filter on **Subproject** changed : current project not selected by default
 
       Available if on a project, and having children
+      Natively when you filter on Sub-projects, you always have the issues of the current project even if project is not selected.
 
     * **Parent Project** (if on a project)
     * If advanced checkbox is checked :
       * **Root task** (if on a project)
       * **Parent task** (if on a project)
       * **Issue** (if on a project)
+
+        Input field replaced by **drop down list** if **Advanced Filers** is checked.
+
       * **Children count**
-      * **Level in tree**
+      * **Level in tree** (0 for root tasks)
 
 * Time Entry Queries :
   * New columns :
-    * **Tracker**
+    * **Estimated time**
+    * **Tracker** + groupable
     * **Target version**
-    * **Category**
+    * **Category** + groupable
     * **Subject**
     * **Watchers**
     * Issues Tree :
       * **⊨ Issue Id.**
       * **⊨ Root task**
-      * **⊨ Parent task -- (Subject)**
-      * **⊨ Parent task -- (Position)**
-      * **⊨ Root task -- (Subject)**
-      * **⊨ Root task -- (Position)**
-      * **⊨ Position**
+      * **⊨ Parent task**
     * Date :
-      * **🗓 Year**
-      * **🗓 Month**
-      * **🗓 Week**
-    * **Updated on**
+      * **+ 🗓 Year**
+      * **+ 🗓 Month**
+      * **  🗓 Week + groupable**
     * Cumulative Hours :
       * **🕝 Hours for issue and user**
       * **🕝 Hours for issue**
@@ -127,6 +132,10 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
 * Forbid setting **global query** public to other than me for non-admins : Fixed upstream with Redmine V3.0.4
 
 # Changelog
+
+* **V1.0.9** Small fixes, + List of tests
+
+  Parent project column grouped as tree column, Time entries category column sort fixed
 
 * **V1.0.8** Small enhancements and fixes :
 
