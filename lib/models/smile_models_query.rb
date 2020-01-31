@@ -1242,6 +1242,9 @@ module Smile
             elsif column.name == :position ||  column.name == :'issue.position'
               criteria_order = 'B8'
               column_label = "#{l("label_with_children_symbol")} #{column.caption}"
+            elsif column.name == :parent_project
+              criteria_order = 'B9'
+              column_label = "#{l("label_with_children_symbol")} #{column.caption}"
 
             # 2/ C? Keep date fields order
             elsif column.name == :created_on
@@ -1378,7 +1381,7 @@ module Smile
               column_label = "#{l("label_tool_icon")} #{column.caption}"
             elsif [:created_on, :start_date, :updated_on, :due_date, :closed_on, :project_updated_on, :date, :spent_on, :year, :tyear, :month, :tmonth, :week, :tweek, :day, :tday].include?(column.name)
               column_label = "#{l("label_calendar_icon")} #{column.caption}"
-            elsif [:issue, :issue_id, :parent, :parent_position, :parent_subject, :root, :root_position, :root_subject, :position, :'issue.position'].include?(column.name)
+            elsif [:parent_project, :issue, :issue_id, :parent, :parent_position, :parent_subject, :root, :root_position, :root_subject, :position, :'issue.position'].include?(column.name)
               column_label = "#{l("label_with_children_symbol")} #{column.caption}"
             elsif [
               :estimated_hours,
