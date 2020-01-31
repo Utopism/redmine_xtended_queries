@@ -43,18 +43,18 @@
       * Subproject filter : remove current project by default  OK
   * Time entries
     * New Time entries columns
-      * Tracker : + groupable                                  ?
-      * Subject                                                ?
-      * Root                                                   ?
-      * Parent                                                 ?
-      * Fixed version                                          ?
-      * Category : + groupable                                 ?
+      * Tracker : + groupable                                  OK
+      * Subject                                                OK
+      * Root                                                   OK
+      * Parent                                                 OK
+      * Fixed version                                          OK
+      * Category : + groupable                                 OK
 
-        Test sort by Category
+        Test sort by Category                                  OK
 
-      * Issue Id                                               ?
-      * Subject                                                ?
-      * Estimated hours                                        ?
+      * Issue Id                                               OK
+      * Subject                                                OK
+      * Estimated hours                                        OK
       * Hours
         * Hours for issue and user                             ?
         * Hours for issue                                      ?
@@ -100,3 +100,5 @@
       * User is me                                             ?
       * Author is me                                           ?
       * SMILE SPECIFIC : BU Project                            ?
+* Error :
+  https://redmine-projets-inte.vitry.intranet/projects/redmine-wf-v1/issues?utf8=%E2%9C%93&set_filter=1&sort=parent&f%5B%5D=status_id&op%5Bstatus_id%5D=o&f%5B%5D=estimated_hours&op%5Bestimated_hours%5D=%3E%3D&v%5Bestimated_hours%5D%5B%5D=0.01&f%5B%5D=&c%5B%5D=project&c%5B%5D=parent&c%5B%5D=tracker&c%5B%5D=status&c%5B%5D=subject&c%5B%5D=assigned_to&c%5B%5D=fixed_version&c%5B%5D=due_date&c%5B%5D=estimated_hours&c%5B%5D=done_ratio&hours_by_day=8.0&advanced_filters=1&group_by=&t%5B%5D=estimated_hours&t%5B%5D=
