@@ -1,4 +1,4 @@
-// Smile specific
+// Smile specific : Or fiters
 function initOrFilters() {
   $('#add_or_filter_select').change(function() {
     addOrFilter($(this).val(), '', []);
@@ -223,4 +223,3 @@ function toggleOrOperator(field) {
       break;
   }
 }
-
