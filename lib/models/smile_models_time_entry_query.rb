@@ -33,10 +33,10 @@ module Smile
           extended_queries_instance_methods = [
             :results_scope,                                               #  1/ EXTENDED    TESTED  RM V4.0.0 OK
             :build_from_params,                                           #  2/ EXTENDED    TESTED  RM V4.0.0 OK
-            :initialize_available_filters,                                #  3/ REWRITTEN   TO TEST RM V4.0.0 OK
+            :initialize_available_filters,                                #  3/ REWRITTEN   TESTED  RM V4.0.0 OK
             :available_columns,                                           #  4/ EXTENDED    TESTED  RM V4.0.0 OK
-            :joins_additionnal,                                           #  5/ EXTENDED    TO TEST RM V4.0.0 OK
-            :joins_for_order_statement,                                   #  6/ EXTENDED    TO TEST RM V4.0.0 OK
+            :joins_additionnal,                                           #  5/ EXTENDED    TESTED  RM V4.0.0 OK
+            :joins_for_order_statement,                                   #  6/ EXTENDED    TESTED  RM V4.0.0 OK
 
 
             :sql_for_issue_created_on_field,                              # 10/ new method  TESTED  RM V4.0.0 OK
@@ -50,6 +50,7 @@ module Smile
             :sql_for_user_id_me_field,                                    # 18/ new method  TESTED  RM V4.0.0 OK
             :sql_for_author_id_me_field,                                  # 19/ new method  TESTED  RM V4.0.0 OK
             :sql_for_issue_id_field,                                      # 20/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_estimated_hours_field,                               # 21/ new method  TO TEST RM V4.0.0 OK
 
             :sql_for_is_last_time_entry_for_issue_and_user_field,         # 30/ new method  TESTED  RM V4.0.0 OK
             :sql_for_is_last_time_entry_for_issue_field,                  # 31/ new method  TESTED  RM V4.0.0 OK
@@ -714,6 +715,11 @@ module Smile
           add_available_filter "comments", :type => :text
 
           ################
+          # Smile specific
+          # + ESTIMATED HOURS
+          add_available_filter "estimated_hours", :type => :float
+
+          ################
           # Smile specific #994 Budget and Remaining enhancement
           # If we display all issue, display budget_hours and remaining_hours columns
           # + BUDGET HOURS
@@ -1242,6 +1248,7 @@ module Smile
         def sql_for_issue_id_field(field, operator, value)
           case operator
           when "="
+            ################
             # Smile specific : manage drop down list filter
             issue_ids = value.join(',')
             "#{TimeEntry.table_name}.issue_id IN (#{issue_ids})"
@@ -1258,6 +1265,12 @@ module Smile
             "#{TimeEntry.table_name}.issue_id IS NOT NULL"
           end
         end
+
+        # 21/ new method, RM 2.6 OK
+        def sql_for_estimated_hours_field(field, operator, value)
+          sql_for_field(field, operator, value, Issue.table_name, 'estimated_hours')
+        end
+
 
         # 30/ new method, RM 4.0.0 OK
         def sql_for_is_last_time_entry_for_issue_and_user_field(field, operator, value)

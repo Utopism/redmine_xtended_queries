@@ -29,20 +29,22 @@ module Smile
           #####################
           # 1) Instance methods
           extended_queries_instance_methods = [
-            :results_scope,                                               #  1/ EXTENDED    TO TEST  RM V4.0.0 OK
-            :build_from_params,                                           #  2/ EXTENDED    TO TEST  RM V4.0.0 OK
-            :initialize_available_filters,                                #  3/ REWRITTEN   TO TEST  RM V4.0.0 OK
+            :results_scope,                                               #  1/ EXTENDED    TESTED  RM V4.0.0 OK
+            :build_from_params,                                           #  2/ EXTENDED    TESTED  RM V4.0.0 OK
+            :initialize_available_filters,                                #  3/ REWRITTEN   TESTED  RM V4.0.0 OK
 
-            :sql_for_issue_created_on_field,                              # 10/ new method  TO TEST  RM V4.0.0 OK
-            :sql_for_tracker_field,                                       # 11/ new method  TO TEST  RM V4.0.0 OK
-            :sql_for_subject_field,                                       # 12/ new method  TO TEST  RM V4.0.0 OK
-            :sql_for_fixed_version_id_field,                              # 13/ new method  TO TEST  RM V4.0.0 OK
-            :sql_for_issue_category_id_field,                             # 14/ new method  TO TEST  RM V4.0.0 OK
-            :sql_for_root_id_field,                                       # 15/ new method  TO TEST  RM V4.0.0 OK
-            :sql_for_parent_id_field,                                     # 16/ new method  TO TEST  RM V4.0.0 OK
-            :sql_for_member_of_group_field,                               # 17/ new method  TO TEST  RM V4.0.0 OK COPIED from IssueQuery
-            :sql_for_user_id_me_field,                                    # 18/ new method  TO TEST  RM V4.0.0 OK
-            :sql_for_author_id_me_field,                                  # 19/ new method  TO TEST  RM V4.0.0 OK
+            :sql_for_issue_created_on_field,                              # 10/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_tracker_field,                                       # 11/ new method  TO TEST RM V4.0.0 OK
+            :sql_for_subject_field,                                       # 12/ new method  TO TEST RM V4.0.0 OK
+            :sql_for_fixed_version_id_field,                              # 13/ new method  TO TEST RM V4.0.0 OK
+            :sql_for_issue_category_id_field,                             # 14/ new method  TO TEST RM V4.0.0 OK
+            :sql_for_root_id_field,                                       # 15/ new method  TO TEST RM V4.0.0 OK
+            :sql_for_parent_id_field,                                     # 16/ new method  TO TEST RM V4.0.0 OK
+            :sql_for_member_of_group_field,                               # 17/ new method  TO TEST RM V4.0.0 OK COPIED from IssueQuery
+            :sql_for_user_id_me_field,                                    # 18/ new method  TO TEST RM V4.0.0 OK
+            :sql_for_author_id_me_field,                                  # 19/ new method  TO TEST RM V4.0.0 OK
+            :sql_for_issue_id_field,                                      # 20/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_estimated_hours_field,                               # 21/ new method  TO TEST RM V4.0.0 OK
           ]
 
           trace_prefix = "#{' ' * (base.name.length + 17)}  --->  "
@@ -193,6 +195,7 @@ module Smile
           # Smile specific #355842 Rapport temps passé : filtre projet mis-à-jour
           if filters.include?('project_updated_on')
             sql_projects_filter = filter_column_on_projects('project_id')
+
             unless sql_projects_filter.present?
               sql_projects_filter = '(1=1)'
             end
@@ -436,6 +439,11 @@ module Smile
           add_available_filter "comments", :type => :text
 
           ################
+          # Smile specific
+          # + ESTIMATED HOURS
+          add_available_filter "estimated_hours", :type => :float
+
+          ################
           # Smile specific #994 Budget and Remaining enhancement
           # If we display all issue, display budget_hours and remaining_hours columns
           # + BUDGET HOURS
@@ -537,6 +545,34 @@ module Smile
         # Smile specific #831010: Time Report Query : new time entry user filter, me
         def sql_for_author_id_me_field(field, operator, value)
           sql_for_field(field, operator, value, nil, "(CASE WHEN (#{TimeEntry.table_name}.author_id = #{User.current.id}) THEN 'me' ELSE 'not_me' END)")
+        end
+
+        # 20/ REWRITTEN, RM 4.0.0 OK
+        # Smile specific #539595 Requête personnalisée : Filtres avancés (Demande, Parent, Racine)
+        def sql_for_issue_id_field(field, operator, value)
+          case operator
+          when "="
+            ################
+            # Smile specific : manage drop down list filter
+            issue_ids = value.join(',')
+            "#{TimeEntry.table_name}.issue_id IN (#{issue_ids})"
+          when "~"
+            issue = Issue.where(:id => value.first.to_i).first
+            if issue && (issue_ids = issue.self_and_descendants.pluck(:id)).any?
+              "#{TimeEntry.table_name}.issue_id IN (#{issue_ids.join(',')})"
+            else
+              "1=0"
+            end
+          when "!*"
+            "#{TimeEntry.table_name}.issue_id IS NULL"
+          when "*"
+            "#{TimeEntry.table_name}.issue_id IS NOT NULL"
+          end
+        end
+
+        # 21/ new method, RM 2.6 OK
+        def sql_for_estimated_hours_field(field, operator, value)
+          sql_for_field(field, operator, value, Issue.table_name, 'estimated_hours')
         end
 
 
