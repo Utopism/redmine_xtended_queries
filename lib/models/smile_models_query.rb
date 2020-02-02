@@ -26,44 +26,47 @@ module Smile
           #####################
           # 1/ Instance methods
           enhancements_instance_methods = [
-            :with_children,                        #  1/ new method  TESTED           OK
-            :with_children=,                       #  2/ new method  TESTED           OK
-            :group_additional_infos,               #  3/ new method  TESTED           OK
-            :group_additional_infos=,              #  4/ new method  TESTED           OK
-            :advanced_filters,                     #  5/ new method  TESTED           OK
-            :advanced_filters=,                    #  6/ new method  TESTED           OK
-            :sql_for_field,                        #  7/ REWRITTEN   TESTED  RM 4.0.0 OK
-            :date_clause,                          #  8/ REWRITTEN   TESTED  RM 4.0.0 OK
-            :filter_column_on_projects,            #  9/ COPIED      TESTED  RM 4.0.0 OK
-            :sql_for_project_updated_on_field,     # 10/ new method  TESTED           OK
-            :sql_for_bu_project_field        ,     # 11/ new method  TESTED           OK
-            :sql_for_children_count_field,         # 12/ new method  TESTED           OK
-            :sql_for_level_in_tree_field,          # 13/ new method  TESTED           OK
-            :statement,                            # 14/ REWRITTEN   PLUGIN           OK
+            :with_children,                               #  1/ new method  TESTED           OK
+            :with_children=,                              #  2/ new method  TESTED           OK
+            :group_additional_infos,                      #  3/ new method  TESTED           OK
+            :group_additional_infos=,                     #  4/ new method  TESTED           OK
+            :advanced_filters,                            #  5/ new method  TESTED           OK
+            :advanced_filters=,                           #  6/ new method  TESTED           OK
+            :sql_for_field,                               #  7/ REWRITTEN   TESTED  RM 4.0.0 OK
+            :date_clause,                                 #  8/ REWRITTEN   TESTED  RM 4.0.0 OK
+            :filter_column_on_projects,                   #  9/ COPIED      TESTED  RM 4.0.0 OK
+            :sql_for_project_updated_on_field,            # 10/ new method  TESTED           OK
+            :sql_for_bu_project_field,                    # 11/ new method  TESTED           OK
+            :sql_for_children_count_field,                # 12/ new method  TESTED           OK
+            :sql_for_level_in_tree_field,                 # 13/ new method  TESTED           OK
+            :statement,                                   # 14/ REWRITTEN   PLUGIN           OK
 
-            :subproject_values,                    # 15/ REWRITTEN   TESTED  RM 4.0.0 OK
-            :subproject_values_condition_hook,     # 16/ new method  TESTED  RM 4.0.0 OK
-            :project_and_children_ids,             # 17/ new method  TESTED  RM 4.0.0 OK
-            :project_and_children,                 # 18/ new method  TESTED  RM 4.0.0 OK
-            :calc_project_and_children_issues,     # 19/ new method  TESTED  RM 4.0.0 OK
-            :available_totalable_columns_DISABLED, # 20/ EXTENDED    TESTED  RM 4.0.0 OK
-            :project_statement,                    # 21/ REWRITTEN   TESTED  RM 4.0.0 OK
-            :total_for,                            # 22/ REWRITTEN   TO TEST RM 4.0.0 OK
-            :total_by_group_for,                   # 23/ REWRITTEN   TO TEST RM 4.0.0 OK
-            :total_with_scope,                     # 24/ REWRITTEN   TO TEST RM 4.0.0 OK
-            :sql_visible_time_entries_issues_ids,  # 25/ new         TO TEST RM 4.0.0 OK
+            :subproject_values,                           # 15/ REWRITTEN   TESTED  RM 4.0.0 OK
+            :subproject_values_condition_hook,            # 16/ new method  TESTED  RM 4.0.0 OK
+            :project_and_children_ids,                    # 17/ new method  TESTED  RM 4.0.0 OK
+            :project_and_children,                        # 18/ new method  TESTED  RM 4.0.0 OK
+            :calc_project_and_children_issues,            # 19/ new method  TESTED  RM 4.0.0 OK
+            :available_totalable_columns_DISABLED,        # 20/ EXTENDED    TESTED  RM 4.0.0 OK
+            :project_statement,                           # 21/ REWRITTEN   TESTED  RM 4.0.0 OK
+            :total_for,                                   # 22/ REWRITTEN   TO TEST RM 4.0.0 OK
+            :total_by_group_for,                          # 23/ REWRITTEN   TO TEST RM 4.0.0 OK
+            :total_with_scope,                            # 24/ REWRITTEN   TO TEST RM 4.0.0 OK
+            :sql_visible_time_entries_issues_ids,         # 25/ new         TO TEST RM 4.0.0 OK
+            :joins_additionnal,                           # 26/ EXTENDED    TO TEST RM V4.0.0 OK
+            :join_project_updated_on_needed_for_order?,   # 27/ new         TO TEST RM V4.0.0 OK
+            :join_project_updated_on_needed_for_filters?, # 28/ new         TO TEST RM V4.0.0 OK
 
             ################
             # Smile specific #340206 Filtre additifs
-            :add_or_filter,                        # 40/ new method  TESTED  RM 4.0.0 OK
-            :add_or_filters,                       # 41/ new method  TESTED  RM 4.0.0 OK
-            :has_or_filter?,                       # 42/ new method  TESTED  RM 4.0.0 OK
-            :add_filter_error,                     # 43/ REWRITTEN   TESTED  RM 4.0.0 OK
-            :or_operator_for,                      # 44/ new method  TESTED  RM 4.0.0 OK
-            :or_values_for,                        # 45/ new method  TESTED  RM 4.0.0 OK
-            :or_value_for,                         # 46/ new method  TESTED  RM 4.0.0 OK
-            :validate_query_filters,               # 47/ EXTENDED    TESTED  RM 4.0.0 OK
-            :or_filters,                           # 48/ new method  TESTED  RM 4.0.0 OK
+            :add_or_filter,                               # 40/ new method  TESTED  RM 4.0.0 OK
+            :add_or_filters,                              # 41/ new method  TESTED  RM 4.0.0 OK
+            :has_or_filter?,                              # 42/ new method  TESTED  RM 4.0.0 OK
+            :add_filter_error,                            # 43/ REWRITTEN   TESTED  RM 4.0.0 OK
+            :or_operator_for,                             # 44/ new method  TESTED  RM 4.0.0 OK
+            :or_values_for,                               # 45/ new method  TESTED  RM 4.0.0 OK
+            :or_value_for,                                # 46/ new method  TESTED  RM 4.0.0 OK
+            :validate_query_filters,                      # 47/ EXTENDED    TESTED  RM 4.0.0 OK
+            :or_filters,                                  # 48/ new method  TESTED  RM 4.0.0 OK
 
             # Following Protected
           ]
@@ -1038,6 +1041,58 @@ module Smile
             order(:id).
             pluck(:id).
             join(',')
+        end
+
+        # 26/ Extended, RM 4.0.3 OK
+        # Smile specific #354800 Requête perso : filtre projet mis-à-jour
+        def joins_additionnal(order_options)
+          joins = super
+
+          debug = nil
+          if self.respond_to?('debug')
+            debug = self.debug
+          end
+
+          logger.debug " =>prof         joins_additionnal" if debug
+          logger.debug " =>prof           group_by_column=#{group_by_column.name}" if group_by_column && debug
+
+          #---------------
+          # Smile specific #354800 Requête perso : filtre projet mis-à-jour
+          # Smile specific : filter project_updated_on
+          # Smile specific : order project_updated_on
+          # Smile specific : => left_join_project_updated_on_from_issues
+          if (
+            join_project_updated_on_needed_for_order?(order_options) ||
+            join_project_updated_on_needed_for_filters?
+          )
+            sql_filter = filter_column_on_projects('project_id')
+            unless sql_filter.present?
+              sql_filter = '(1=1)'
+            end
+
+            logger.debug "==>prof           +left_join_project_updated_on_from_issues" if debug
+            joins << self.class.left_join_project_updated_on_from_issues(sql_filter)
+          end
+          # END -- Smile specific #354800 Requête perso : filtre projet mis-à-jour
+          #----------------------
+
+          joins
+        end
+
+        # 27/ new method, RM 4.0.0 OK
+        # Smile specific #994 Budget and Remaining enhancement
+        def join_project_updated_on_needed_for_order?(order_options=nil)
+          return false unless order_options
+
+          order_options.include?('project_updated_on')
+        end
+
+        # 28/ new method, RM 4.0.0 OK
+        # Smile specific #994 Budget and Remaining enhancement
+        # Smile specific #215753 Filtre ticket sur % réalisé et module de suivi budget
+        def join_project_updated_on_needed_for_filters?
+          filters.include?('project_updated_on') ||
+            or_filters.include?('project_updated_on')
         end
 
 
