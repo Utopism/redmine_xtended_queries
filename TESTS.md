@@ -21,8 +21,7 @@
       * No columns selection                                   OK
       * Criteria multiple values selection (arrows buttons)    OK
   * Or filters
-    * Like filters but with non exclusive filters              H.S.
-      Not available
+    * Like filters but with non exclusive filters              OK
   * SMILE SPECIFIC : total F / G / D at the group level
     * Issues                                                   H.S.
   * SMILE SPECIFIC : sum time with children                    ?
