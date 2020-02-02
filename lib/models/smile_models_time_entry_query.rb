@@ -828,9 +828,9 @@ module Smile
             debug = self.debug
           end
 
-          logger.debug " =>prof         joins_additionnal" if debug
-          logger.debug " =>prof           group_by_column=#{group_by_column.name}" if group_by_column && debug
-          logger.debug " =>prof           filters=#{self.filters}" if debug == '2'
+          logger.debug " =>prof           TEQ joins_additionnal" if debug
+          logger.debug " =>prof             group_by_column=#{group_by_column.name}" if group_by_column && debug
+          logger.debug " =>prof             filters=#{self.filters}" if debug == '2'
 
 
           ######
@@ -876,7 +876,7 @@ module Smile
               'issue_id'
             )
 
-            logger.debug " =>prof           sql_visible_issues_filter=#{sql_visible_issues_filter}" if debug == '3'
+            logger.debug " =>prof               sql_visible_issues_filter=#{sql_visible_issues_filter}" if debug == '3'
           end
 
 
@@ -890,7 +890,7 @@ module Smile
             #-----------------------
             # 1.1) By Issue and User, Filter on visible time entries
             if join_max_t_e_by_issue_and_user
-              logger.debug " =>prof           +left_join_max_time_entry_id_by_issue_and_user(...)" if debug
+              logger.debug " =>prof               +left_join_max_time_entry_id_by_issue_and_user(...)" if debug
 
               sql_where_filter = self.class.sql_where_w_optional_conditions(
                   false, # where_prefix
@@ -899,21 +899,21 @@ module Smile
                 ) +
                 ' '
               if debug == '2'
-                logger.debug " =>prof           sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
+                logger.debug " =>prof                 sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
               elsif debug == '3'
-                logger.debug " =>prof           sql_where_filter='#{sql_where_filter}'"
+                logger.debug " =>prof                 sql_where_filter='#{sql_where_filter}'"
               end
 
               # No postfix, default select name
               joins << self.class.left_join_max_time_entry_id_by_issue_and_user(sql_where_filter)
             else
-              logger.debug " =>prof           join_max_time_entry_by_issue_and_user NOT needed" if debug == '2'
+              logger.debug " =>prof                 join_max_time_entry_by_issue_and_user NOT needed" if debug == '3'
             end
 
             #--------------
             # 1.2) By Issue, Filter on visible time entries
             if join_max_t_e_by_issue
-              logger.debug " =>prof           +left_join_max_time_entry_id_by_issue(...)" if debug
+              logger.debug " =>prof               +left_join_max_time_entry_id_by_issue(...)" if debug
 
               sql_where_filter = self.class.sql_where_w_optional_conditions(
                   false, # where_prefix
@@ -922,21 +922,21 @@ module Smile
                 ) +
                 ' '
               if debug == '2'
-                logger.debug " =>prof           sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
+                logger.debug " =>prof                 sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
               elsif debug == '3'
-                logger.debug " =>prof           sql_where_filter='#{sql_where_filter}'"
+                logger.debug " =>prof                 sql_where_filter='#{sql_where_filter}'"
               end
 
               # No postfix, default select name
               joins << self.class.left_join_max_time_entry_id_by_issue(sql_where_filter)
             else
-              logger.debug " =>prof           join_max_time_entry_by_issue          NOT needed" if debug == '2'
+              logger.debug " =>prof               left_join_max_time_entry_by_issue     NOT needed" if debug == '3'
             end
 
             #-------------
             # 1.3) By User, Filter on visible time entries
             if join_max_t_e_by_user
-              logger.debug " =>prof           +left_join_max_time_entry_id_by_user(...)" if debug
+              logger.debug " =>prof               +left_join_max_time_entry_id_by_user(...)" if debug
 
               sql_where_filter = self.class.sql_where_w_optional_conditions(
                   false, # where_prefix
@@ -945,15 +945,15 @@ module Smile
                 ) +
                 ' '
               if debug == '2'
-                logger.debug " =>prof           sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
+                logger.debug " =>prof                 sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
               elsif debug == '3'
-                logger.debug " =>prof           sql_where_filter='#{sql_where_filter}'"
+                logger.debug " =>prof                 sql_where_filter='#{sql_where_filter}'"
               end
 
               # No postfix, default select name
               joins << self.class.left_join_max_time_entry_id_by_user(sql_where_filter)
             else
-              logger.debug " =>prof           join_max_time_entry_by_user           NOT needed" if debug == '2'
+              logger.debug " =>prof               left_join_max_time_entry_by_user      NOT needed" if debug == '3'
             end
           end
 
@@ -974,7 +974,7 @@ module Smile
             #-----------------------
             # 2.1) By Issue and User, Filter on visible time entries
             if join_max_t_e_by_issue_and_user_this_month
-              logger.debug " =>prof           +left_join_max_time_entry_id_by_issue_and_user(...)" if debug
+              logger.debug " =>prof               +left_join_max_time_entry_id_by_issue_and_user(...) this_month" if debug
 
               sql_where_filter = self.class.sql_where_w_optional_conditions(
                   false, # where_prefix
@@ -984,21 +984,21 @@ module Smile
                 ) +
                 ' '
               if debug == '2'
-                logger.debug " =>prof           sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
+                logger.debug " =>prof                 sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
               elsif debug == '3'
-                logger.debug " =>prof           sql_where_filter='#{sql_where_filter}'"
+                logger.debug " =>prof                 sql_where_filter='#{sql_where_filter}'"
               end
 
               # No postfix, default select name
               joins << self.class.left_join_max_time_entry_id_by_issue_and_user(sql_where_filter, '_this_month')
             else
-              logger.debug " =>prof           join_max_time_entry_by_issue_and_user NOT needed" if debug == '2'
+              logger.debug " =>prof               left_join_max_time_entry_by_issue_and_user NOT needed" if debug == '3'
             end
 
             #--------------
             # 2.2) By Issue, Filter on visible time entries
             if join_max_t_e_by_issue_this_month
-              logger.debug " =>prof           +left_join_max_time_entry_id_by_issue(...)" if debug
+              logger.debug " =>prof               +left_join_max_time_entry_id_by_issue(...)" if debug
 
               sql_where_filter = self.class.sql_where_w_optional_conditions(
                   false, # where_prefix
@@ -1008,21 +1008,21 @@ module Smile
                 ) +
                 ' '
               if debug == '2'
-                logger.debug " =>prof           sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
+                logger.debug " =>prof                 sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
               elsif debug == '3'
-                logger.debug " =>prof           sql_where_filter='#{sql_where_filter}'"
+                logger.debug " =>prof                 sql_where_filter='#{sql_where_filter}'"
               end
 
               # No postfix, default select name
               joins << self.class.left_join_max_time_entry_id_by_issue(sql_where_filter, '_this_month')
             else
-              logger.debug " =>prof           join_max_time_entry_by_issue          NOT needed" if debug == '2'
+              logger.debug " =>prof               left_join_max_time_entry_by_issue     NOT needed" if debug == '3'
             end
 
             #-------------
             # 2.3) By User, Filter on visible time entries
             if join_max_t_e_by_user_this_month
-              logger.debug " =>prof           +left_join_max_time_entry_id_by_user(...)" if debug
+              logger.debug " =>prof               +left_join_max_time_entry_id_by_user(...)" if debug
 
               sql_where_filter = self.class.sql_where_w_optional_conditions(
                   false, # where_prefix
@@ -1032,15 +1032,15 @@ module Smile
                 ) +
                 ' '
               if debug == '2'
-                logger.debug " =>prof           sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
+                logger.debug " =>prof                 sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
               elsif debug == '3'
-                logger.debug " =>prof           sql_where_filter='#{sql_where_filter}'"
+                logger.debug " =>prof                 sql_where_filter='#{sql_where_filter}'"
               end
 
               # No postfix, default select name
               joins << self.class.left_join_max_time_entry_id_by_user(sql_where_filter, '_this_month')
             else
-              logger.debug " =>prof           join_max_time_entry_by_user           NOT needed" if debug == '2'
+              logger.debug " =>prof               left_join_max_time_entry_by_user      NOT needed" if debug == '3'
             end
           end
 
@@ -1060,7 +1060,7 @@ module Smile
             #-----------------------
             # 3.1) By Issue and User, Filter on visible time entries
             if join_max_t_e_by_issue_and_user_previous_month
-              logger.debug " =>prof           +left_join_max_time_entry_id_by_issue_and_user(...)" if debug
+              logger.debug " =>prof               +left_join_max_time_entry_id_by_issue_and_user(...) prev month" if debug
 
               sql_where_filter = self.class.sql_where_w_optional_conditions(
                   false, # where_prefix
@@ -1070,22 +1070,22 @@ module Smile
                 ) +
                 ' '
               if debug == '2'
-                logger.debug " =>prof           sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
+                logger.debug " =>prof                 sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
               elsif debug == '3'
-                logger.debug " =>prof           sql_where_filter='#{sql_where_filter}'"
+                logger.debug " =>prof                 sql_where_filter='#{sql_where_filter}'"
               end
 
               # No postfix, default select name
               joins << self.class.left_join_max_time_entry_id_by_issue_and_user(sql_where_filter, '_previous_month')
             else
-              logger.debug " =>prof           join_max_time_entry_by_issue_and_user NOT needed" if debug == '2'
+              logger.debug " =>prof               left_join_max_time_entry_by_issue_and_user NOT needed" if debug == '3'
             end
 
 
             #--------------
             # 3.2) By Issue, Filter on visible time entries
             if join_max_t_e_by_issue_previous_month
-              logger.debug " =>prof           +left_join_max_time_entry_id_by_issue(...)" if debug
+              logger.debug " =>prof               +left_join_max_time_entry_id_by_issue(...)" if debug
 
               sql_where_filter = self.class.sql_where_w_optional_conditions(
                   false, # where_prefix
@@ -1095,21 +1095,21 @@ module Smile
                 ) +
                 ' '
               if debug == '2'
-                logger.debug " =>prof           sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
+                logger.debug " =>prof                 sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
               elsif debug == '3'
-                logger.debug " =>prof           sql_where_filter='#{sql_where_filter}'"
+                logger.debug " =>prof                 sql_where_filter='#{sql_where_filter}'"
               end
 
               # No postfix, default select name
               joins << self.class.left_join_max_time_entry_id_by_issue(sql_where_filter, '_previous_month')
             else
-              logger.debug " =>prof           join_max_time_entry_by_issue          NOT needed" if debug == '2'
+              logger.debug " =>prof               left_join_max_time_entry_by_issue     NOT needed" if debug == '3'
             end
 
             #-------------
             # 3.3) By User, Filter on visible time entries
             if join_max_t_e_by_user_previous_month
-              logger.debug " =>prof           +left_join_max_time_entry_id_by_user(...)" if debug
+              logger.debug " =>prof               +left_join_max_time_entry_id_by_user(...)" if debug
 
               sql_where_filter = self.class.sql_where_w_optional_conditions(
                   false, # where_prefix
@@ -1119,15 +1119,15 @@ module Smile
                 ) +
                 ' '
               if debug == '2'
-                logger.debug " =>prof           sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
+                logger.debug " =>prof                 sql_where_filter='#{SmileTools.remove_sql_in_values(sql_where_filter)}'"
               elsif debug == '3'
-                logger.debug " =>prof           sql_where_filter='#{sql_where_filter}'"
+                logger.debug " =>prof                 sql_where_filter='#{sql_where_filter}'"
               end
 
               # No postfix, default select name
               joins << self.class.left_join_max_time_entry_id_by_user(sql_where_filter, '_previous_month')
             else
-              logger.debug " =>prof           join_max_time_entry_by_user           NOT needed" if debug == '2'
+              logger.debug " =>prof               left_join_max_time_entry_by_user      NOT needed" if debug == '3'
             end
           end
 
@@ -1146,9 +1146,8 @@ module Smile
           end
 
           if debug
-            logger.debug " =>prof"
-            logger.debug "\\=>prof       joins_for_order_statement ==> joins_additionnal"
-            logger.debug " =>prof         order_options=#{order_options}" if debug == '2'
+            logger.debug "\\=>prof         joins_for_order_statement ==> joins_additionnal"
+            logger.debug " =>prof           order_options=#{order_options}" if debug == '2'
           end
           more_joins = joins_additionnal(order_options)
 
@@ -1159,8 +1158,7 @@ module Smile
           end
 
           if debug
-            logger.debug "/=>prof       joins_for_order_statement"
-            logger.debug " =>prof"
+            logger.debug "/=>prof         joins_for_order_statement"
           end
 
           order_joins
@@ -1444,6 +1442,7 @@ module Smile
             time_entries_user_ids_sql = scope.where.not(:user_id => nil).pluck(:user_id).uniq.join(', ')
 
             sql_time_entries_filter = " AND #{self.class.sql_in_values_or_false_if_empty(time_entries_user_ids_sql, 'user_id', false)} "
+
             scope = scope.joins(
               self.class.left_join_max_time_entry_id_by_user(sql_time_entries_filter)
             )
