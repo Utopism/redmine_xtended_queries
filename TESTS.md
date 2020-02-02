@@ -70,8 +70,8 @@
         * Hours for user                                       OK
     * New Time entries filters
       * Project updated (date)                                 OK
-      * Root                                                   ?
-      * Parent                                                 ?
+      * Root                                                   OK
+      * Parent                                                 OK
       * Issue                                                  ?
       * Issue created on                                       ?
       * Assignee's Member of group                             ?
@@ -85,8 +85,8 @@
   * Time report
     * New Time report filters                                  ?
       * Project updated (date)                                 OK
-      * Root                                                   ?
-      * Parent                                                 ?
+      * Root                                                   OK
+      * Parent                                                 OK
       * Issue                                                  ?
       * Issue created on                                       ?
       * Assignee's Member of group                             ?

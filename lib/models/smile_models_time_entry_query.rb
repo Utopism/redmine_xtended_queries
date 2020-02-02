@@ -49,6 +49,7 @@ module Smile
             :sql_for_member_of_group_field,                               # 17/ new method  TESTED  RM V4.0.0 OK COPIED from IssueQuery
             :sql_for_user_id_me_field,                                    # 18/ new method  TESTED  RM V4.0.0 OK
             :sql_for_author_id_me_field,                                  # 19/ new method  TESTED  RM V4.0.0 OK
+            :sql_for_issue_id_field,                                      # 20/ new method  TESTED  RM V4.0.0 OK
 
             :sql_for_is_last_time_entry_for_issue_and_user_field,         # 30/ new method  TESTED  RM V4.0.0 OK
             :sql_for_is_last_time_entry_for_issue_field,                  # 31/ new method  TESTED  RM V4.0.0 OK
@@ -1231,6 +1232,28 @@ module Smile
         # Smile specific #831010: Time Report Query : new time entry user filter, me
         def sql_for_author_id_me_field(field, operator, value)
           sql_for_field(field, operator, value, nil, "(CASE WHEN (#{TimeEntry.table_name}.author_id = #{User.current.id}) THEN 'me' ELSE 'not_me' END)")
+        end
+
+        # 20/ REWRITTEN, RM 4.0.0 OK
+        # Smile specific #539595 Requête personnalisée : Filtres avancés (Demande, Parent, Racine)
+        def sql_for_issue_id_field(field, operator, value)
+          case operator
+          when "="
+            # Smile specific : manage drop down list filter
+            issue_ids = value.join(',')
+            "#{TimeEntry.table_name}.issue_id IN (#{issue_ids})"
+          when "~"
+            issue = Issue.where(:id => value.first.to_i).first
+            if issue && (issue_ids = issue.self_and_descendants.pluck(:id)).any?
+              "#{TimeEntry.table_name}.issue_id IN (#{issue_ids.join(',')})"
+            else
+              "1=0"
+            end
+          when "!*"
+            "#{TimeEntry.table_name}.issue_id IS NULL"
+          when "*"
+            "#{TimeEntry.table_name}.issue_id IS NOT NULL"
+          end
         end
 
         # 30/ new method, RM 4.0.0 OK
