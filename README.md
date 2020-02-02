@@ -133,8 +133,8 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
 
 # Changelog
 
+* **V1.0.11** + **Estimated Hours filter** for Time Entries / Report queries
 * **V1.0.10** Re-introducing Query **watcher_values** method for Older Redmine versions
-
 * **V1.0.9** Small fixes, + List of tests
 
   Parent project column grouped as tree column, Time entries category column sort fixed
