@@ -176,6 +176,7 @@ module Smile
             :root,
             :parent,
             :tracker,
+            :assigned_to,
             :fixed_version,
             :category,
             :subject,
@@ -300,6 +301,8 @@ module Smile
           end
 
           base.available_columns << QueryColumn.new(:tracker, :sortable => "#{Issue.table_name}.tracker_id", :groupable => "#{Issue.table_name}.tracker_id")
+
+          base.available_columns << QueryColumn.new(:assigned_to, :sortable => "#{Issue.table_name}.assigned_to_id", :groupable => "#{Issue.table_name}.assigned_to_id")
 
           # Add columns tracker and subject, that were included in issue column before
           # + VERSION

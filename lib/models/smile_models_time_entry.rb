@@ -27,6 +27,7 @@ module Smile
             :fixed_version,                                     #  5/ EXTENDED    TESTED  V4.0.0 OK
             :category,                                          #  6/ new method  TESTED  V4.0.0 OK
             :issue_id,                                          #  7/ new method  TESTED  V4.0.0 OK
+            :assigned_to,                                       #  8/ new method  TESTED  V4.0.0 OK
 
             :estimated_hours,                                   # 20/ new method  TESTED  V4.0.0 OK
             :spent_hours_for_issue_and_user,                    # 21/ new method  TESTED  V4.0.0 OK
@@ -198,6 +199,15 @@ module Smile
           @issue_id = nil
 
           @issue_id = issue.id if issue
+        end
+
+        # 8/ new method, RM 4.0.0 OK
+        def assigned_to
+          return @assigned_to if defined?(@assigned_to)
+
+          @assigned_to = nil
+
+          @assigned_to = issue.assigned_to if issue
         end
 
         # 20/ new method, RM 4.0.0 OK
