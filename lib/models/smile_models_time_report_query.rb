@@ -297,7 +297,7 @@ module Smile
           add_available_filter('project_updated_on',
             :type => :date_past,
             :name => "#{l(:label_project)} #{l(:field_updated_on)}"
-          ) if project.nil?
+          ) if project
           # END -- Smile specific #355842 Rapport temps passé : filtre projet mis-à-jour
           #######################
 

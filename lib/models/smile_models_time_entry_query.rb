@@ -35,7 +35,7 @@ module Smile
             :build_from_params,                                           #  2/ EXTENDED    TESTED  RM V4.0.0 OK
             :initialize_available_filters,                                #  3/ REWRITTEN   TO TEST RM V4.0.0 OK
             :available_columns,                                           #  4/ EXTENDED    TESTED  RM V4.0.0 OK
-            :joins_additionnal,                                           #  5/ new method  TO TEST RM V4.0.0 OK
+            :joins_additionnal,                                           #  5/ EXTENDED    TO TEST RM V4.0.0 OK
             :joins_for_order_statement,                                   #  6/ EXTENDED    TO TEST RM V4.0.0 OK
 
 
@@ -449,6 +449,7 @@ module Smile
           # Smile specific #355842 Rapport temps passé : filtre projet mis-à-jour
           if filters.include?('project_updated_on')
             sql_projects_filter = filter_column_on_projects('project_id')
+
             unless sql_projects_filter.present?
               sql_projects_filter = '(1=1)'
             end
@@ -570,7 +571,7 @@ module Smile
           add_available_filter('project_updated_on',
             :type => :date_past,
             :name => "#{l(:label_project)} #{l(:field_updated_on)}"
-          ) if project.nil?
+          ) if project
           # END -- Smile specific #355842 Rapport temps passé : filtre projet mis-à-jour
           #######################
 
@@ -804,13 +805,13 @@ module Smile
           @available_columns
         end
 
-        # 5/ new method, RM 4.0.0 OK
+        # 5/ Extended, RM 4.0.0 OK
         # Smile specific : debug from query
         # Smile specific : + join_max_t_e_by_issue / user
         # Smile specific : + join_max_t_e_by_issue / user -- this month
         # Smile specific : + join_max_t_e_by_issue / user -- previous month
         def joins_additionnal(order_options)
-          joins = []
+          joins = super
 
           debug = nil
           if self.respond_to?('debug')
@@ -840,6 +841,7 @@ module Smile
           join_max_t_e_by_issue_previous_month          = join_max_time_entry_id_by_issue_previous_month_needed_for_filters?
           join_max_t_e_by_user_previous_month           = join_max_time_entry_id_by_user_previous_month_needed_for_filters?
 
+          sql_visible_issues_filter = nil
 
           # 0) Filter on VISIBLE sub-issues used in left_join_max_time_entry_id_by_issue / user
           #    ALL / THIS MONTH / PREVIOUS MONTH
@@ -875,17 +877,6 @@ module Smile
             join_max_t_e_by_issue ||
             join_max_t_e_by_user
           )
-            # 1.0) Filter on VISIBLE sub-issues used in left_join_max_time_entry_id_by{_issue}{_and_user} for :
-            sql_visible_issues_filter = ' ' + self.class.sql_in_values_or_false_if_empty(
-              sql_visible_time_entries_issues_ids(
-                filter_column_on_projects('project_id'),
-                debug
-              ),
-              'issue_id'
-            )
-
-            logger.debug " =>prof           sql_visible_issues_filter=#{sql_visible_issues_filter}" if debug == '3'
-
             #-----------------------
             # 1.1) By Issue and User, Filter on visible time entries
             if join_max_t_e_by_issue_and_user
