@@ -924,6 +924,17 @@ module Smile
           # Smile specific : cache
           return nil unless column
 
+          #-----------------------------
+          # Smile specific : debug trace
+          debug = nil
+          if self.respond_to?('debug')
+            debug = self.debug
+          end
+
+          if debug
+            start = Time.now
+          end
+
           @total_by_group_for_by_column ||= {true => {}, false => {}}
 
           if @total_by_group_for_by_column[only_visible][column.name]
@@ -938,26 +949,19 @@ module Smile
           # Smile specific : manage composite Issue Columns
           # TODO add hook for total_for_bar
           if self.respond_to?('total_for_bar')
+            logger.debug "\\=>prof       total_for_bar" if debug == '3'
             total_for_bar(column, only_visible, @total_by_group_for_by_column, :total_by_group_for)
+            logger.debug "/=>prof       total_for_bar" if debug == '3'
           end
 
           if @total_by_group_for_by_column[only_visible][column.name]
+            logger.debug " =>prof         column #{column.name}/only_visible=#{only_visible} in CACHE" if debug == '2'
             return @total_by_group_for_by_column[only_visible][column.name]
           end
           # END -- Smile specific : manage composite Issue Columns
           #######################
 
-
-          #---------------
-          # Smile specific : debug trace
-          debug = nil
-          if self.respond_to?('debug')
-            debug = self.debug
-          end
-
           if debug
-            start = Time.now
-
             logger.debug " =>prof"
             logger.debug "\\=>prof       #{@indent_spaces}total_by_group_for(#{column.name}#{', NOT only_visible' unless only_visible}) NATIVE"
           end
@@ -993,24 +997,27 @@ module Smile
             debug = self.debug
           end
 
+          logger.debug "==>prof         #{@indent_spaces}total_with_scope"
+
           unless column.is_a?(QueryColumn)
             column = column.to_sym
             column = available_totalable_columns.detect {|c| c.name == column}
           end
           if column.is_a?(QueryCustomFieldColumn)
             custom_field = column.custom_field
+            logger.debug " =>prof           ->total_for_custom_field"
             send "total_for_custom_field", custom_field, scope
           else
             if is_a?(IssueQuery)
               ################
               # Smile specific : manage only_visible case
               # Smile specific : + debug param
-              logger.debug " =>prof       IQ total_with_scope  send total_for_#{column.name}, scope, only_visible=#{only_visible ? 'true' : 'false'}" if debug
+              logger.debug " =>prof           IQ total_with_scope  send total_for_#{column.name}, scope, only_visible=#{only_visible ? 'true' : 'false'}" if debug
               if only_visible
                 # Smile comment : UPSTREAM CODE
                 send "total_for_#{column.name}", scope
               else
-                logger.debug " =>prof       IQ total_with_scope  +joins_additionnal" if debug
+                logger.debug " =>prof           IQ total_with_scope  +joins_additionnal" if debug
                 # Smile comment : to be able to calculate totals on not visible issues
                 send "total_for_#{column.name}", scope, false
               end
@@ -1018,7 +1025,10 @@ module Smile
               #######################
             else
               # Smile comment : UPSTREAM CODE
-              send "total_for_#{column.name}", scope
+              logger.debug "\\=>prof           total_for_#{column.name}" if debug
+              result_total_for = send("total_for_#{column.name}", scope)
+              logger.debug "/=>prof           total_for_#{column.name}" if debug
+              result_total_for
             end
           end
           # Smile specific : Namespace prefix, in a sub-module
@@ -1035,7 +1045,7 @@ module Smile
 
           sql_issue_ids = sql_issue_ids.where(project_ids) if project_ids
 
-          logger.debug(" =>prof       sql_visible_time_entries_issues_ids [#{sql_issue_ids.count}] issues") if debug
+          logger.debug(" =>prof             sql_visible_time_entries_issues_ids [#{sql_issue_ids.count}] issues") if debug
 
           sql_issue_ids = sql_issue_ids.
             order(:id).
@@ -1053,8 +1063,8 @@ module Smile
             debug = self.debug
           end
 
-          logger.debug " =>prof         joins_additionnal" if debug
-          logger.debug " =>prof           group_by_column=#{group_by_column.name}" if group_by_column && debug
+          logger.debug " =>prof           Q joins_additionnal" if debug
+          logger.debug " =>prof             group_by_column=#{group_by_column.name}" if group_by_column && debug
 
           #---------------
           # Smile specific #354800 Requête perso : filtre projet mis-à-jour
@@ -1070,7 +1080,7 @@ module Smile
               sql_filter = '(1=1)'
             end
 
-            logger.debug "==>prof           +left_join_project_updated_on_from_issues" if debug
+            logger.debug "==>prof             +left_join_project_updated_on_from_issues" if debug
             joins << self.class.left_join_project_updated_on_from_issues(sql_filter)
           end
           # END -- Smile specific #354800 Requête perso : filtre projet mis-à-jour
