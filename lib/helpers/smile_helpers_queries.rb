@@ -277,7 +277,11 @@ module Smile
               ################
               # Smile specific #100718 Liste demandes : total F / G / D au niveau de chaque groupe
               # Smile specific : calculate totals_by_group
-              if Query.respond_to?('group_additional_infos_provided?') && Query.group_additional_infos_provided?
+              if (
+                Query.respond_to?('group_additional_infos_provided?') &&
+                Query.group_additional_infos_provided? &&
+                query.is_a?(IssueQuery)
+              )
                 if query.group_additional_infos
                   logger.debug " =>prof       group_additional_infos OK" if debug
                   logger.debug " =>prof       grouped? #{query.grouped? ? 1 : 0}" if debug

@@ -55,27 +55,21 @@
       * Subject                                                OK
       * Estimated hours                                        OK
       * Hours
-        * Hours for issue and user                             ?
-        * Hours for issue                                      ?
-        * Hours for user                                       ?
-        * Hours for issue and user this month                  ?
-        * Hours for issue this month                           ?
-        * Hours for user this month                            ?
-        * Hours for issue and user previous month              ?
-        * Hours for issue previous month                       ?
-        * Hours for user previous month                        ?
+        * Hours for issue and user                             OK
+        * Hours for issue                                      OK
+        * Hours for user                                       OK
+        * Hours for issue and user this month                  OK
+        * Hours for issue this month                           OK
+        * Hours for user this month                            OK
+        * Hours for issue and user previous month              OK
+        * Hours for issue previous month                       OK
+        * Hours for user previous month                        OK
       * Hours Totals
-        * Hours for issue and user                             ?
-        * Hours for issue                                      ?
-        * Hours for user                                       ?
-        * Hours for issue and user this month                  ?
-        * Hours for issue this month                           ?
-        * Hours for user this month                            ?
-        * Hours for issue and user previous month              ?
-        * Hours for issue previous month                       ?
-        * Hours for user previous month                        ?
+        * Hours for issue and user                             OK
+        * Hours for issue                                      OK
+        * Hours for user                                       OK
     * New Time entries filters
-      * Project updated (date)                                 ?
+      * Project updated (date)                                 OK
       * Root                                                   ?
       * Parent                                                 ?
       * Issue                                                  ?
@@ -90,7 +84,7 @@
         * Is last Time Entry for user                          ?
   * Time report
     * New Time report filters                                  ?
-      * Project updated (date)                                 ?
+      * Project updated (date)                                 OK
       * Root                                                   ?
       * Parent                                                 ?
       * Issue                                                  ?
