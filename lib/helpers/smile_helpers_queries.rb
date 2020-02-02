@@ -259,13 +259,14 @@ module Smile
               end
               logger.debug "==>prof" if debug
               logger.debug "\\=>prof     grouped_query_results" if debug
+              logger.debug "\\=>prof       result_count_by_group"
               # END -- Smile specific : profiling trace
               #----------------------
 
               result_count_by_group = query.result_count_by_group
               #---------------
               # Smile specific : debug trace
-              logger.debug " =>prof        result_count_by_group keys=#{result_count_by_group ? result_count_by_group.keys.join(',') : 'NONE'}" if debug
+              logger.debug "/=>prof       result_count_by_group  keys=#{result_count_by_group ? result_count_by_group.keys.join(',') : 'NONE'}" if debug
 
               previous_group, first = false, true
 
