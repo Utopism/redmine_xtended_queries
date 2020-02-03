@@ -56,12 +56,33 @@ module Smile
         end # def self.prepended
 
         # 1/ REWRITTEN, RM 4.0.3 OK
-        def value_object(object)
-          # Smile specific : to enable User Custom Fields
-          # That are always visible
-          if !object.respond_to?('project') || (custom_field.visible_by?(object.project, User.current))
+        # Param addded : original to preserve compatibility with Localizable plugin
+        # Behaviour of Localizable merged here
+        def value_object(object, orginal=false)
+          
+          if (
+            ################
+            # Smile specific
+            ! custom_field.respond_to?('visible_by?') || # Test added for Localizable Plugin
+            ################
+            # Smile specific
+            ! object.respond_to?('project') || # Smile specific : to enable User Custom Fields that are always visible
+            custom_field.visible_by?(object.project, User.current)
+          )
             cv = object.custom_values.select {|v| v.custom_field_id == @cf.id}
-            cv.size > 1 ? cv.sort {|a,b| a.value.to_s <=> b.value.to_s} : cv.first
+            if cv.size > 1
+              cv.sort_by do |e|
+                ################
+                # Smile specific : value -> value(original)
+                if Redmine::Plugin.installed?('localizable')
+                  e.value.to_s
+                else
+                  e.value(original).to_s
+                end
+              end
+            else
+              cv.first
+            end
           else
             nil
           end

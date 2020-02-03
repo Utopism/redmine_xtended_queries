@@ -133,6 +133,10 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
 
 # Changelog
 
+* **V1.0.13** Bugfix : QueryCustomFieldColumn.value_object merged Behaviour of Localizable plugin
+
+  Param addded : original to preserve compatibility with Localizable plugin
+
 * **V1.0.12** **criteria selection** at the beginning
 * **V1.0.11** + **Estimated Hours filter** for Time Entries / Report queries
 * **V1.0.10** Re-introducing Query **watcher_values** method for Older Redmine versions
