@@ -1438,17 +1438,31 @@ module Smile
         # 62/ new method, RM 4.0.0 OK
         # Returns sum of all the spent hours for user
         def total_for_spent_hours_for_user(scope)
+          debug = nil
+          if self.respond_to?('debug')
+            debug = self.debug
+          end
+
+          logger.debug " =>prof           total_for_spent_hours_for_user" if debug == '3'
           unless join_max_time_entry_id_by_user_needed_for_filters?
+            SmileTools.debug_scope(scope, 'prof', "before time_entries_user_ids_sql") if debug == '3'
             time_entries_user_ids_sql = scope.where.not(:user_id => nil).pluck(:user_id).uniq.join(', ')
 
+            logger.debug " =>prof             time_entries_user_ids_sql=#{time_entries_user_ids_sql}" if debug == '3'
+
             sql_time_entries_filter = " AND #{self.class.sql_in_values_or_false_if_empty(time_entries_user_ids_sql, 'user_id', false)} "
+            logger.debug " =>prof             sql_time_entries_filter=#{sql_time_entries_filter}" if debug == '3'
+            logger.debug " =>prof             #{self.class.left_join_max_time_entry_id_by_user(sql_time_entries_filter)}" if debug == '3'
 
             scope = scope.joins(
               self.class.left_join_max_time_entry_id_by_user(sql_time_entries_filter)
             )
           end
 
-          map_total(scope.sum('max_time_entry_id_by_user.sum_hours_by_user')) {|t| t.to_f.round(2)}
+          SmileTools.debug_scope(scope, 'prof', "total_for_spent_hours_for_user") if debug == '3'
+          sums = scope.sum('max_time_entry_id_by_user.sum_hours_by_user')
+          logger.debug " =>prof           sums=#{sums}" if debug == '3'
+          map_total(sums) {|t| t.to_f.round(2)}
         end
 
         # 63/ new method, RM 4.0.0 OK

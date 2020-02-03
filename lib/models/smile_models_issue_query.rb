@@ -122,13 +122,15 @@ module Smile
             ActiveRecord::Base.connection.data_source_exists?('issues') &&
             Issue.column_names.include?('position')
           )
+            index_position = base.available_columns.find_index {|column| column.name == :position}
+
             base.available_columns.insert (index + 1), QueryColumn.new(
               :position,
               :sortable => "#{Issue.table_name}.position",
               :default_order => 'desc',
               :caption => lambda {::I18n.t(:field_position)},
               :groupable => true
-            )
+            ) unless index_position
           end
 
           #---------------

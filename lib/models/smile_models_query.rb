@@ -1025,9 +1025,9 @@ module Smile
               #######################
             else
               # Smile comment : UPSTREAM CODE
-              logger.debug "\\=>prof           total_for_#{column.name}" if debug
+              logger.debug "\\=>prof           total_for_#{column.name}" if debug == '3'
               result_total_for = send("total_for_#{column.name}", scope)
-              logger.debug "/=>prof           total_for_#{column.name}" if debug
+              logger.debug "/=>prof           total_for_#{column.name}" if debug == '3'
               result_total_for
             end
           end
