@@ -23,8 +23,8 @@
   * Or filters
     * Like filters but with non exclusive filters              OK
   * SMILE SPECIFIC : total F / G / D at the group level
-    * Issues                                                   H.S.
-  * SMILE SPECIFIC : sum time with children                    ?
+    * Issues                                                   OK
+  * SMILE SPECIFIC : sum time with children                    OK
   * Custom fields
     * + User Custom Fields values (value_object)               OK
   * Issues
@@ -34,6 +34,7 @@
       * Watchers                                               OK
       * Project updated (date)                                 OK
       * SMILE SPECIFIC : Separate subject, tracker, status     OK
+      * SMILE SPECIFIC : BU Project                            OK
     * New Issue query filters
       * Parent issue Projet                                    OK
       * (B)usiness (U)nit                                      OK
@@ -77,11 +78,10 @@
       * Assignee's Member of group                             OK
       * User is me                                             OK
       * Author is me                                           OK
-      * SMILE SPECIFIC : BU Project                            ?
       * Last Time entry
-        * Is last Time Entry for issue and user                ?
-        * Is last Time Entry for issue                         ?
-        * Is last Time Entry for user                          ?
+        * Is last Time Entry for issue and user                OK
+        * Is last Time Entry for issue                         OK
+        * Is last Time Entry for user                          OK
   * Time report
     * New Time report filters                                  ?
       * Project updated (date)                                 OK
