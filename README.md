@@ -112,14 +112,14 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
     * **Hours for issue and user**
     * **Hours for issue**
     * **Hours for user**
-
-    * **Hours for issue and user this month**
-    * **Hours for issue this_month**
-    * **Hours for user this month**
-
-    * **Hours for issue and user previous month**
-    * **Hours for issue previous_month**
-    * **Hours for user previous month**
+    * This month
+      * **Hours for issue and user this month**
+      * **Hours for issue this_month**
+      * **Hours for user this month**
+    * Previous month
+      * **Hours for issue and user previous month**
+      * **Hours for issue previous_month**
+      * **Hours for user previous month**
 
   * New Group totals fixed for
     * **Spent Hours by Issue / User**
