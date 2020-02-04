@@ -131,6 +131,51 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
 
 * Forbid setting **global query** public to other than me for non-admins : Fixed upstream with Redmine V3.0.4
 
+## How it is implemented
+
+### Query partial views
+
+* In **app/views/queries** :
+  * 🔑 **REWRITTEN** **_filters.html.erb**
+  * 🔑 **REWRITTEN** **_form.html.erb**
+  * New **_or_filters.html.erb**
+  * 🔑 **REWRITTEN** **_query_form.html.erb**
+
+### Javascript assets for **Or Filters**
+
+* New **assets/javascripts/custom_query.js**
+
+### New **translations** (ca, en-GB, en, es, fr, uk)
+
+### Migrations :
+
+* **20150225140000_add_queries_or_filters** technical migration, can be ignored
+* **20150225140000_add_queries_or_filters** to add **or_filters** to **queries table**
+
+### Controllers / Helpers / Modelss
+
+* **lib/controllers**
+  * **smile_controllers_queries**
+    * Module **AdvancedFilters**
+      * 🔑 **REWRITTEN** filter method
+
+* **lib/helpers**
+  * **smile_helpers_application**
+    * Module **ExtendedQueries**
+      * 🔑 **REWRITTEN** filter methods
+  * **smile_helpers_issues**
+  * **smile_helpers_queries**
+
+* **lib/models**
+  * **smile_models_issue**
+  * **smile_models_issue_query**
+  * **smile_models_project**
+  * **smile_models_query**
+  * **smile_models_query_custom_field_column**
+  * **smile_models_time_entry**
+  * **smile_models_time_entry_query**
+  * **smile_models_time_time_query**
+
 # Changelog
 
 * **V1.0.13** Bugfix : QueryCustomFieldColumn.value_object merged Behaviour of Localizable plugin
