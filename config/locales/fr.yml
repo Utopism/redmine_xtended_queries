@@ -27,6 +27,7 @@ fr:
   #340206 Filtre additifs
   label_or: Ou
   label_or_filters: Filtres Ou
+  label_non_exclusive_filters: Filtres non-exclusifs
 
   # Evolution #134828
   field_watchers: Observateurs

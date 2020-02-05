@@ -181,7 +181,8 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
 
 # Changelog
 
-* **V1.0.14**  Compatibility with RM V4.1+ #31433 of RM.org for RM > 4.1
+* **V1.0.15**  **Non-exclusive filters** title on OR filters legend
+* **V1.0.14**  Compatibility with RM V4.1+, #31433 of RM.org for RM > 4.1
 * **V1.0.13**  Bugfix : QueryCustomFieldColumn.value_object merged Behaviour of Localizable plugin
 
   Param addded : original to preserve compatibility with Localizable plugin
