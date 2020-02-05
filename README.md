@@ -182,18 +182,18 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
 # Changelog
 
 * **V1.0.14**  Compatibility with RM V4.1+ #31433 of RM.org for RM > 4.1
-* **V1.0.13** Bugfix : QueryCustomFieldColumn.value_object merged Behaviour of Localizable plugin
+* **V1.0.13**  Bugfix : QueryCustomFieldColumn.value_object merged Behaviour of Localizable plugin
 
   Param addded : original to preserve compatibility with Localizable plugin
 
-* **V1.0.12** **criteria selection** at the beginning
-* **V1.0.11** + **Estimated Hours filter** for Time Entries / Report queries
-* **V1.0.10** Re-introducing Query **watcher_values** method for Older Redmine versions
-* **V1.0.9** Small fixes, + List of tests
+* **V1.0.12**  **criteria selection** at the beginning
+* **V1.0.11**  + **Estimated Hours filter** for Time Entries / Report queries
+* **V1.0.10**  Re-introducing Query **watcher_values** method for Older Redmine versions
+* **V1.0.9**   Small fixes, + List of tests
 
   Parent project column grouped as tree column, Time entries category column sort fixed
 
-* **V1.0.8** Small enhancements and fixes :
+* **V1.0.8**   Small enhancements and fixes :
 
   * **QueryColumn.group_value** added for old Redmine versions
 
@@ -206,6 +206,6 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
   * lib/models/smile_models_time_{entry/report}_query.rb **cleaned**
   * Time Report Advanced queries : **filter issue** dropdown list like parent, root
 
-* **V1.0.7** REMOVED : Forbid setting global query public to other than me for non-admins : **Fixed upstream**
+* **V1.0.7**   REMOVED : Forbid setting global query public to other than me for non-admins : **Fixed upstream**
 
-* **V1.0.6** +Spent/Billable/Deviation hours for issue/user **this** / **previous month**
+* **V1.0.6**   +Spent/Billable/Deviation hours for issue/user **this** / **previous month**
