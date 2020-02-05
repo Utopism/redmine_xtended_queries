@@ -553,7 +553,8 @@ module Smile
           # Smile specific #340206 Filtre additifs
           # Or filters clauses
           or_filters_clauses = []
-          if Query.respond_to?(:or_filters_provided?)
+          # Namespace to avoid a confusion with Class:ActiveRecord::AttributeMethods::Query
+          if ::Query.respond_to?(:or_filters_provided?)
             or_filters.each_key do |field|
               next if field == "subproject_id"
               v = or_values_for(field).clone
