@@ -18,7 +18,7 @@ Redmine::Plugin.register plugin_name do
   author_url "mailto:Jerome BATAILLE <redmine-support@smile.fr>?subject=#{plugin_name}"
   description 'Extends the Redmine Queries and adds small Improvments'
   url "https://github.com/Smile-SA/#{plugin_name}"
-  version '1.0.15'
+  version '1.0.16'
   requires_redmine :version_or_higher => '2.6.0'
 
   requires_redmine_plugin :redmine_smile_base, :version_or_higher => '1.0.0'
@@ -76,6 +76,7 @@ rails_dispatcher.to_prepare do
 
     # lib/controllers
     '/lib/controllers/smile_controllers_queries',
+    '/lib/record_list_field_format_patch',
 
     # lib/helpers
     '/lib/helpers/smile_helpers_application',
