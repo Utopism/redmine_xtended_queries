@@ -24,6 +24,8 @@ module Smile
             :query_as_hidden_field_tags,                  # 2/ REWRITTEN   TESTED  RM 4.0.0 OK
             :grouped_query_results,                       # 3/ New method  TESTED  RM 4.0.0 OK
             :column_value_hook,                           # 4/ EXTENDED    TO TEST RM 4.0.0 OK
+            :filters_options_for_select_hook,             # 5/ EXTENDED    TO TEST RM 4.0.0 OK
+            :groupable_columns_options,                   # 6/ New method  TO TEST RM 4.0.0 OK
           ]
 
 
@@ -486,6 +488,42 @@ module Smile
               else
                 filters_options_for_select_hook_without_extended_queries(query, field, field_options)
               end
+            end
+
+            # 6/ New method, RM 4.0.3 OK
+            def groupable_columns_options(query, columns)
+              columns_options = columns.collect do |column|
+                #######################
+                # Smile specific #245965 Rapport : critères, indication type champ personnalisé
+                # Smile specific : New hook
+                criteria_order = nil
+                column_label = column.caption
+
+                criteria_order_hook, column_label_hook = Query.column_label_and_order_hook(query, column)
+
+                if criteria_order_hook
+                  criteria_order = criteria_order_hook
+                  column_label = column_label_hook
+                end
+                # END -- Smile specific #245965 Rapport : critères, indication type champ personnalisé
+                #######################
+
+                ################
+                # Smile specific #245965 Rapport : critères, indication type champ personnalisé
+                # Smile specific : column.caption -> column_label
+                # Smile specific : added third value in array for order
+                [column_label, column.name, criteria_order]
+              end
+
+              ################
+              # Smile specific #245965 Rapport : critères, indication type champ personnalisé
+              # Smile specific : sort with criteria order
+              sort_options_by_label_and_order!(columns_options)
+
+              ################
+              # Smile specific #245965 Rapport : critères, indication type champ personnalisé
+              # Smile specific : remove last element used to sort => will remain [column_label, column.name]
+              columns_options = columns_options.collect{|k| [k[0], k[1]]}
             end
           end # base.module_eval do
 

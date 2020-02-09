@@ -181,6 +181,11 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
 
 # Changelog
 
+* **V1.0.17**  + **groupable_columns_options** to sort group by columns
+
+  Renamed method query_available_inline_columns_options_hook -> column_label_and_order_hook
+  Renamed method query_selected_inline_columns_options_hook -> column_label_hook
+
 * **V1.0.16**  Added **User Custom Fields** to **RecordList** customized_class_names
 * **V1.0.15**  **Non-exclusive filters** title on OR filters legend
 * **V1.0.14**  Compatibility with RM V4.1+, #31433 of RM.org for RM > 4.1

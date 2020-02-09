@@ -92,7 +92,13 @@
       :data => {:disables => "#columns, .block_columns input"} %></p>
 
 <p><label for="query_group_by"><%= l(:field_group_by) %></label>
-<%= select 'query', 'group_by', @query.groupable_columns.collect {|c| [c.caption, c.name.to_s]}, :include_blank => true %></p>
+<%
+  ################
+  # Smile specific : columns sorted
+  # Smile comment : NATIVE code
+  # @query.groupable_columns.collect {|c| [c.caption, c.name.to_s]}
+-%>
+<%= select 'query', 'group_by', groupable_columns_options(@query, @query.groupable_columns), :include_blank => true %></p>
 
 <%
     ################

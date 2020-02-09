@@ -122,8 +122,8 @@ module Smile
             :or_filters_provided?,                            #  6/  new method       TESTED   RM 4.0.0 OK
             :sql_in_values_or_false_if_empty,                 #  7/  new method       TO TEST  RM 4.0.0 OK
             :sql_where_w_optional_conditions,                 #  8/  new method       TO TEST  RM 4.0.0 OK
-            :query_available_inline_columns_options_hook,     #  9/  EXTENDED PLUGIN  TO TEST  RM 4.0.0 OK
-            :query_selected_inline_columns_options_hook,      # 10/  EXTENDED PLUGIN  TO TEST  RM 4.0.0 OK
+            :column_label_and_order_hook,                     #  9/  EXTENDED PLUGIN  TO TEST  RM 4.0.0 OK
+            :column_label_hook,                               # 10/  EXTENDED PLUGIN  TO TEST  RM 4.0.0 OK
           ]
 
           base.singleton_class.prepend ClassMethods
@@ -1274,7 +1274,7 @@ module Smile
 
           # 9/ EXTENDED, RM 4.0.3 OK
           # Smile specific #245965 Rapport : critères, indication type champ personnalisé
-          def query_available_inline_columns_options_hook(query, column)
+          def column_label_and_order_hook(query, column)
             ################
             # Smile specific #245965 Rapport : critères, indication type champ personnalisé
             column_label, criteria_order = nil
@@ -1424,7 +1424,7 @@ module Smile
 
           # 10/ EXTENDED, RM 4.0.0 OK
           # Smile specific #245965 Rapport : critères, indication type champ personnalisé
-          def query_selected_inline_columns_options_hook(query, column)
+          def column_label_hook(query, column)
             column_label = nil
             column_name = column.name.to_s
 
