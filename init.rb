@@ -64,7 +64,9 @@ rails_dispatcher.to_prepare do
   # Id of each plugin method
   SmileTools.reset_override_count(plugin_name)
 
-  SmileTools.trace_override "                                plugin  #{plugin_name} V#{plugin_version} id #{plugin_id}"
+  SmileTools.trace_override "                                plugin  #{plugin_name} V#{plugin_version} id #{plugin_id}",
+    false,
+    :redmine_xtended_queries
 
   ######################################
   # 3.1/ List of reloadable dependencies
