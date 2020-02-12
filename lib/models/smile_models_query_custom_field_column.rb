@@ -75,9 +75,9 @@ module Smile
                 ################
                 # Smile specific : value -> value(original)
                 if Redmine::Plugin.installed?('localizable')
-                  e.value.to_s
-                else
                   e.value(original).to_s
+                else
+                  e.value.to_s
                 end
               end
             else
