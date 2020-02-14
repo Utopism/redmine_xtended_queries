@@ -58,7 +58,7 @@ module Smile
         # 1/ REWRITTEN, RM 4.0.3 OK
         # Param addded : original to preserve compatibility with Localizable plugin
         # Behaviour of Localizable merged here
-        def value_object(object, orginal=false)
+        def value_object(object, original=false)
           
           if (
             ################
