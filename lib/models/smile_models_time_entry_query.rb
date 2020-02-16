@@ -992,7 +992,7 @@ module Smile
               # No postfix, default select name
               joins << self.class.left_join_max_time_entry_id_by_issue_and_user(sql_where_filter, '_this_month')
             else
-              logger.debug " =>prof               left_join_max_time_entry_by_issue_and_user NOT needed" if debug == '3'
+              logger.debug " =>prof               left_join_max_time_entry_by_issue_and_user NOT needed  this month" if debug == '3'
             end
 
             #--------------
@@ -1016,7 +1016,7 @@ module Smile
               # No postfix, default select name
               joins << self.class.left_join_max_time_entry_id_by_issue(sql_where_filter, '_this_month')
             else
-              logger.debug " =>prof               left_join_max_time_entry_by_issue     NOT needed" if debug == '3'
+              logger.debug " =>prof               left_join_max_time_entry_by_issue     NOT needed  this month" if debug == '3'
             end
 
             #-------------
@@ -1040,7 +1040,7 @@ module Smile
               # No postfix, default select name
               joins << self.class.left_join_max_time_entry_id_by_user(sql_where_filter, '_this_month')
             else
-              logger.debug " =>prof               left_join_max_time_entry_by_user      NOT needed" if debug == '3'
+              logger.debug " =>prof               left_join_max_time_entry_by_user      NOT needed  this month" if debug == '3'
             end
           end
 
@@ -1078,7 +1078,7 @@ module Smile
               # No postfix, default select name
               joins << self.class.left_join_max_time_entry_id_by_issue_and_user(sql_where_filter, '_previous_month')
             else
-              logger.debug " =>prof               left_join_max_time_entry_by_issue_and_user NOT needed" if debug == '3'
+              logger.debug " =>prof               left_join_max_time_entry_by_issue_and_user NOT needed  previous month" if debug == '3'
             end
 
 
@@ -1103,7 +1103,7 @@ module Smile
               # No postfix, default select name
               joins << self.class.left_join_max_time_entry_id_by_issue(sql_where_filter, '_previous_month')
             else
-              logger.debug " =>prof               left_join_max_time_entry_by_issue     NOT needed" if debug == '3'
+              logger.debug " =>prof               left_join_max_time_entry_by_issue     NOT needed  previous month" if debug == '3'
             end
 
             #-------------
@@ -1127,7 +1127,7 @@ module Smile
               # No postfix, default select name
               joins << self.class.left_join_max_time_entry_id_by_user(sql_where_filter, '_previous_month')
             else
-              logger.debug " =>prof               left_join_max_time_entry_by_user      NOT needed" if debug == '3'
+              logger.debug " =>prof               left_join_max_time_entry_by_user      NOT needed  previous month" if debug == '3'
             end
           end
 
@@ -1404,7 +1404,8 @@ module Smile
           end
 
           unless join_max_time_entry_id_by_issue_needed_for_filters?
-            time_entries_issue_ids_sql = scope.where.not(:issue_id => nil).pluck(:issue_id).uniq.join(', ')
+            # Smile comment : remove the group by that does NOT work, and is not necessary to get ids
+            time_entries_issue_ids_sql = scope.unscope(:group).where.not(:issue_id => nil).pluck(:issue_id).uniq.join(', ')
 
             sql_time_entries_filter = " AND #{self.class.sql_in_values_or_false_if_empty(time_entries_issue_ids_sql, 'issue_id', false)} "
             scope = scope.joins(
@@ -1423,16 +1424,32 @@ module Smile
         # 61/ new method, RM 4.0.0 OK
         # Returns sum of all the spent hours for issue and user
         def total_for_spent_hours_for_issue_and_user(scope)
-          unless join_max_time_entry_id_by_issue_and_user_needed_for_filters?
-            time_entries_ids_sql = scope.where.not(:issue_id => nil).pluck(:issue_id).join(', ')
+          debug = nil
+          if self.respond_to?('debug')
+            debug = self.debug
+          end
 
-            sql_time_entries_filter = " AND #{self.class.sql_in_values_or_false_if_empty(time_entries_ids_sql, 'issue_id', false)} "
+          logger.debug " =>prof           total_for_spent_hours_for_issue_and_user" if debug == '3'
+          unless join_max_time_entry_id_by_issue_and_user_needed_for_filters?
+            SmileTools.debug_scope(scope, 'prof', "before time_entries_issue_ids_sql") if debug == '3'
+            # Smile comment : remove the group by that does NOT work, and is not necessary to get ids
+            time_entries_issue_ids_sql = scope.unscope(:group).where.not(:issue_id => nil).pluck(:issue_id).join(', ')
+
+            logger.debug " =>prof             time_entries_issue_ids_sql=#{time_entries_issue_ids_sql}" if debug == '3'
+
+            sql_time_entries_filter = " AND #{self.class.sql_in_values_or_false_if_empty(time_entries_issue_ids_sql, 'issue_id', false)} "
+            logger.debug " =>prof             sql_time_entries_filter=#{sql_time_entries_filter}" if debug == '3'
+            logger.debug " =>prof             #{self.class.left_join_max_time_entry_id_by_issue_and_user(sql_time_entries_filter)}" if debug == '3'
+
             scope = scope.joins(
               self.class.left_join_max_time_entry_id_by_issue_and_user(sql_time_entries_filter)
             )
           end
 
-          map_total(scope.sum('max_time_entry_id_by_issue_and_user.sum_hours_by_issue_and_user')) {|t| t.to_f.round(2)}
+          SmileTools.debug_scope(scope, 'prof', "total_for_spent_hours_for_issue_and_user") if debug == '3'
+          sums = scope.sum('max_time_entry_id_by_issue_and_user.sum_hours_by_issue_and_user')
+          logger.debug " =>prof           sums=#{sums}" if debug == '3'
+          map_total(sums) {|t| t.to_f.round(2)}
         end
 
         # 62/ new method, RM 4.0.0 OK
@@ -1446,7 +1463,8 @@ module Smile
           logger.debug " =>prof           total_for_spent_hours_for_user" if debug == '3'
           unless join_max_time_entry_id_by_user_needed_for_filters?
             SmileTools.debug_scope(scope, 'prof', "before time_entries_user_ids_sql") if debug == '3'
-            time_entries_user_ids_sql = scope.where.not(:user_id => nil).pluck(:user_id).uniq.join(', ')
+            # Smile comment : remove the group by that does NOT work, and is not necessary to get ids
+            time_entries_user_ids_sql = scope.unscope(:group).where.not(:user_id => nil).pluck(:user_id).uniq.join(', ')
 
             logger.debug " =>prof             time_entries_user_ids_sql=#{time_entries_user_ids_sql}" if debug == '3'
 
@@ -1469,7 +1487,8 @@ module Smile
         # Returns sum of all the billable hours for issue
         def total_for_billable_hours_for_issue(scope)
           cf = TimeEntry.billable_custom_field
-          scope_issue_ids = scope.where.not(:issue_id => nil).pluck(:issue_id).uniq
+          # Smile comment : remove the group by that does NOT work, and is not necessary to get ids
+          scope_issue_ids = scope.unscope(:group).where.not(:issue_id => nil).pluck(:issue_id).uniq
           scope_for_issues = TimeEntry.where(:issue_id => scope_issue_ids)
           if scope.group_values.any?
             scope_for_issues = scope_for_issues.group(scope.group_values)
@@ -1485,8 +1504,10 @@ module Smile
         # Returns sum of all the billable hours for issue and user
         def total_for_billable_hours_for_issue_and_user(scope)
           cf = TimeEntry.billable_custom_field
-          scope_issue_ids = scope.where.not(:issue_id => nil).pluck(:issue_id).uniq
-          scope_user_ids = scope.where.not(:user_id => nil).pluck(:user_id).uniq
+          # Smile comment : remove the group by that does NOT work, and is not necessary to get ids
+          scope_issue_ids = scope.unscope(:group).where.not(:issue_id => nil).pluck(:issue_id).uniq
+          scope_user_ids = scope.unscope(:group).where.not(:user_id => nil).pluck(:user_id).uniq
+
           scope_for_issues_and_users = TimeEntry.where(:issue_id => scope_issue_ids).where(:user_id => scope_user_ids)
           if scope.group_values.any?
             scope_for_issues_and_users = scope_for_issues_and_users.group(scope.group_values)
@@ -1502,7 +1523,9 @@ module Smile
         # Returns sum of all the billable hours for user
         def total_for_billable_hours_for_user(scope)
           cf = TimeEntry.billable_custom_field
-          scope_user_ids = scope.where.not(:user_id => nil).pluck(:user_id).uniq
+          # Smile comment : remove the group by that does NOT work, and is not necessary to get ids
+          scope_user_ids = scope.unscope(:group).where.not(:user_id => nil).pluck(:user_id).uniq
+
           scope_for_users = TimeEntry.where(:user_id => scope_user_ids)
           if scope.group_values.any?
             scope_for_users = scope_for_users.group(scope.group_values)
@@ -1518,7 +1541,9 @@ module Smile
         # Returns sum of all the deviation hours for issue
         def total_for_deviation_hours_for_issue(scope)
           cf = TimeEntry.deviation_custom_field
-          scope_issue_ids = scope.where.not(:issue_id => nil).pluck(:issue_id).uniq
+          # Smile comment : remove the group by that does NOT work, and is not necessary to get ids
+          scope_issue_ids = scope.unscope(:group).where.not(:issue_id => nil).pluck(:issue_id).uniq
+
           scope_for_issues = TimeEntry.where(:issue_id => scope_issue_ids)
           if scope.group_values.any?
             scope_for_issues = scope_for_issues.group(scope.group_values)
@@ -1534,8 +1559,10 @@ module Smile
         # Returns sum of all the deviation hours for issue and user
         def total_for_deviation_hours_for_issue_and_user(scope)
           cf = TimeEntry.deviation_custom_field
-          scope_issue_ids = scope.where.not(:issue_id => nil).pluck(:issue_id).uniq
-          scope_user_ids = scope.where.not(:user_id => nil).pluck(:user_id).uniq
+          # Smile comment : remove the group by that does NOT work, and is not necessary to get ids
+          scope_issue_ids = scope.unscope(:group).where.not(:issue_id => nil).pluck(:issue_id).uniq
+          scope_user_ids = scope.unscope(:group).where.not(:user_id => nil).pluck(:user_id).uniq
+
           scope_for_issues_and_users = TimeEntry.where(:issue_id => scope_issue_ids).where(:user_id => scope_user_ids)
           if scope.group_values.any?
             scope_for_issues_and_users = scope_for_issues_and_users.group(scope.group_values)
@@ -1551,7 +1578,9 @@ module Smile
         # Returns sum of all the deviation hours for user
         def total_for_deviation_hours_for_user(scope)
           cf = TimeEntry.deviation_custom_field
-          scope_user_ids = scope.where.not(:user_id => nil).pluck(:user_id).uniq
+          # Smile comment : remove the group by that does NOT work, and is not necessary to get ids
+          scope_user_ids = scope.unscope(:group).where.not(:user_id => nil).pluck(:user_id).uniq
+
           scope_for_users = TimeEntry.where(:user_id => scope_user_ids)
           if scope.group_values.any?
             scope_for_users = scope_for_users.group(scope.group_values)
