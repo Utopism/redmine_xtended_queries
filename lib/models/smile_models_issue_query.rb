@@ -95,11 +95,11 @@ module Smile
           new_query_columns_names = [
             :root, # Smile specific #77476 Demandes : colonne Tâche racine
             :parent_project, # Smile specific #412709 Demandes : Filtre + Colonne "Projet de la demande parente"
+            :bu_project,
             :watchers,
             :parent_subject,
             :root_subject,
             :project_updated_on,
-            :bu_project
           ]
 
           #---------------
@@ -116,26 +116,9 @@ module Smile
           # END -- Smile specific #77476 Demandes : colonne Tâche racine
           #----------------------
 
-          # Smile specific #830767 Issue Query : Sort / Group by parent / root position
-          if (
-            # Avoid an error when creating DB
-            ActiveRecord::Base.connection.data_source_exists?('issues') &&
-            Issue.column_names.include?('position')
-          )
-            index_position = base.available_columns.find_index {|column| column.name == :position}
-
-            base.available_columns.insert (index + 1), QueryColumn.new(
-              :position,
-              :sortable => "#{Issue.table_name}.position",
-              :default_order => 'desc',
-              :caption => lambda {::I18n.t(:field_position)},
-              :groupable => true
-            ) unless index_position
-          end
-
           #---------------
           # Smile specific #412709 Demandes : Filtre + Colonne "Projet de la demande parente"
-          # Smile comment : 2/ PARENT PROJECT
+          # Smile comment : 3/ PARENT PROJECT
           index = base.available_columns.find_index {|column| column.name == :root}
           base.available_columns.insert (index + 1), QueryColumn.new(:parent_project,
             :sortable => "(SELECT project_id FROM issues AS parents WHERE parents.id = #{Issue.table_name}.parent_id)",
@@ -148,24 +131,24 @@ module Smile
 
           ################
           # Smile specific #393391 Requête perso Demandes : colonne BU
-          # Smile comment : 3/ BU
-          index = base.available_columns.find_index {|column| column.name == :parent_project}
+          # Smile comment : 4/ BU
+          index = base.available_columns.find_index {|column| column.name == :last_updated_by}
           base.available_columns.insert (index + 1), QueryColumn.new(:bu_project,
             :caption => lambda {I18n.t(:label_bu)}
           )
           # END -- Smile specific #393391 Requête perso Demandes : colonne BU
           #######################
 
-          # Smile comment : 4/ WATCHERS
-          index = base.available_columns.find_index {|column| column.name == :watchers}
-          unless index
-            index = base.available_columns.find_index {|column| column.name == :bu_project}
+          ################
+          # Smile comment : 5/ WATCHERS
+          index_watchers = base.available_columns.find_index {|column| column.name == :watchers}
+          unless index_watchers
             base.available_columns.insert (index + 1), QueryColumn.new(:watchers)
           end
 
           ################
           # Smile specific #469832 Demandes : nouvelles colonnes Sujet Tâche Parente / Racine
-          # Smile comment : 5/ PARENT / ROOT SUBJECT
+          # Smile comment : 6/ PARENT POSITION
           # Smile specific : get subject column index
           index = base.available_columns.find_index {|column| column.name == :subject}
 
@@ -173,8 +156,11 @@ module Smile
           if (
             # Avoid an error when creating DB
             ActiveRecord::Base.connection.data_source_exists?('issues') &&
-            Issue.column_names.include?('position')
+            Issue.column_names.include?('position') &&
+            Redmine::Plugin.installed?('scrum')
           )
+            new_query_columns_names << :parent_position
+
             base.available_columns.insert (index + 1), QueryColumn.new(
                 :parent_position,
                 :sortable => "(SELECT position FROM issues AS issue_parents WHERE issue_parents.id = #{Issue.table_name}.parent_id)",
@@ -184,6 +170,7 @@ module Smile
               )
           end
 
+          # Smile comment : 7/ PARENT SUBJECT
           base.available_columns.insert (index + 1), QueryColumn.new(
               :parent_subject,
               :sortable => ["#{Issue.table_name}.root_id", "#{Issue.table_name}.lft ASC"],
@@ -191,11 +178,15 @@ module Smile
               :caption => lambda {"#{I18n.t(:field_parent_issue)} -- (#{I18n.t(:field_subject)})" }
             )
 
+          # Smile comment : 8/ ROOT POSITION
           if (
             # Avoid an error when creating DB
             ActiveRecord::Base.connection.data_source_exists?('issues') &&
-            Issue.column_names.include?('position')
+            Issue.column_names.include?('position') &&
+            Redmine::Plugin.installed?('scrum')
           )
+            new_query_columns_names << :root_position
+
             base.available_columns.insert (index + 1), QueryColumn.new(
                 :root_position,
                 :sortable => "(SELECT position FROM issues AS issue_roots WHERE issue_roots.id = #{Issue.table_name}.root_id)",
@@ -205,6 +196,7 @@ module Smile
               )
           end
 
+          # Smile comment : 9/ ROOT SUBJECT
           base.available_columns.insert (index + 1), QueryColumn.new(
               :root_subject,
               :sortable => "#{Issue.table_name}.root_id",
@@ -217,7 +209,7 @@ module Smile
 
           ################
           # Smile specific #355551 Requête perso demandes : filtre projet mis-à-jour
-          # Smile specific : 6/ PROJECT UPDATED ON
+          # Smile specific : 10/ PROJECT UPDATED ON
           # Smile specific : get updated_on column index
           index = base.available_columns.find_index {|column| column.name == :updated_on}
           # Smile specific : insert AFTER updated_on
