@@ -116,6 +116,33 @@ module Smile
           # END -- Smile specific #77476 Demandes : colonne Tâche racine
           #----------------------
 
+          # --------------
+          # Smile specific #830767 Issue Query : Sort / Group by parent / root position
+          # Smile specific : add groupable, and translation to redmine_backlogs plugin column
+          if (
+            # Avoid an error when creating DB
+            ActiveRecord::Base.connection.data_source_exists?('issues') &&
+            Issue.column_names.include?('position') &&
+            Redmine::Plugin.installed?('redmine_backlogs')
+          )
+            index_position = base.available_columns.find_index {|column| column.name == :position}
+            if index_position
+              base.available_columns.delete_at(index_position)
+            else
+              index_position = index
+            end
+
+            new_query_columns_names << :position
+
+            base.available_columns.insert (index_position), QueryColumn.new(
+              :position,
+              :sortable => "#{Issue.table_name}.position",
+              :default_order => 'desc',
+              :caption => lambda {::I18n.t(:field_position)},
+              :groupable => true
+            )
+          end
+
           #---------------
           # Smile specific #412709 Demandes : Filtre + Colonne "Projet de la demande parente"
           # Smile comment : 3/ PARENT PROJECT
@@ -157,7 +184,10 @@ module Smile
             # Avoid an error when creating DB
             ActiveRecord::Base.connection.data_source_exists?('issues') &&
             Issue.column_names.include?('position') &&
-            Redmine::Plugin.installed?('scrum')
+            (
+              Redmine::Plugin.installed?('scrum') ||
+              Redmine::Plugin.installed?('redmine_backlogs')
+            )
           )
             new_query_columns_names << :parent_position
 
