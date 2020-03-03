@@ -98,7 +98,8 @@ module Smile
               # Smile specific : hide NOT visible time entries
               joins(:project).
               where( TimeEntry.visible_condition(User.current) ).
-              sum("#{TimeEntry.table_name}.hours").to_f || 0.0
+              sum("#{TimeEntry.table_name}.hours").
+              to_f || 0.0
           end
         end
 
