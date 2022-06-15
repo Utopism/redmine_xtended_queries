@@ -66,7 +66,7 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
     * Date :
       * **+ 🗓 Year**
       * **+ 🗓 Month**
-      * **  🗓 Week + groupable**
+      * **+ 🗓 Week + groupable**
       * **+ 🗓 Week day + groupable**
     * Cumulative Hours :
       * **🕝 Hours for issue and user**
