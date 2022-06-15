@@ -450,6 +450,10 @@ module Smile
                 if item.is_a?(TimeEntry)
                   result_column_value = value.to_s
                 end
+              when :wday
+                if item.is_a?(TimeEntry)
+                  result_column_value = I18n.t('date.abbr_day_names')[item.spent_on.wday]
+                end
               ################
               # Smile specific #330363 Link to issue from subject column wrong
               when :subject
