@@ -1348,6 +1348,9 @@ module Smile
             elsif column.name == :day || column.name == :tday
               criteria_order = 'CF'
               column_label = "#{l("label_calendar_icon")} #{column.caption}"
+            elsif column.name == :wday
+              criteria_order = 'CG'
+              column_label = "#{l("label_calendar_icon")} #{column.caption}"
 
 
             # 3/ F? Keep Spent Time fields order
@@ -1447,7 +1450,7 @@ module Smile
               column_label = "#{l('label_tool_icon')} #{column.caption}"
             elsif column.class == QueryCustomFieldColumn
               column_label = "#{l("label_tool_icon")} #{column.caption}"
-            elsif [:created_on, :start_date, :updated_on, :due_date, :closed_on, :project_updated_on, :date, :spent_on, :year, :tyear, :month, :tmonth, :week, :tweek, :day, :tday].include?(column.name)
+            elsif [:created_on, :start_date, :updated_on, :due_date, :closed_on, :project_updated_on, :date, :spent_on, :year, :tyear, :month, :tmonth, :week, :tweek, :day, :tday, :wday].include?(column.name)
               column_label = "#{l("label_calendar_icon")} #{column.caption}"
             elsif [:parent_project, :issue, :issue_id, :parent, :parent_position, :parent_subject, :root, :root_position, :root_subject, :position, :'issue.position'].include?(column.name)
               column_label = "#{l("label_with_children_symbol")} #{column.caption}"
