@@ -68,6 +68,10 @@ module Smile
                 unless links
                   object.to_s
                 end
+              when 'Float'
+                ################
+                # Smile specific : five decimals, remove trailing zeros
+                sprintf("%.5f", object).sub(/\.?0+$/, '')
               end
 
               if result_format_object
