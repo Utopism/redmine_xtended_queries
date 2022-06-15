@@ -42,7 +42,8 @@ module Smile
             ),
             trace_first_prefix,
             trace_prefix,
-            last_postfix
+            last_postfix,
+            :redmine_xtended_queries
           )
 
           if missing_instance_methods.any?
@@ -52,7 +53,12 @@ module Smile
 
         # Returns the group that object belongs to when grouping query results
         def group_value(object)
-          value(object)
+          val = value(object)
+          case name
+          when :tmonth, :tweek
+            val = "#{object.tyear}-#{val}"
+          end
+          val
         end
       end # module GroupValue
     end # module QueryColumnOverride
