@@ -59,6 +59,8 @@ module Smile
             :deviation_hours_for_issue_and_user_previous_month, # 46/ new method  TESTED  V4.0.0 OK
             :deviation_hours_for_issue_previous_month,          # 47/ new method  TESTED  V4.0.0 OK
             :deviation_hours_for_user_previous_month,           # 48/ new method  TESTED  V4.0.0 OK
+
+            :wday,                                              # 50/ new method  TESTED  V4.0.0 OK
           ]
 
 
@@ -711,6 +713,13 @@ module Smile
           cf = self.class.deviation_custom_field
           total = cf.format.total_for_scope(cf, scope_for_time_entries)
           @deviation_hours_for_user_previous_month = cf.format.cast_total_value(cf, total)
+        end
+
+        # 50/ new method, RM 4.0.0 OK
+        def wday
+          return @wday if defined?(@wday)
+
+          @estimated_hours = spent_on.wday
         end
 
         module ClassMethods
