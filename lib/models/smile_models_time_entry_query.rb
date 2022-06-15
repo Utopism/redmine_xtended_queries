@@ -803,11 +803,18 @@ module Smile
               :caption => l(:label_month)
             )
 
+          # + WDAY
+          @available_columns.insert (index + 1), QueryColumn.new(:wday,
+                                                                 :sortable => ["#{TimeEntry.table_name}.spent_on", "#{TimeEntry.table_name}.created_on"],
+                                                                 :groupable => true,
+                                                                 :caption => l("datetime.prompts.day")
+          )
+
           # TWEEK : groupable
           tweek_column = @available_columns.detect{|c| c.name == :tweek}
 
           if tweek_column
-           tweek_column.groupable = "#{TimeEntry.table_name}.tweek"
+           tweek_column.groupable = "#{TimeEntry.table_name}.tyear || '-' || #{TimeEntry.table_name}.tweek"
           end
           # END -- Smile Specific #379708 Liste entrées de temps : colonne semaine
           #######################
@@ -1418,7 +1425,7 @@ module Smile
           sums = scope.sum('max_time_entry_id_by_issue.sum_hours_by_issue')
           logger.debug "==>prof       total_for_spent_hours_for_issue sums=#{sums}" if debug == '2'
 
-          map_total(sums) {|t| t.to_f.round(2)}
+          map_total(sums) {|t| t.to_f.round(3)}
         end
 
         # 61/ new method, RM 4.0.0 OK
