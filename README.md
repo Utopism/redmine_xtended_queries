@@ -183,6 +183,9 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
 # Changelog
 
 * **V1.0.18**  + New **wday** Time Entry column
+
+  And also fixed grouping totals when grouping by **tweek**, **tmonth**
+
 * **V1.0.17**  + **groupable_columns_options** to sort group by columns
 
   Renamed method query_available_inline_columns_options_hook -> column_label_and_order_hook
