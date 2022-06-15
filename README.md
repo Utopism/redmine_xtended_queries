@@ -67,6 +67,7 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
       * **+ 🗓 Year**
       * **+ 🗓 Month**
       * **  🗓 Week + groupable**
+      * **+ 🗓 Week day + groupable**
     * Cumulative Hours :
       * **🕝 Hours for issue and user**
       * **🕝 Hours for issue**
@@ -181,6 +182,7 @@ Redmine plugin that adds new **Columns**, **Filters** and other features.
 
 # Changelog
 
+* **V1.0.18**  + New **wday** Time Entry column
 * **V1.0.17**  + **groupable_columns_options** to sort group by columns
 
   Renamed method query_available_inline_columns_options_hook -> column_label_and_order_hook
