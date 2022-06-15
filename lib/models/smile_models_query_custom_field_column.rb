@@ -33,9 +33,9 @@ module Smile
           }
 
           if missing_instance_methods.any?
-            trace_first_prefix = "#{base.name} MISS          instance_methods  "
+            trace_first_prefix = "#{base.name} MISS inst_meths  "
           else
-            trace_first_prefix = "#{base.name}               instance_methods  "
+            trace_first_prefix = "#{base.name}      inst_meths  "
           end
 
           SmileTools::trace_by_line(
