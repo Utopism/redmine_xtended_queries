@@ -719,7 +719,7 @@ module Smile
         def wday
           return @wday if defined?(@wday)
 
-          @estimated_hours = spent_on.wday
+          @wday = spent_on.wday
         end
 
         module ClassMethods
